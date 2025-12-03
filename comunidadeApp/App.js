@@ -1,16 +1,29 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+
+// IMPORTANTE: Note as chaves { } nas importações abaixo. 
+// Isso corrige o erro "got: undefined".
+import { Loading } from './src/screens/Loading';
+import { Login } from './src/screens/Login';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-gray-900">
-      <Text className="text-white text-2xl font-bold">
-        Funciona! Atualiza na hora
-      </Text>
-      <Text className="text-gray-400 mt-2">
-        Tailwind 3.3.2 + NativeWind
-      </Text>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade', animationDuration: 5000 }}>
+        
+        {/* A primeira tela da lista é a que aparece primeiro */}
+        <Stack.Screen name="Splash" component={Loading} />
+        
+        {/* Definimos o nome 'Login' para usar no navigation.replace('Login') */}
+        <Stack.Screen name="Login" component={Login}  
+          options={{ animation: 'fade', animationDuration: 5000 }}
+        />
+        
+      </Stack.Navigator>
       <StatusBar style="light" />
-    </View>
+    </NavigationContainer>
   );
 }
