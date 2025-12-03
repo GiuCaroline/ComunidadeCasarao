@@ -15,7 +15,7 @@ Atualmente, esses cadastros são sistemas separados, mas futuramente poderão se
 
 Você pode visualizar o protótipo do aplicativo no link abaixo:
 
-👉 **[Acessar Protótipo no Figma]([COLOQUE_O_LINK_AQUI](https://www.figma.com/design/NB4nHXF9NbfRRigPwNe1rI/Comunidade-Casar%C3%A3o?node-id=0-1&t=5LXCBC1w9jk5yeLS-1))**
+👉 **Markdown:** [Acessar Protótipo no Figma](https://www.figma.com/design/NB4nHXF9NbfRRigPwNe1rI/Comunidade-Casar%C3%A3o?node-id=0-1&t=5LXCBC1w9jk5yeLS-1)
 
 ---
 
