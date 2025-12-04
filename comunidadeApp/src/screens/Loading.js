@@ -16,7 +16,7 @@ export function Loading({ navigation }) {
     <View className="flex-1 items-center justify-center bg-black">
       
       <Image 
-        source={require('../../assets/logoBranco.png')} 
+        source={require('../../assets/images/logoBranco.png')} 
         className="w-[60%]"
         resizeMode="contain"
       />

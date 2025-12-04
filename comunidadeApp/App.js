@@ -2,25 +2,37 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 
-// IMPORTANTE: Note as chaves { } nas importações abaixo. 
-// Isso corrige o erro "got: undefined".
+
+import { useFonts, Poppins_200ExtraLight, Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from '@expo-google-fonts/poppins';
+
 import { Loading } from './src/screens/Loading';
 import { Login } from './src/screens/Login';
+import { EsqueciSenha } from './src/screens/EsqueciSenha';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Poppins_200ExtraLight,
+    Poppins_300Light,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade', animationDuration: 5000 }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade', animationDuration: 1000 }}>
         
-        {/* A primeira tela da lista é a que aparece primeiro */}
         <Stack.Screen name="Splash" component={Loading} />
         
-        {/* Definimos o nome 'Login' para usar no navigation.replace('Login') */}
         <Stack.Screen name="Login" component={Login}  
           options={{ animation: 'fade', animationDuration: 5000 }}
         />
+        <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
         
       </Stack.Navigator>
       <StatusBar style="light" />
