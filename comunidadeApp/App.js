@@ -8,6 +8,7 @@ import { useFonts, Poppins_200ExtraLight, Poppins_300Light, Poppins_400Regular, 
 import { Loading } from './src/screens/Loading';
 import { Login } from './src/screens/Login';
 import { EsqueciSenha } from './src/screens/EsqueciSenha';
+import { Cadastro1 } from './src/screens/Cadastro1';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,8 @@ export default function App() {
           options={{ animation: 'fade', animationDuration: 5000 }}
         />
         <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+
+        <Stack.Screen name="Cadastro1" component={Cadastro1} />
         
       </Stack.Navigator>
       <StatusBar style="light" />
