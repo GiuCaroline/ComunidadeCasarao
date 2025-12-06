@@ -8,6 +8,7 @@ module.exports = {
         'popLight': 'Poppins_300Light',
         'popRegular': 'Poppins_400Regular',
         'popMedium': 'Poppins_500Medium',
+        'popSemibold' : 'Poppins_600SemiBold',
         'popBold': 'Poppins_700Bold',
       },
         colors: {

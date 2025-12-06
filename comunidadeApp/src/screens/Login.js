@@ -18,7 +18,7 @@ export function Login() {
             className="w-[60%]  mt-[15%]"
             resizeMode="contain"
           />
-          <Text className="font-popMedium text-[22px] text-vermelho mt-[-15px] mb-[10%]">
+          <Text className="font-popMedium text-[22px] text-vermelho mt-[-10%] mb-[10%]">
             Login
           </Text>
 
@@ -26,7 +26,7 @@ export function Login() {
           <Input texto = 'Senha' seguranca={true}/>
 
           <View className='w-[310px]'>
-            <Text className="font-popLight text-[12px] text-placeInput mt-[-15px] mb-[10%]"
+            <Text className="font-popLight text-[12px] text-placeInput mt-[-5%] mb-[10%]"
             onPress={() => navigation.navigate('EsqueciSenha')}>
               Esqueci minha senha
             </Text>
@@ -62,8 +62,8 @@ export function Login() {
             </TouchableOpacity>
           </View>
 
-          <Text className='font-popLight text-[13px] mt-[25%]'>
-            Não tem login? Faça o cadastro clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Cadastro1')}>aqui</Text>
+          <Text className='font-popLight text-[13px] mt-[30%]' onPress={() => navigation.navigate('Cadastro')}>
+            Não tem login? Faça o cadastro clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
           </Text>
         </ScrollView>
       </KeyboardAvoidingView>

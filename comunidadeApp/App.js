@@ -3,12 +3,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 
 
-import { useFonts, Poppins_200ExtraLight, Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { useFonts,
+   Poppins_200ExtraLight,
+    Poppins_300Light, Poppins_400Regular,
+     Poppins_500Medium, Poppins_600SemiBold,
+      Poppins_700Bold } from '@expo-google-fonts/poppins';
 
 import { Loading } from './src/screens/Loading';
 import { Login } from './src/screens/Login';
 import { EsqueciSenha } from './src/screens/EsqueciSenha';
-import { Cadastro1 } from './src/screens/Cadastro1';
+import { Cadastro } from './src/screens/Cadastro';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +22,7 @@ export default function App() {
     Poppins_300Light,
     Poppins_400Regular,
     Poppins_500Medium,
+    Poppins_600SemiBold,
     Poppins_700Bold,
   });
 
@@ -35,7 +40,7 @@ export default function App() {
         />
         <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
 
-        <Stack.Screen name="Cadastro1" component={Cadastro1} />
+        <Stack.Screen name="Cadastro" component={Cadastro} />
         
       </Stack.Navigator>
       <StatusBar style="light" />
