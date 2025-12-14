@@ -3,6 +3,7 @@ import { View, Text, Image, KeyboardAvoidingView, ScrollView, Platform, Touchabl
  } from 'react-native';
 import { Input } from '../components/input';
 import { Calendario } from '../components/calendario'
+import { Dropdown } from '../components/dropdown';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from "react";
 import { GenderMale,GenderFemale } from "phosphor-react-native";
@@ -62,15 +63,17 @@ export function Cadastro() {
                         </View>
             
                         <Input texto = 'Nome*' seguranca={false}/>
-                        <Text className="text-[16px] font-popRegular text-placeInput w-[310px]">Data de Nascimento*</Text>
+                        <View className='flex flex-row justify-center items-baseline'>
+                            <Text className="text-[16px] font-popRegular text-placeInput w-[200px]">Data de Nascimento*</Text>
+                            <TouchableOpacity className='bg-[#BB1C00] rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalendarioVisible(true)}>
+                                <Text className='text-[#fafafa]'>Selecionar Data</Text>
+                            </TouchableOpacity>
+                        </View>
 
                         <Modal visible={calendarioVisible} transparent animationType="fade">
                             <Calendario day={day} setDay={setDay} close={() => setCalendarioVisible(false)} />
                         </Modal>
 
-                        <TouchableOpacity className='bg-[#BB1C00] rounded-xl py-2 flex items-center w-[150px]' onPress={() => setCalendarioVisible(true)}>
-                            <Text className='text-[#fafafa]'>Selecionar Data</Text>
-                        </TouchableOpacity>
 
                         <TouchableOpacity style={[styles.sombra]}
                             className="bg-input rounded-xl flex px-4 justify-center w-[320px] h-[50px] mb-[10%]"
@@ -106,12 +109,24 @@ export function Cadastro() {
 
                     <Input texto={'Estado Civil'} seguranca={false} />
 
+                    <Dropdown
+                        placeholder="Selecione"
+                        data={[
+                            { value: "1", label: "React Native" },
+                            { value: "2", label: "Swift" },
+                            { value: "3", label: "Kotlin" },
+                        ]}
+                        onChange={(item) => console.log(item)}
+                    />
+
+
+
                     <Input texto={'Cônjuge'} seguranca={false} />
 
 
             
                     <TouchableOpacity 
-                        className="w-[65%] h-[6%] bg-vermelho rounded-full items-center justify-center mt-2"
+                        className="w-[65%] h-[4%] bg-vermelho rounded-full items-center justify-center mt-2"
                         onPress={() => console.log('Clicou em Entrar')}
                         activeOpacity={0.8}
                     >
@@ -119,8 +134,9 @@ export function Cadastro() {
                         Entrar
                         </Text>
                     </TouchableOpacity>
-            
-                    <Text className='font-popLight text-[13px] mt-[25%]' onPress={() => navigation.navigate('Login')}>
+                    
+                    
+                    <Text className='font-popLight text-[13px] mt-[20%] mb-[10%]' onPress={() => navigation.navigate('Login')}>
                         Já tem cadastro? Faça o login clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Login')}>aqui</Text>
                     </Text>
                     </ScrollView>

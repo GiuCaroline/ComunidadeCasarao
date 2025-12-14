@@ -1,6 +1,5 @@
 import { View, TouchableOpacity, StyleSheet, Text, Modal, FlatList } from "react-native";
-import { DayState } from "react-native-calendars/src/types";
-import { Calendar, LocaleConfig, CalendarList } from "react-native-calendars";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import { CaretLeft, CaretRight } from "phosphor-react-native"
 import { ptBr } from '../utils/localeCalendarConfig'
 import { useState } from "react";
@@ -14,10 +13,6 @@ export function Calendario({ day, setDay, close }){
     return(
         <View className='flex justify-center items-center' style={styles.modalBackground}>
             <View style={styles.modalBoxCalendar}>
-                <TouchableOpacity onPress={close}>
-                    <Text style={{ fontSize: 16 }} className='text-[#BB1C00]'>Fechar</Text>
-                </TouchableOpacity>
-
                 <TouchableOpacity className='mb-[5%] bg-[#BB1C00] rounded-xl py-2 flex items-center w-[150px]' onPress={() => setYearPickerVisible(true)}>
                     <Text className='text-[#fafafa]'>Selecionar Ano</Text>
                 </TouchableOpacity>
@@ -43,7 +38,7 @@ export function Calendario({ day, setDay, close }){
                             padding: 0,
                         }
                     }}
-                    onDayPress={(date) => {setDay(date)}}
+                    onDayPress={(date) => {setDay(date); close();}}
                     hideExtraDays
                     markedDates={day &&{
                         [day.dateString]: { selected : true },
@@ -52,7 +47,8 @@ export function Calendario({ day, setDay, close }){
                         const isSelected = day?.dateString === date.dateString;
                         return(
                             <TouchableOpacity 
-                    onPress={() => setDay(date)}    style={[
+                    onPress={() => {setDay(date);setTimeout(close, 150);}}    
+                    style={[
                                 styles.day,
                                 isSelected && styles.daySelected
                                 ]}>
@@ -72,7 +68,7 @@ export function Calendario({ day, setDay, close }){
                 <View style={styles.modalBackground}>
                     <View style={styles.modalBox}>
                     <FlatList
-                        data={Array.from({ length: 70 }, (_, i) => 1950 + i)}
+                        data={Array.from({ length: 80 }, (_, i) => 1940 + i)}
                         keyExtractor={(item) => item.toString()}
                         renderItem={({ item }) => (
                         <TouchableOpacity
