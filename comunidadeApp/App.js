@@ -12,7 +12,9 @@ import { useFonts,
 import { Loading } from './src/screens/Loading';
 import { Login } from './src/screens/Login';
 import { EsqueciSenha } from './src/screens/EsqueciSenha';
-import { Cadastro } from './src/screens/Cadastro';
+import { Passo1 } from './src/screens/Cadastro/Passo1';
+import { CadastroProvider } from './src/screens/CadastroContext';
+import { Passo2 } from './src/screens/Cadastro/Passo2';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,20 +32,24 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade', animationDuration: 1000 }}>
-        
-        <Stack.Screen name="Splash" component={Loading} />
-        
-        <Stack.Screen name="Login" component={Login}  
-          options={{ animation: 'fade', animationDuration: 5000 }}
-        />
-        <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+    <CadastroProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade', animationDuration: 1000 }}>
+          
+          <Stack.Screen name="Splash" component={Loading} />
+          
+          <Stack.Screen name="Login" component={Login}  
+            options={{ animation: 'fade', animationDuration: 5000 }}
+          />
+          <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
 
-        <Stack.Screen name="Cadastro" component={Cadastro} />
-        
-      </Stack.Navigator>
-      <StatusBar style="light" />
-    </NavigationContainer>
+          <Stack.Screen name="Cadastro" component={Passo1} />
+
+          <Stack.Screen name="Passo2" component={Passo2} />
+          
+        </Stack.Navigator>
+        <StatusBar style="light" />
+      </NavigationContainer>
+    </CadastroProvider>
   );
 }

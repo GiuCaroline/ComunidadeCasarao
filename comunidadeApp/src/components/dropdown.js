@@ -1,120 +1,86 @@
-import React, { useCallback, useState } from "react";
+import { useState } from "react";
 import {
-  Modal,
-  Platform,
-  TouchableWithoutFeedback,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  Pressable, ScrollView 
 } from "react-native";
 import { CaretUp, CaretDown } from "phosphor-react-native";
 
-export function Dropdown({ data = [], onChange, placeholder }) {
+export function Dropdown({
+  data = [],
+  onChange,
+  placeholder,
+  onOpen,
+  onClose
+}) {
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
-  const [top, setTop] = useState(0);
 
-  const toggleExpanded = useCallback(() => {
-    setExpanded(prev => !prev);
-  }, []);
+  const openDropdown = () => {
+    onOpen && onOpen();
+    setExpanded(true);
+  };
 
-  const onSelect = useCallback(
-    (item) => {
-      setValue(item.label);
-      onChange && onChange(item);
-      setExpanded(false);
-    },
-    [onChange]
-  );
+  const closeDropdown = () => {
+    onClose && onClose();
+    setExpanded(false);
+  };
+
+  const onSelect = (item) => {
+    setValue(item.label);
+    onChange && onChange(item);
+    closeDropdown();
+  };
 
   return (
-    <View
-      onLayout={(event) => {
-        const layout = event.nativeEvent.layout;
-        const topOffset = layout.y;
-        const height = layout.height;
-
-        const finalValue =
-          topOffset +
-          height +
-          (Platform.OS === "android" ? -32 : 3);
-
-        setTop(finalValue);
-      }}
-    >
+    <View>
       <TouchableOpacity
-        style={[styles.button, styles.sombra]}
-        onPress={toggleExpanded}
+        style={[ styles.sombra]}
+        className='h-[48px] bg-input rounded-xl px-[15px] flex-row justify-between items-center w-[95%] mb-[9%]'
+        onPress={expanded ? closeDropdown : openDropdown}
         activeOpacity={0.8}
       >
-        <Text style={styles.text}>
+        <Text className='text-placeInput font-popRegular text-[16px]'>
           {value || placeholder}
         </Text>
-        {expanded ? <CaretUp size={18} className='text-placeInput'/> : <CaretDown size={18} className='text-placeInput'/>}
+        {expanded ? <CaretUp size={22} /> : <CaretDown size={22} />}
       </TouchableOpacity>
 
-      <Modal visible={expanded} transparent animationType="fade">
-        <TouchableWithoutFeedback onPress={() => setExpanded(false)}>
-          <View style={styles.overlay}>
-            <View style={[styles.dropdown, styles.sombra, { top }]}>
-              <FlatList
-                data={data}
-                keyExtractor={(item) => item.value}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => onSelect(item)}
-                    activeOpacity={0.8}
-                  >
-                    <Text>{item.label}</Text>
-                  </TouchableOpacity>
-                )}
-                ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-              />
-            </View>
+      {expanded && (
+        <>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={closeDropdown}
+          />
+
+          <View className='absolute top-[52px] w-[95%] bg-input max-h-[300px] rounded-xl p-[10px] z-[999]'
+           style={[styles.sombra]}>
+            <ScrollView
+              showsVerticalScrollIndicator
+              >
+               {data.map((item) => (
+                <TouchableOpacity
+                  key={item.value}
+                  className='h-[45px] justify-center'
+                  onPress={() => onSelect(item)}
+                  activeOpacity={0.8}
+                >
+                  <Text className='text-placeInput font-popRegular text-[16px]'>{item.label}</Text>
+                </TouchableOpacity>
+              ))}
+              </ScrollView>
           </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+        </>
+      )}
     </View>
   );
 }
 
+
 const styles = StyleSheet.create({
-  button: {
-    height: 48,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "92%",
-  },
-  text: {
-    fontSize: 16,
-    color: "#5e5e5e",
-    fontFamily: "Poppins_400Regular",
-  },
-  overlay: {
-    flex: 1,
-    padding: 20,
-  },
-  dropdown: {
-  position: "absolute",
-  top: 52,
-  width: "100%",
-  backgroundColor: "#f0f0f0",
-  borderRadius: 12,
-  padding: 10,
-  maxHeight: 250,
-  zIndex: 999,
-},
-  item: {
-    height: 45,
-    justifyContent: "center",
-  },
   sombra: {
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 5 },

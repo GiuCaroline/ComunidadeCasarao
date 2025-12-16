@@ -68,7 +68,7 @@ export function Calendario({ day, setDay, close }){
                 <View style={styles.modalBackground}>
                     <View style={styles.modalBox}>
                     <FlatList
-                        data={Array.from({ length: 80 }, (_, i) => 1940 + i)}
+                        data={Array.from({ length: 80 }, (_, i) => 2020 - i)}
                         keyExtractor={(item) => item.toString()}
                         renderItem={({ item }) => (
                         <TouchableOpacity
