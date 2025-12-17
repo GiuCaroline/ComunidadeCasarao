@@ -1,26 +1,56 @@
 import {
   View, Text, Image, KeyboardAvoidingView, ScrollView,
-  Platform, TouchableOpacity, StyleSheet, Modal
+  Platform, TouchableOpacity, StyleSheet, Modal 
 } from 'react-native';
 
 import { Input } from '../../components/input';
 import { Calendario } from '../../components/calendario';
 import { Dropdown } from '../../components/dropdown';
 import { MascFem } from '../../components/genero';
+import { AlertCustom } from '../../components/alert';
 
 import { useNavigation } from '@react-navigation/native';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCadastro } from "../CadastroContext";
 
+
 export function Passo1() {
-  const navigation = useNavigation();
-  const { cadastro, updateCadastro } = useCadastro();
+
+    const navigation = useNavigation();
+    const { cadastro, updateCadastro, resetCadastro } = useCadastro();
   
     const [show, setShow] = useState(false);
     const [day, setDay] = useState(null);
+    useEffect(() => {
+        if (day?.dateString) {
+            updateCadastro({ nascimento: day.dateString });
+        }
+    }, [day]);
 
-  const [scrollEnabled, setScrollEnabled] = useState(true);
-  const [calendarioVisible, setCalendarioVisible] = useState(false);
+    const [scrollEnabled, setScrollEnabled] = useState(true);
+    const [calendarioVisible, setCalendarioVisible] = useState(false);
+
+    const camposObrigatoriosPreenchidos =
+        cadastro.nome &&
+        cadastro.nascimento &&
+        cadastro.estadoCivil &&
+        cadastro.situacao;
+        
+    
+    const [alertVisible, setAlertVisible] = useState(false);
+    function handleAvancar() {
+    if (!camposObrigatoriosPreenchidos) {
+        setAlertVisible(true);
+        return;
+    }
+    navigation.navigate("Passo2");
+    }
+    
+    function handleIrParaLogin() {
+        resetCadastro();
+        setDay(null); 
+        navigation.navigate("Login");
+    }
 
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
@@ -35,7 +65,7 @@ export function Passo1() {
 
             <Image
                 source={require('../../../assets/images/logoPreto.png')}
-                className="w-[60%] mt-[-10%]"
+                className="w-[50%] mt-[-10%]"
                 resizeMode="contain"
             />
 
@@ -83,14 +113,13 @@ export function Passo1() {
                 </Modal>
 
 
-                <TouchableOpacity style={[styles.sombra]}
+                <View style={[styles.sombra]}
                     className="bg-input rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-[10%]"
-                    onPress={() => setShow(true)}
                 >
                     <Text>
                     {day?.dateString}
                     </Text>
-                </TouchableOpacity>
+                </View>
 
             {/* Sexo */}
             <MascFem
@@ -178,17 +207,27 @@ export function Passo1() {
 
             {/* Avançar */}
             <TouchableOpacity
-                className="w-[65%] h-[3%] bg-vermelho rounded-full items-center justify-center mt-4"
-                onPress={() => navigation.navigate("Passo2")}
+                className={`w-[65%] h-[3%] bg-vermelho rounded-full items-center justify-center mt-4
+                    ${camposObrigatoriosPreenchidos ? "bg-vermelho" : "bg-vermelho/40"}`}
+                onPress={handleAvancar}
             >
                 <Text className="text-white font-popLight text-[16px]">
                 Avançar
                 </Text>
             </TouchableOpacity>
 
-            <Text className='font-popLight text-[13px] mt-[10%] mb-[10%]' onPress={() => navigation.navigate('Login')}>
-                Já tem cadastro? Faça o login clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Login')}>aqui</Text>
+            <Text className='font-popLight text-[13px] mt-[10%] mb-[10%]'  onPress={handleIrParaLogin}>
+                Já tem cadastro? Faça o login clicando <Text className='text-vermelho underline'>aqui</Text>
             </Text>
+
+
+            <AlertCustom
+                visible={alertVisible}
+                onClose={() => setAlertVisible(false)}
+                title="Atenção!"
+                message="Preencha os campos obrigatórios."
+                type="warning"
+            />
 
         </ScrollView>
       </KeyboardAvoidingView>
@@ -209,6 +248,8 @@ const styles = StyleSheet.create({
         elevation: 6,
     }
 });
+
+
 
 function maskPhone(value) {
   // remove tudo que não for número
@@ -231,3 +272,6 @@ function maskPhone(value) {
 
   return v;
 }
+
+
+

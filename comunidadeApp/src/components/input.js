@@ -1,22 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, TextInput, Animated, StyleSheet } from 'react-native';
 
 export function Input({
   texto,
   seguranca,
-  value,
+  value = '',
   onChangeText,
   keyboardType = 'default',
   containerStyle,
 }) {
-  const [internalText, setInternalText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-
-  const text = value !== undefined ? value : internalText;
-  const setText = onChangeText || setInternalText;
-
-  const isActive = isFocused || text.length > 0;
   const animation = useRef(new Animated.Value(0)).current;
+
+  const isActive = isFocused || value.length > 0;
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -48,7 +44,9 @@ export function Input({
           top: labelTop,
           fontSize: labelSize,
           color: '#5e5e5e',
-          fontFamily: isActive ? 'Poppins_300Light' : 'Poppins_400Regular',
+          fontFamily: isActive
+            ? 'Poppins_300Light'
+            : 'Poppins_400Regular',
           zIndex: 1,
         }}
       >
@@ -58,8 +56,8 @@ export function Input({
       <TextInput
         className="font-popRegular px-[2%] w-[95%] text-[16px]"
         style={{ height: 65 }}
-        value={text}
-        onChangeText={setText}
+        value={value}
+        onChangeText={onChangeText}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         secureTextEntry={seguranca}

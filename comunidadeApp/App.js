@@ -12,9 +12,10 @@ import { useFonts,
 import { Loading } from './src/screens/Loading';
 import { Login } from './src/screens/Login';
 import { EsqueciSenha } from './src/screens/EsqueciSenha';
-import { Passo1 } from './src/screens/Cadastro/Passo1';
 import { CadastroProvider } from './src/screens/CadastroContext';
+import { Passo1 } from './src/screens/Cadastro/Passo1';
 import { Passo2 } from './src/screens/Cadastro/Passo2';
+import { Passo3 } from './src/screens/Cadastro/Passo3';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +47,8 @@ export default function App() {
           <Stack.Screen name="Cadastro" component={Passo1} />
 
           <Stack.Screen name="Passo2" component={Passo2} />
+
+          <Stack.Screen name="Passo3" component={Passo3} />
           
         </Stack.Navigator>
         <StatusBar style="light" />

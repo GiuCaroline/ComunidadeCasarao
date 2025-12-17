@@ -10,9 +10,9 @@ export function Login() {
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       <KeyboardAvoidingView 
         className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
       >
-        <ScrollView contentContainerStyle={{ padding: 20, alignItems:'center', }} className='flex'>
+        <ScrollView contentContainerStyle={{ padding: 10, alignItems:'center', }} className='flex'>
           <Image
             source={require('../../assets/images/logoPreto.png')}
             className="w-[60%]  mt-[15%]"
@@ -22,10 +22,12 @@ export function Login() {
             Login
           </Text>
 
-          <Input texto = 'Email' seguranca={false}/>
-          <Input texto = 'Senha' seguranca={true}/>
+          <View className='w-[350px] items-center'>
+            <Input texto = 'Email'/>
+            <Input texto = 'Senha' seguranca={true}/>
+          </View>
 
-          <View className='w-[310px]'>
+          <View className='w-[95%]'>
             <Text className="font-popLight text-[12px] text-placeInput mt-[-5%] mb-[10%]"
             onPress={() => navigation.navigate('EsqueciSenha')}>
               Esqueci minha senha
@@ -33,7 +35,7 @@ export function Login() {
           </View>
 
           <TouchableOpacity 
-            className="w-[65%] h-[6%] bg-vermelho rounded-full items-center justify-center mt-2"
+            className="w-[65%] h-[5%] bg-vermelho rounded-full items-center justify-center mt-2"
             onPress={() => console.log('Clicou em Entrar')}
             activeOpacity={0.8}
           >

@@ -8,8 +8,14 @@ LocaleConfig.locales["pt-br"] = ptBr
 LocaleConfig.defaultLocale = "pt-br"
 
 export function Calendario({ day, setDay, close }){
+    const currentYear = new Date().getFullYear();
+
     const [yearPickerVisible, setYearPickerVisible] = useState(false);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    if (typeof setDay !== "function") {
+    console.warn("Calendario recebeu setDay inválido");
+    return null;
+  }
     return(
         <View className='flex justify-center items-center' style={styles.modalBackground}>
             <View style={styles.modalBoxCalendar}>
@@ -68,7 +74,7 @@ export function Calendario({ day, setDay, close }){
                 <View style={styles.modalBackground}>
                     <View style={styles.modalBox}>
                     <FlatList
-                        data={Array.from({ length: 80 }, (_, i) => 2020 - i)}
+                        data={Array.from({ length: 81 }, (_, i) => currentYear - i)}
                         keyExtractor={(item) => item.toString()}
                         renderItem={({ item }) => (
                         <TouchableOpacity

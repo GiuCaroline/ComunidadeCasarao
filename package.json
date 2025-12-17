@@ -1,0 +1,12 @@
+{
+  "name": "comunidade-fullstack",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run api\" \"npm run app\"",
+    "api": "cd backend && npm run dev",
+    "app": "cd comunidadeApp && npx expo start --tunnel --clear"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

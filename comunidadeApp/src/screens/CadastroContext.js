@@ -20,18 +20,46 @@ export function CadastroProvider({ children }) {
     bairro: "",
     complemento: "",
     cargo: "",
-    membro: "",
+    membro: null,
     batismo: null,
     email: "",
     senha: "",
+    cidade: "",
   });
 
   function updateCadastro(dados) {
     setCadastro(prev => ({ ...prev, ...dados }));
   }
 
+  
+  function resetCadastro() {
+    updateCadastro({
+      nome: "",
+      nascimento: "",
+      sexo: "",
+      estadoCivil: "",
+      conjuge: "",
+      escolaridade: "",
+      situacao: "",
+      mae: "",
+      pai: "",
+      telefone: "",
+      cep: "",
+      uf: "",
+      endereco: "",
+      bairro: "",
+      complemento: "",
+      cargo: "",
+      membro: "",
+      batismo: "",
+      email: "",
+      senha: "",
+      cidade: "",
+    });
+  }
+
   return (
-    <CadastroContext.Provider value={{ cadastro, updateCadastro }}>
+    <CadastroContext.Provider value={{ cadastro, updateCadastro, resetCadastro  }}>
       {children}
     </CadastroContext.Provider>
   );
@@ -40,3 +68,5 @@ export function CadastroProvider({ children }) {
 export function useCadastro() {
   return useContext(CadastroContext);
 }
+
+
