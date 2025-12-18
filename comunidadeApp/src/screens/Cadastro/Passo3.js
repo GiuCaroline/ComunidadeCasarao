@@ -43,16 +43,12 @@ export function Passo3() {
 
     
     function validarCadastro() {
-    if (!cadastro.email) return "Informe o e-mail.";
-    if (!cadastro.senha || cadastro.senha.length < 6)
-        return "A senha deve ter no mínimo 6 caracteres";
-
-    
-    if (!cadastro.aceitouTermos)
-        return "Você precisa aceitar os Termos de Uso.";
+        if (!cadastro.email) return "Informe o e-mail.";
+        if (!cadastro.senha || cadastro.senha.length < 6)
+            return "A senha deve ter no mínimo 6 caracteres";
 
 
-    return null;
+        return null;
     }
 
     const [alertVisible, setAlertVisible] = useState(false);
@@ -79,31 +75,36 @@ export function Passo3() {
         }
 
         const erro = validarCadastro();
-
         if (erro) {
-            showAlert("Atenção!", erro, "warning");
+            showAlert("Atenção", erro);
             return;
         }
 
         try {
-            const response = await fetch("https://SEU_BACKEND/api/cadastro", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(cadastro),
+            const response = await fetch('https://literate-space-umbrella-x55rwwqvgxgv2vwrp-3333.app.github.dev/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cadastro)
             });
 
-            if (!response.ok) throw new Error("Erro ao cadastrar");
+            const data = await response.json();
 
-            showAlert("Sucesso!", "Cadastro realizado com sucesso!", "success");
+            if (!response.ok) {
+                showAlert("Erro", data.error || "Erro no cadastro");
+                return;
+            }
+
+            showAlert("Sucesso", "Cadastro realizado com sucesso!", "success");
 
             setTimeout(() => {
-            navigation.navigate("Login");
-            }, 2500);
+                navigation.navigate("Login");
+            }, 2000);
 
         } catch (error) {
-            showAlert("Erro!", "Não foi possível finalizar o cadastro.", "error");
+            showAlert("Erro!", "Não foi possível conectar ao servidor.");
+            console.log('erro:', error);
         }
     }
 
@@ -266,7 +267,7 @@ export function Passo3() {
 
 
 
-            <View className='w-full flex-row justify-between px-[10px]'>        
+            <View className='w-full flex-row justify-between px-[10px] mb-[5%]'>        
                 <TouchableOpacity
                     className="w-[35%] h-[40px] bg-vermelho rounded-full items-center justify-center"
                     onPress={() => navigation.navigate("Passo2")}

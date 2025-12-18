@@ -1,5 +1,4 @@
 import { View, Text, Image, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity } from 'react-native';
-import '../components/input'
 import { Input } from '../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { GoogleLogo, FacebookLogo, InstagramLogo } from 'phosphor-react-native';
@@ -15,7 +14,7 @@ export function Login() {
         <ScrollView contentContainerStyle={{ padding: 10, alignItems:'center', }} className='flex'>
           <Image
             source={require('../../assets/images/logoPreto.png')}
-            className="w-[60%]  mt-[15%]"
+            className="w-[60%]  mt-[10%]"
             resizeMode="contain"
           />
           <Text className="font-popMedium text-[22px] text-vermelho mt-[-10%] mb-[10%]">
@@ -36,7 +35,7 @@ export function Login() {
 
           <TouchableOpacity 
             className="w-[65%] h-[5%] bg-vermelho rounded-full items-center justify-center mt-2"
-            onPress={() => console.log('Clicou em Entrar')}
+            onPress={() => navigation.navigate('Inicio')}
             activeOpacity={0.8}
           >
             <Text className="text-white font-popLight text-[16px]">
@@ -64,7 +63,7 @@ export function Login() {
             </TouchableOpacity>
           </View>
 
-          <Text className='font-popLight text-[13px] mt-[30%]' onPress={() => navigation.navigate('Cadastro')}>
+          <Text className='font-popLight text-[13px] mt-[15%]' onPress={() => navigation.navigate('Cadastro')}>
             Não tem login? Faça o cadastro clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
           </Text>
         </ScrollView>

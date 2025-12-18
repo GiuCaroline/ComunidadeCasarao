@@ -6,7 +6,9 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const port = 3333;
 
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 app.use(express.json());
 
 app.get('/', async (req, res) => {
@@ -168,6 +170,6 @@ app.post('/auth/login', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor rodando na porta ${port}`);
 });

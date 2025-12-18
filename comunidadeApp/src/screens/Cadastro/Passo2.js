@@ -102,7 +102,7 @@ export function Passo2() {
             </View>
 
             <Input
-                texto='Endereço e Número'
+                texto='Endereço'
                 value={cadastro.endereco}
                 onChangeText={(text) => updateCadastro({ endereco: text })} 
             />
@@ -120,13 +120,13 @@ export function Passo2() {
             />
 
             <Input 
-                texto='Complemento'
+                texto='Número e Complemento'
                 value={cadastro.complemento}
                 onChangeText={(text) => updateCadastro({ complemento: text })} 
             />
 
 
-            <View className='w-full flex-row justify-between px-[10px]  mt-[15%]'>        
+            <View className='w-full flex-row justify-between px-[10px]  mt-[10%]'>        
                 <TouchableOpacity
                     className="w-[35%] h-[40px] bg-vermelho rounded-full items-center justify-center"
                     onPress={() => navigation.navigate("Cadastro")}

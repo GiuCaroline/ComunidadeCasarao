@@ -16,6 +16,7 @@ import { CadastroProvider } from './src/screens/CadastroContext';
 import { Passo1 } from './src/screens/Cadastro/Passo1';
 import { Passo2 } from './src/screens/Cadastro/Passo2';
 import { Passo3 } from './src/screens/Cadastro/Passo3';
+import { Inicio } from './src/screens/Inicio';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login}  
             options={{ animation: 'fade', animationDuration: 5000 }}
           />
+
           <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
 
           <Stack.Screen name="Cadastro" component={Passo1} />
@@ -49,6 +51,8 @@ export default function App() {
           <Stack.Screen name="Passo2" component={Passo2} />
 
           <Stack.Screen name="Passo3" component={Passo3} />
+
+          <Stack.Screen name="Inicio" component={Inicio} />
           
         </Stack.Navigator>
         <StatusBar style="light" />
