@@ -272,6 +272,3 @@ function maskPhone(value) {
 
   return v;
 }
-
-
-
