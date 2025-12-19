@@ -2,6 +2,7 @@ import { View, Image, ScrollView, Text, StyleSheet, TouchableOpacity } from "rea
 import { InstagramLogo, YoutubeLogo, FacebookLogo, MapPinAreaIcon, Bank, PixLogo } from "phosphor-react-native";
 import { WhatsappLogo, Phone, EnvelopeSimple } from "phosphor-react-native";
 import { Carousel } from '../components/carousel';
+import { Nav } from '../components/nav';
 
 
 export function Inicio(){
@@ -112,7 +113,7 @@ export function Inicio(){
 
           <Text className='font-popLight text-[15px] mt-[3%]'>{'     Contribuir é um ato de fé e gratidão.\nA sua oferta ajuda a sustentar os projetos da Comunidade Casarão e a expandir o Reino de Deus na cidade.'} </Text>
 
-          <View className='bg-input rounded-xl h-[500px] px-[4%] py-[2%] mt-[5%]' style={[styles.sombra]}>
+          <View className='bg-input rounded-xl px-[4%] py-[3%] mt-[5%]' style={[styles.sombra]}>
             <View className='flex-row items-center gap-2'>
               <Bank className='text-vermelho' size={32}/>
               <Text className='text-black font-popRegular text-[16px]'>Transferência Bancária</Text>
@@ -123,24 +124,30 @@ export function Inicio(){
             <Text className='text-[15px] font-popLight'><Text className='font-popRegular'>Conta:</Text> 67890-1</Text>
 
             
-            <View className='flex-row'>
-              <Text></Text>
-              <View className='flex-row items-center gap-2 mt-[5%]'>
-                <PixLogo className='text-vermelho' size={32}/>
-                <Text className='text-black font-popRegular text-[16px]'>Pix</Text>
+            <View className='flex-row justify-between'>
+              <View>
+                <View className='flex-row items-center gap-2 mt-[5%]'>
+                  <PixLogo className='text-vermelho' size={32}/>
+                  <Text className='text-black font-popRegular text-[16px]'>Pix</Text>
+                </View>
+                <Text className='mt-[3%] font-popLight text-black text-[15px]'>{'  Escaneie o QR\nCode com o app do\nseu banco para\ncontribuir.'}</Text>
+                <Text className='text-black font-popRegular text-[16px] mt-[10%]'>Chave Pix:</Text>
               </View>
-
-              <Image
-                source={require('../../assets/images/pix.png')}
-                className="w-[250px] h-[100px]"
-                resizeMode="contain"
-              />
+                <Image
+                  source={require('../../assets/images/pix.png')}
+                  className="w-[150px] mt-[10%]"
+                  resizeMode="contain"
+                />
             </View>
-
+            <Text className='text-[16px] font-popLight'>contato@comunidadecasarao.com</Text>
           </View>
 
         </View>
 
+        <Text className='text-[16px] text-black font-popLightItalic px-[5%] text-center mt-[5%]'>Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama quem dá com alegria.</Text>
+        <Text className='text-[16px] text-vermelho font-popSemiboldItalic px-[5%] text-center'>2 Coríntios 9:7</Text>
+
+        <Nav />
       </ScrollView>
     </View>
   );
