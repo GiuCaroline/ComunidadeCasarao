@@ -4,12 +4,15 @@ import { WhatsappLogo, Phone, EnvelopeSimple } from "phosphor-react-native";
 import { Carousel } from '../components/carousel';
 import { Nav } from '../components/nav';
 
+import { useNavigation } from "@react-navigation/native";
+
 
 export function Inicio(){
+  const navigation = useNavigation();
 
     return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
-      <ScrollView contentContainerStyle={{ padding: 10 }} className='flex'>
+      <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 85 }} className='flex'>
         <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
           <Text className='text-[18px] font-popRegular mt-[5%]'>Olá Fulano!</Text>
           <Image
@@ -147,8 +150,10 @@ export function Inicio(){
         <Text className='text-[16px] text-black font-popLightItalic px-[5%] text-center mt-[5%]'>Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama quem dá com alegria.</Text>
         <Text className='text-[16px] text-vermelho font-popSemiboldItalic px-[5%] text-center'>2 Coríntios 9:7</Text>
 
-        <Nav />
       </ScrollView>
+      <Nav
+        active="Inicio"
+        onChange={(r) => navigation.navigate(r)} />
     </View>
   );
 }

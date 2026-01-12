@@ -18,7 +18,8 @@ import { Passo1 } from './src/screens/Cadastro/Passo1';
 import { Passo2 } from './src/screens/Cadastro/Passo2';
 import { Passo3 } from './src/screens/Cadastro/Passo3';
 import { Inicio } from './src/screens/Inicio';
-
+import { Cursos } from './src/screens/Cursos';
+import { Galeria } from './src/screens/Galeria';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -56,6 +57,10 @@ export default function App() {
           <Stack.Screen name="Passo3" component={Passo3} />
 
           <Stack.Screen name="Inicio" component={Inicio} />
+
+          <Stack.Screen name="Cursos" component={Cursos} />
+
+          <Stack.Screen name="Galeria" component={Galeria} />
           
         </Stack.Navigator>
         <StatusBar style="light" />
