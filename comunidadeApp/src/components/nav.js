@@ -67,7 +67,7 @@ function Tab({ label, icon: Icon, active, onPress }) {
         className="text-preto dark:text-branco"
       />
 
-      <Text className="text-[12px] text-preto dark:text-branco font-popRegular">
+      <Text className="text-[11px] text-preto dark:text-branco font-popRegular">
         {label}
       </Text>
     </Pressable>
