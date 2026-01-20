@@ -2,6 +2,7 @@ import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { Info } from "phosphor-react-native";
+import { DropdownContent } from '../components/dropdownContent'
 
 export function Cursos() {
   const navigation = useNavigation();
@@ -18,22 +19,53 @@ export function Cursos() {
             />
         </View>
         <View
-        className="bg-branco rounded-xl px-4 py-3 mt-4"
+        className="flex-col bg-branco rounded-3xl p-[5%] mt-[3%] mx-[2%]"
         style={styles.shadow}
         >
-          <View className="flex-col">
-            <View className='flex-row items-center gap-1'>
-              <Info size={25} weight="fill" className="text-vermelho" />
-              <Text className="font-popRegular text-[17px] text-[14px] dark:tex-branco">
-                  Informações Adicionais
-              </Text>
-            </View>
-              <Text className="text-[14px] font-Light text-preto dark:tex-branco flex-1">
-              Para mais detalhes sobre os cursos, entre em contato com os
-              responsáveis ou procure a secretaria da igreja.
-              </Text>
+          <View className='flex-row items-center gap-1'>
+            <Info size={25} weight="fill" className="text-vermelho" />
+            <Text className="font-popRegular text-[17px] dark:text-branco">
+                Informações Adicionais
+            </Text>
           </View>
+            <Text className="text-[15px] mt-[2%] font-popLight text-preto dark:text-branco">
+            Para mais detalhes sobre os cursos, entre em contato com os
+            responsáveis ou procure a secretaria da igreja.
+            </Text>
         </View>
+
+        <View className='items-center mt-[10%]'>
+          <DropdownContent
+            title="Curso de Casais"
+            subtitle="Às terças e quintas - 20h"
+            description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
+            whatsapp="(11) 94002-8922"
+            email="teste@gmail.com"
+          />
+          <DropdownContent
+            title="Maturidade"
+            subtitle="Às terças - 20h"
+            description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
+            whatsapp="(11) 94002-8922"
+            email="teste@gmail.com"
+          />
+          <DropdownContent
+            title="Curso de Casais"
+            subtitle="Às terças e quintas - 20h"
+            description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
+            whatsapp="(11) 94002-8922"
+            email="teste@gmail.com"
+          />
+          <DropdownContent
+            title="Maturidade"
+            subtitle="Às terças - 20h"
+            description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
+            whatsapp="(11) 94002-8922"
+            email="teste@gmail.com"
+          />
+
+        </View>
+
     </ScrollView>
       <Nav
         active="Cursos"
