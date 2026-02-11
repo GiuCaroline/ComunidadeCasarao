@@ -196,13 +196,13 @@ export function Perfil() {
 
 
 const styles = StyleSheet.create({
-    sombra: {
-        // iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-        // Android
-        elevation: 6,
-    }
+  sombra: {
+      // iOS
+      shadowColor: '#000',
+      shadowOffset: { width: 5, height: 5 },
+      shadowOpacity: 0.25,
+      shadowRadius: 5,
+      // Android
+      elevation: 6,
+  }
 });

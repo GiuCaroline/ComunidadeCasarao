@@ -24,6 +24,7 @@ import { Perfil } from './src/screens/Perfil';
 import { Carteira } from './src/screens/Carteira';
 import { Solicitacao } from './src/screens/Solicitacao';
 import { EditPerfil } from './src/screens/EditPerfil';
+import { Agenda } from './src/screens/Agenda';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -73,6 +74,8 @@ export default function App() {
           <Stack.Screen name="Solicitacao" component={Solicitacao} />
           
           <Stack.Screen name="EditPerfil" component={EditPerfil} />
+          
+          <Stack.Screen name="Agenda" component={Agenda} />
           
         </Stack.Navigator>
         <StatusBar style="light" />
