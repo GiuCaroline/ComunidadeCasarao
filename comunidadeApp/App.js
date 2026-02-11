@@ -21,6 +21,9 @@ import { Inicio } from './src/screens/Inicio';
 import { Cursos } from './src/screens/Cursos';
 import { Galeria } from './src/screens/Galeria';
 import { Perfil } from './src/screens/Perfil';
+import { Carteira } from './src/screens/Carteira';
+import { Solicitacao } from './src/screens/Solicitacao';
+import { EditPerfil } from './src/screens/EditPerfil';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -64,6 +67,12 @@ export default function App() {
           <Stack.Screen name="Galeria" component={Galeria} />
           
           <Stack.Screen name="Perfil" component={Perfil} />
+          
+          <Stack.Screen name="Carteira" component={Carteira} />
+          
+          <Stack.Screen name="Solicitacao" component={Solicitacao} />
+          
+          <Stack.Screen name="EditPerfil" component={EditPerfil} />
           
         </Stack.Navigator>
         <StatusBar style="light" />

@@ -50,6 +50,7 @@ export function Nav({ active, onChange }) {
         onPress={() => onChange("Perfil")}
         icon={User}
       />
+
     </View>
   );
 }

@@ -9,12 +9,15 @@ import { useNavigation } from "@react-navigation/native";
 
 export function Inicio(){
   const navigation = useNavigation();
+  const usuario = [
+    { id: "1",
+     nome: "Fulano de tal"}]
 
     return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 85 }} className='flex'>
         <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
-          <Text className='text-[18px] font-popRegular mt-[5%]'>Olá Fulano!</Text>
+          <Text className='text-[18px] font-popRegular mt-[5%]'>Olá {usuario[0].nome}!</Text>
           <Image
               source={require('../../assets/images/logoPreto.png')}
               className="w-[25%] "

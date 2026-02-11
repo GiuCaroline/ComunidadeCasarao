@@ -265,8 +265,6 @@ export function Passo3() {
                 </Text>
             </TouchableOpacity>
 
-
-
             <View className='w-full flex-row justify-between px-[10px] mb-[5%]'>        
                 <TouchableOpacity
                     className="w-[35%] h-[40px] bg-vermelho rounded-full items-center justify-center"

@@ -249,8 +249,6 @@ const styles = StyleSheet.create({
     }
 });
 
-
-
 function maskPhone(value) {
   // remove tudo que não for número
   let v = value.replace(/\D/g, "");
