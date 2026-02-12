@@ -13,8 +13,7 @@ const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 export function CustomCalendar({
   month,
   year,
-  setMonth,
-  setYear,
+  selected,
   onSelectDay,
   events = {}
 }) {
@@ -30,8 +29,6 @@ export function CustomCalendar({
       </View>
 
       <View style={styles.sombra} className='bg-input dark:bg-input-dark mx-[5%] rounded-[20px] p-2'>
-        {/* Calendário */}
-        {/* Dias da semana */}
         <View className="flex-row justify-between mb-2">
           {weekDays.map((day, index) => (
             <Text
@@ -57,9 +54,11 @@ export function CustomCalendar({
               <DayCell
                 key={index}
                 day={day}
+                isSelected={selected === dateKey}
                 onPress={() => onSelectDay(dateKey)}
                 markers={markers}
               />
+
             );
           })}
         </View>

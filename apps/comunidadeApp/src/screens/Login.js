@@ -34,7 +34,7 @@ export function Login() {
           </View>
 
           <TouchableOpacity 
-            className="w-[65%] h-[5%] bg-vermelho rounded-full items-center justify-center mt-2"
+            className="px-16 bg-vermelho rounded-full items-center justify-center mt-2 py-2 mt-2"
             onPress={() => navigation.navigate('Inicio')}
             activeOpacity={0.8}
           >

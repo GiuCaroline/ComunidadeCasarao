@@ -1,20 +1,28 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-export function DayCell({ day, onPress, markers = [] }) {
+export function DayCell({ day, onPress, markers = [], isSelected }) {
 
   if (!day) {
-    return <View style={styles.empty} />;
+    return <View className="w-[14.28%] h-[60px]" />;
   }
 
   return (
-    <TouchableOpacity style={styles.day} onPress={() => onPress(day)}>
-      <Text className='text-[14px] font-popLight text-preto dark:text-branco'>{day}</Text>
+    <TouchableOpacity
+      className={`w-[14.28%] h-[60px] items-center justify-center rounded-lg
+        ${isSelected ? "bg-vermelho/20" : ""}
+      `}
+      onPress={onPress}
+    >
+      <Text className="text-[14px] font-popLight text-preto dark:text-branco">
+        {day}
+      </Text>
 
-      <View style={styles.markerContainer}>
+      <View className="flex-row mt-1">
         {markers.map((color, index) => (
           <View
             key={index}
-            style={[styles.marker, { backgroundColor: color }]}
+            className="w-[12px] h-[2px] rounded-full mx-[1px]"
+            style={{ backgroundColor: color }}
           />
         ))}
       </View>
@@ -22,25 +30,3 @@ export function DayCell({ day, onPress, markers = [] }) {
   );
 }
 
-const styles = StyleSheet.create({
-  empty:{
-    width:"14.2%",
-    height:60
-  },
-  day:{
-    width:"14.2%",
-    height:60,
-    alignItems:"center",
-    justifyContent:"center"
-  },
-  markerContainer:{
-    flexDirection:"row",
-    marginTop:4
-  },
-  marker:{
-    width:6,
-    height:2,
-    borderRadius:2,
-    marginHorizontal:1
-  }
-});

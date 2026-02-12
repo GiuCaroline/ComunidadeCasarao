@@ -1,7 +1,8 @@
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { IdentificationCard, Paperclip, PencilSimple  } from "phosphor-react-native";
+import { IdentificationCard, Paperclip, PencilSimple, SunDim, MoonStars } from "phosphor-react-native";
+import { useTheme } from "../context/themeContext";
 
 export function Perfil() {
   const navigation = useNavigation();
@@ -29,6 +30,7 @@ export function Perfil() {
     },
   ];
 
+  const { theme, toggleTheme } = useTheme();
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
       <View className='w-full flex-row justify-between items-center px-[4%] mb-[-18%] mt-[-12%]'>
@@ -163,7 +165,7 @@ export function Perfil() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate("Solicitacao")}
-            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mt-[7%] mb-[15%]"
+            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mt-[7%] mb-[5%]"
             style={styles.sombra}
           >
             <View className="flex-row items-center gap-3">
@@ -173,6 +175,22 @@ export function Perfil() {
             </View>
 
             <Paperclip size={25} color="#B3261E"/>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={toggleTheme}
+            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[15%]"
+            style={styles.sombra}
+          >
+            <Text className="text-base font-popRegular text-preto dark:text-branco">
+              Tema do App
+            </Text>
+
+            {theme === "dark" ? (
+              <MoonStars size={25} color="#B3261E" />
+            ) : (
+              <SunDim size={25} color="#B3261E" />
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

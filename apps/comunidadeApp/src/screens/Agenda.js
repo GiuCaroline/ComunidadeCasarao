@@ -4,7 +4,7 @@ import { MonthHeader } from "../components/monthHeader";
 import { CustomCalendar } from "../components/customCalendar";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { IdentificationCard, Paperclip, PencilSimple  } from "phosphor-react-native";
+import { CalendarDots , Paperclip, PencilSimple  } from "phosphor-react-native";
 
 export function Agenda(){
 
@@ -15,11 +15,54 @@ export function Agenda(){
   const [year,setYear] = useState(today.getFullYear());
   const [selected,setSelected] = useState(null);
 
-  // MOCK de eventos
-  const events = {
-    "2026-02-11":["#BB1C00"],
-    "2026-02-07":["#BB1C00","#16A34A"]
-  };
+    const events = [
+        {
+            id: 1,
+            title: "Culto e Santa Ceia",
+            time: "10h e 18h",
+            date: "2026-02-07",
+            color: "#BB1C00"
+        },
+        {
+            id: 2,
+            title: "Reunião Iluminação",
+            time: "19h",
+            date: "2026-02-07",
+            color: "#1E3A8A"
+        },
+        {
+            id: 3,
+            title: "Culto Geral",
+            time: "19h",
+            date: "2026-02-11",
+            color: "#BB1C00"
+        },
+        {
+            id: 4,
+            title: "Culto Geral",
+            time: "19h",
+            date: "2026-02-07",
+            color: "#BB1C00"
+        }
+    ];
+
+    const eventsByDate = events.reduce((acc, event) => {
+        if (!acc[event.date]) {
+            acc[event.date] = [];
+        }
+
+        acc[event.date].push(event.color);
+        return acc;
+    }, {});
+
+    const filteredEvents = selected
+        ? events.filter(event => event.date === selected)
+        : events.filter(event => {
+            return event.date.startsWith(
+                `${year}-${String(month + 1).padStart(2, "0")}`
+            );
+        }
+    );
 
   return(
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -45,9 +88,64 @@ export function Agenda(){
             <CustomCalendar
                 month={month}
                 year={year}
-                onSelectDay={(date)=> setSelected(date)}
-                events={events}
+                selected={selected} 
+                onSelectDay={(date) => {
+                    if (selected === date) {
+                    setSelected(null); 
+                    } else {
+                    setSelected(date);
+                    }
+                }}
+                events={eventsByDate}
             />
+
+            <View className='mt-[5%] px-[3%]'>
+                <View className='mt-[5%] px-[3%]'>
+
+                    {filteredEvents.map((event) => (
+
+                        <View
+                        key={event.id}
+                        className='bg-input rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
+                        >
+
+                        {/* Ícone colorido */}
+                        <CalendarDots
+                            size={26}
+                            color={event.color}
+                        />
+
+                        <View className='flex-1 ml-[3%]'>
+
+                            <View className='flex-row justify-between items-center'>
+                                <Text className='font-popRegular text-[16px] text-preto dark:text-branco'>
+                                    {event.title}
+                                </Text>
+
+                                <Text className='font-popLight text-[14px] text-cinza'>
+                                    {event.time}
+                                </Text>
+                                </View>
+
+                                <Text className='font-popLight text-[14px] text-cinza mt-[2%]'>
+                                Dia {event.date.split("-").reverse().join("/")}
+                                </Text>
+
+                            </View>
+
+                        </View>
+
+                    ))}
+
+                    {filteredEvents.length === 0 && (
+                        <Text className="text-center text-cinza mt-[10%] font-popLight">
+                        Nenhum evento encontrado
+                        </Text>
+                    )}
+
+                </View>
+            </View>
+
         </ScrollView>
 
         <Nav
@@ -57,3 +155,15 @@ export function Agenda(){
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  sombra: {
+      // iOS
+      shadowColor: '#000',
+      shadowOffset: { width: 5, height: 5 },
+      shadowOpacity: 0.25,
+      shadowRadius: 5,
+      // Android
+      elevation: 6,
+  }
+});
