@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom"
+
 export default function Home() {
+  const navigate = useNavigate()
+
   return (
-    <div className="flex flex-col items-center h-screen w-screen bg-branco dark:bg-preto-dark text-preto">
+    <div className="flex flex-col items-center">
         <img 
           src="/images/logoPreto.png"
           className="w-auto h-[10vh] md:h-[80vh] object-cover selection:bg-branco"
@@ -13,7 +17,7 @@ export default function Home() {
       </div>
 
       <button className="bg-vermelho text-branco font-light px-10 mt-[15%] py-2 text-xl rounded-full" 
-      onClick={()=>{window.location="/Login"}}>Login</button>
+      onClick={() => navigate("/login")}>Login</button>
     </div>
   )
 }
