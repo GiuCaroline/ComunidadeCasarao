@@ -179,7 +179,7 @@ export function Perfil() {
 
           <TouchableOpacity
             onPress={toggleTheme}
-            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[15%]"
+            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[25%]"
             style={styles.sombra}
           >
             <Text className="text-base font-popRegular text-preto dark:text-branco">
@@ -198,7 +198,7 @@ export function Perfil() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => navigation.navigate("EditPerfil")}
-          className="absolute bottom-24 right-5 bg-vermelho rounded-full p-4"
+          className="absolute bottom-32 right-5 bg-vermelho rounded-full p-4"
           style={styles.sombra}
         >
           <PencilSimple  size={28} color="#FAFAFA"/>

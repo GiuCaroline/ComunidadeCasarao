@@ -9,7 +9,7 @@ export function Cursos() {
 
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
-      <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 85 }} className='flex'>
+      <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 125 }} className='flex'>
           <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
               <Text className='text-[18px] text-preto dark:text-branco font-popRegular mt-[5%]'>Cursos</Text>
               <Image

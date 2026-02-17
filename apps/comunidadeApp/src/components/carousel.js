@@ -66,7 +66,7 @@ export function Carousel(){
           setCurrentIndex(index);
         }}
         renderItem={({ item }) => (
-          <View className="px-2 ">
+          <View className="px-3 ">
             <Image
               source={item.image}
               className="rounded-xl"
@@ -81,7 +81,7 @@ export function Carousel(){
               colors={['transparent', 'rgba(0,0,0,0.85)']}
               locations={[0.4, 1]}
               style={{
-                left: 8,
+                left: 12,
                 position: 'absolute',
                 bottom: 0,
                 width: width - 40,

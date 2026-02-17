@@ -74,7 +74,7 @@ export function Agenda(){
             resizeMode="contain"
             />
         </View>
-        <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 85 }} className='flex'>
+        <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 125 }} className='flex'>
 
             <View className='items-center'>
                 <MonthHeader
