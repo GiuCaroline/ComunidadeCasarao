@@ -1,12 +1,23 @@
 import { useState, useEffect } from "react";
-import { MagnifyingGlass, Trash, PencilSimple } from "@phosphor-icons/react";
+import { MagnifyingGlass, TrashIcon, PencilSimple } from "@phosphor-icons/react";
+import { ConfirmDelete } from "../components/confirmDelete";
+import { AlertCustom } from "../components/alert";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Usuarios() {
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState([]); // dados vindos da API
+  const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  // 🔥 Simulação de dados (depois vira API)
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   useEffect(() => {
     const fakeUsers = [
       { id: 1, nome: "Fulano de tal", email: "teste@teste.com" },
@@ -18,7 +29,6 @@ export default function Usuarios() {
     setUsers(fakeUsers);
   }, []);
 
-  // 🔍 Filtro inteligente
   useEffect(() => {
     if (search.trim() === "") {
       setFilteredUsers([]);
@@ -34,22 +44,50 @@ export default function Usuarios() {
     setFilteredUsers(result);
   }, [search, users]);
 
-  function handleDelete(id) {
-    // depois vira DELETE na API
-    const updated = users.filter((user) => user.id !== id);
-    setUsers(updated);
-    setFilteredUsers(updated);
+  function handleDeleteClick(id) {
+    setSelectedUserId(id);
+    setConfirmVisible(true);
   }
 
-  function handleEdit(id) {
-    console.log("Editar usuário:", id);
-    // depois navega para tela de edição
+  function handleConfirmDelete() {
+    setConfirmVisible(false);
+
+    try {
+      const updated = users.filter((user) => user.id !== selectedUserId);
+      setUsers(updated);
+
+      setAlertType("success");
+      setAlertTitle("Usuário removido");
+      setAlertMessage("O usuário foi apagado com sucesso.");
+    } catch (error) {
+      setAlertType("error");
+      setAlertTitle("Erro");
+      setAlertMessage("Não foi possível apagar o usuário.");
+    }
+
+    setAlertVisible(true);
   }
+
+  function handleCancelDelete() {
+    setConfirmVisible(false);
+
+    setAlertType("warning");
+    setAlertTitle("Operação cancelada");
+    setAlertMessage("O usuário não foi removido.");
+
+    setAlertVisible(true);
+  }
+
+  const navigate = useNavigate();
+
+  function handleEdit(user) {
+    navigate("/editar", { state: { user } });
+  }
+
 
   return (
     <div className="pt-5 px-4 flex flex-col items-center gap-6">
 
-      {/* 🔎 Campo de pesquisa */}
       <div className="relative w-[95%]">
         <input
           type="text"
@@ -82,7 +120,8 @@ export default function Usuarios() {
             dark:bg-input-dark
             rounded-2xl
             shadow-md
-            p-4
+            px-4
+            py-2
             flex justify-between items-center
           "
         >
@@ -92,16 +131,31 @@ export default function Usuarios() {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={() => handleDelete(user.id)}>
-              <Trash size={20} className="text-red-500" />
+            <button onClick={() => handleDeleteClick(user.id)}>
+              <TrashIcon size={30} className="text-vermelho" />
             </button>
 
-            <button onClick={() => handleEdit(user.id)}>
-              <PencilSimple size={20} className="text-green-500" />
+            <button onClick={() => handleEdit(user)}>
+              <PencilSimple size={30} className="text-[#01CB34]" />
             </button>
           </div>
         </div>
       ))}
+
+      {/* Modais */}
+      <ConfirmDelete
+        visible={confirmVisible}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
+
+      <AlertCustom
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        type={alertType}
+      />
 
     </div>
   );

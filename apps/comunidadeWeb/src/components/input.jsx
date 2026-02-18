@@ -27,11 +27,11 @@ export function Input({
           w-full h-full
           px-4
           text-[16px]
-          bg-input
+          bg-input dark:bg-input-dark
           rounded-xl
           outline-none
           shadow-md
-          font-popRegular
+          font-normal
         "
       />
 

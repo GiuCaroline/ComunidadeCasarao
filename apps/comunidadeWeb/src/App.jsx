@@ -4,6 +4,7 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Inicio from "./screens/Inicio";
 import Usuarios from "./screens/Usuarios";
+import EditUsers from "./screens/EditUsers";
 
 export default function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Inicio />} />
           <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/editar" element={<EditUsers />} />
         </Routes>
       </div>
     </>

@@ -60,11 +60,12 @@ export function Nav() {
 
           {/* ===== HAMBURGER (sempre no mobile) ===== */}
           <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden z-50"
+            onClick={() => setOpen(true)}
+            className="md:hidden"
           >
-            {open ? <X size={26} /> : <List size={26} />}
+            <List size={26} />
           </button>
+
 
         </div>
       </nav>
@@ -72,7 +73,7 @@ export function Nav() {
       {/* ===== OVERLAY ===== */}
       <div
         onClick={() => setOpen(false)}
-        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 bg-black/40 transition-opacity duration-300 z-[55] md:hidden ${
           open ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       />
@@ -80,12 +81,15 @@ export function Nav() {
       {/* ===== DRAWER ===== */}
       <div
         className={`
-          fixed top-0 right-0 h-screen w-[70%] bg-white shadow-lg
+          fixed top-0 right-0 h-screen w-[70%] bg-branco shadow-lg z-[60]
           transform transition-transform duration-300
           md:hidden
           ${open ? "translate-x-0" : "translate-x-full"}
         `}
       >
+        <button onClick={() => setOpen(false)} className="p-5">
+          <X size={26} />
+        </button>
         <div className="flex flex-col gap-10 px-6 text-lg font-normal items-center mt-[50%]">
           <Link to="/home" onClick={() => setOpen(false)}>Home</Link>
           <Link to="/usuarios" onClick={() => setOpen(false)}>Usuários</Link>
