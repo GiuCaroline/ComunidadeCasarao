@@ -1,0 +1,51 @@
+import { useState } from "react";
+
+export deafault function Input({
+  texto,
+  seguranca = false,
+  value = "",
+  onChange,
+  type = "text",
+  containerClass = "",
+}) {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const isActive = isFocused || value.length > 0;
+
+  return (
+    <div
+      className={`relative w-[95%] h-[50px] mb-[10%] ${containerClass}`}
+    >
+      {/* Input */}
+      <input
+        type={seguranca ? "password" : type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        className="
+          w-full h-full
+          px-4
+          text-[16px]
+          bg-input
+          rounded-xl
+          outline-none
+          shadow-md
+          font-popRegular
+        "
+      />
+
+      {/* Label */}
+      <label
+        className={`
+          absolute left-4 transition-all duration-200
+          ${isActive ? "-top-4 text-sm" : "top-3 text-base"}
+          text-[#5e5e5e]
+          pointer-events-none
+        `}
+      >
+        {texto}
+      </label>
+    </div>
+  );
+}

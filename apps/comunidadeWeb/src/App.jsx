@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom"
 function App() {
 
   return (
-    <div className="min-h-screen w-full bg-branco dark:bg-preto">
+    <div className="min-h-screen w-full bg-branco dark:bg-preto-dark">
       <div id="app-content">
         <main>
           <Routes>

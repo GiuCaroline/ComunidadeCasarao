@@ -7,7 +7,7 @@ export default function Home() {
     <div className="flex flex-col items-center">
         <img 
           src="/images/logoPreto.png"
-          className="w-auto h-[10vh] md:h-[80vh] object-cover selection:bg-branco"
+          className="w-auto h-[10vh] md:h-[80vh] object-cover selection:bg-branco mt-[15%]"
         />
       <div className="mt-[25%]">
         <img 
