@@ -1,22 +1,27 @@
-import './index.css'
-import Home from './screens/Home'
-import Login from './screens/Login'
-import { Routes, Route } from "react-router-dom"
+import { Nav } from "./components/nav";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Login from "./screens/Login";
+import Home from "./screens/Home";
+import Inicio from "./screens/Inicio";
+import Usuarios from "./screens/Usuarios";
 
-function App() {
+export default function App() {
+  const location = useLocation();
+
+  const hideNavRoutes = ["/login", "/" ];
 
   return (
-    <div className="min-h-screen w-full bg-branco dark:bg-preto-dark">
-      <div id="app-content">
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </main>
-      </div>
-    </div>
-  )
-}
+    <>
+      {!hideNavRoutes.includes(location.pathname) && <Nav />}
 
-export default App
+      <div className="pt-16">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Inicio />} />
+          <Route path="/usuarios" element={<Usuarios />} />
+        </Routes>
+      </div>
+    </>
+  );
+}

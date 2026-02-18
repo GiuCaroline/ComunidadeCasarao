@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Input } from "../components/input";
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const navigate = useNavigate();
 
   function handleLogin(e) {
     e.preventDefault();
@@ -18,9 +20,9 @@ export default function Login() {
         />
          <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-2xl shadow-lg w-[400px] flex flex-col items-center"
+        className="bg-transparent p-8 w-[400px] flex flex-col items-center mt-[5%]"
       >
-        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <h1 className="text-2xl font-bold mb-[25%] text-vermelho">Login</h1>
 
         <Input
           texto="Email"
@@ -36,9 +38,14 @@ export default function Login() {
           seguranca={true}
         />
 
+        <div className="items-start flex">
+          <a><p className="text-placeInput text-sm">Esqueci minha senha</p></a>
+        </div>
+
         <button
           type="submit"
-          className="w-full mt-6 bg-primary text-white py-3 rounded-xl hover:opacity-90 transition"
+          onClick={() => navigate("/home")}
+          className="mt-6 bg-primary text-branco bg-vermelho py-3 px-20 rounded-full hover:opacity-90 transition"
         >
           Entrar
         </button>
