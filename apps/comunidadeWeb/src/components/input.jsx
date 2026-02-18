@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export deafault function Input({
+export function Input({
   texto,
   seguranca = false,
   value = "",
