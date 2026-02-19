@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { MagnifyingGlass, TrashIcon, PencilSimple } from "@phosphor-icons/react";
 import { ConfirmDelete } from "../components/confirmDelete";
 import { AlertCustom } from "../components/alert";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 
@@ -20,10 +19,10 @@ export default function Usuarios() {
 
   useEffect(() => {
     const fakeUsers = [
-      { id: 1, nome: "Fulano de tal", email: "teste@teste.com" },
-      { id: 2, nome: "Maria Silva", email: "maria@email.com" },
-      { id: 3, nome: "João Pedro", email: "joao@email.com" },
-      { id: 4, nome: "João Pedro Ferreira", email: "joaoF@email.com" },
+      { id: 1, nome: "Culto", email: "teste@teste.com" },
+      { id: 2, nome: "Jovens", email: "maria@email.com" },
+      { id: 3, nome: "Oração", email: "joao@email.com" },
+      
     ];
 
     setUsers(fakeUsers);

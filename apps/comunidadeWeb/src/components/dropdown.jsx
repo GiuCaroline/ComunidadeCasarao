@@ -75,7 +75,7 @@ export function Dropdown({
             absolute
             top-[52px]
             w-full
-            bg-input
+            bg-input dark:bg-input-dark
             max-h-[300px]
             rounded-xl
             p-2

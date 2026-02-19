@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #root {
+  height: 100%;
+}
 
 body {
   @apply font-poppins;
+  @apply bg-branco dark:bg-preto-dark transition-colors duration-300;
 }
 
 @keyframes slideDown {
