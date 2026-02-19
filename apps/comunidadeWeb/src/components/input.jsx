@@ -14,7 +14,7 @@ export function Input({
 
   return (
     <div
-      className={`relative w-[95%] h-[50px] mb-[10%] ${containerClass}`}
+      className={`relative w-[95%] h-[50px] mb-[7%] ${containerClass}`}
     >
       {/* Input */}
       <input

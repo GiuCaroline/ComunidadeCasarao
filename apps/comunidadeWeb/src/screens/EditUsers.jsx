@@ -17,7 +17,6 @@ export default function EditUsers() {
 
   const user = location.state?.user;
 
-  // Caso alguém entre direto na rota
   if (!user) {
     navigate("/usuarios");
   }
@@ -204,7 +203,7 @@ export default function EditUsers() {
           dropdownMode="select"
           scrollableYearDropdown
           yearDropdownItemNumber={100}
-          className="h-[48px] w-full bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none"
+          className="h-[48px] w-full bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none shadow-md"
         />
       </div>
       <MascFem value={sexo} onChange={setSexo} />
@@ -280,7 +279,7 @@ export default function EditUsers() {
           onChange={(date) => setMembro(date)}
           dateFormat="MM/yyyy"
           showMonthYearPicker
-          className="h-[48px] w-full bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none"
+          className="h-[48px] w-full bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none shadow-md"
           placeholderText="Selecione mês e ano"
         />
       </div>
@@ -301,7 +300,7 @@ export default function EditUsers() {
           scrollableYearDropdown
           yearDropdownItemNumber={100}
           dateFormat="dd/MM/yyyy"
-          className="h-[48px] w-full bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none"
+          className="h-[48px] w-full bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none shadow-md"
           placeholderText="Selecione a data"
         />
       </div>
