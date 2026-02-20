@@ -14,8 +14,8 @@ export function ModalEvento({ visible, onClose, onSave, evento }) {
 
 
   const repeticoes = [
-    { value: "0", label: "Todos do mês" },
-    { value: "1", label: "Semana sim e semana não" },
+    { value: "1", label: "Todos do mês" },
+    { value: "2", label: "Semana sim e semana não" },
   ];
 
 
