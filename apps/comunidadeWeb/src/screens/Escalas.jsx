@@ -58,12 +58,12 @@ export default function Escalas(){
       setEscalas(updated);
 
       setAlertType("success");
-      setAlertTitle("Usuário removido");
-      setAlertMessage("O usuário foi apagado com sucesso.");
+      setAlertTitle("Escala removido");
+      setAlertMessage("O escala foi apagado com sucesso.");
     } catch (error) {
       setAlertType("error");
       setAlertTitle("Erro");
-      setAlertMessage("Não foi possível apagar o usuário.");
+      setAlertMessage("Não foi possível apagar o escala.");
     }
 
     setAlertVisible(true);
@@ -74,7 +74,7 @@ export default function Escalas(){
 
     setAlertType("warning");
     setAlertTitle("Operação cancelada");
-    setAlertMessage("O usuário não foi removido.");
+    setAlertMessage("O escala não foi removido.");
 
     setAlertVisible(true);
   }
