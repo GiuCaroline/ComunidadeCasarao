@@ -26,10 +26,10 @@ export default function Menu() {
             </div>
             
             <div
-            onClick={() => navigate("/fotos")}
+            onClick={() => navigate("/galeria")}
             className="bg-input dark:bg-input-dark py-5 flex justify-between px-5 w-[95%] rounded-[20px]">
                 <span className="text-preto dark:text-branco text-xl">
-                    Gerenciar Fotos de Eventos
+                    Gerenciar Galeria de Eventos
                 </span>
                 <ImagesSquareIcon size={30} className="text-vermelho" />
             </div>

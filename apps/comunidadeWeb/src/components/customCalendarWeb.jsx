@@ -50,13 +50,17 @@ export default function CustomCalendarWeb({
               key={index}
               onClick={() => onSelectDay(key)}
               className={`
-                h-10 rounded-lg text-sm
-                ${isMarked
-                  ? "bg-vermelho text-branco font-light"
-                  : "hover:bg-gray-200 dark:hover:bg-gray-700 text-preto dark:text-branco font-light"}
+                relative
+                h-10 text-sm font-light
+                flex items-center justify-center
+                text-preto dark:text-branco
+                hover:bg-gray-200 dark:hover:bg-gray-700
               `}
             >
               {day}
+              {isMarked && (
+                <span className="absolute bottom-1 w-6 h-[2px] bg-vermelho rounded-full"></span>
+              )}
             </button>
           );
         })}

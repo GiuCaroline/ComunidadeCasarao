@@ -6,6 +6,8 @@ import Menu from "./screens/Menu";
 import Usuarios from "./screens/Usuarios";
 import EditUsers from "./screens/EditUsers";
 import Eventos from "./screens/Eventos";
+import Galeria from "./screens/Galeria";
+import Escalas from "./screens/Escalas";
 
 export default function App() {
   const location = useLocation();
@@ -24,6 +26,8 @@ export default function App() {
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/editar" element={<EditUsers />} />
           <Route path="/eventos" element={<Eventos />} />
+          <Route path="/galeria" element={<Galeria />} />
+          <Route path="/escalas" element={<Escalas />} />
         </Routes>
       </div>
     </>

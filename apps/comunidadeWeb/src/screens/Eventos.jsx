@@ -104,7 +104,7 @@ export default function Eventos() {
   function handleDeleteClick(id, evento) {
     if (evento.isGroup){
       setGrupoSelecionado(evento);
-      setCalendarAction("delete"); // 👈
+      setCalendarAction("delete"); 
       setCalendarVisible(true);
     } else {
       setSelectedEventoId(id);

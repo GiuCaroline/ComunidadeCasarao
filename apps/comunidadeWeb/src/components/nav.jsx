@@ -22,7 +22,7 @@ export function Nav() {
   const routeNames = {
     "/usuarios": "Usuários",
     "/eventos": "Eventos",
-    "/fotos": "Fotos",
+    "/galeria": "Galeria",
     "/escalas": "Escalas",
     "/cursos": "Cursos",
     "/perfil": "Perfil",
@@ -80,7 +80,7 @@ export function Nav() {
             <Link to="/menu">Home</Link>
             <Link to="/usuarios">Usuários</Link>
             <Link to="/eventos">Eventos</Link>
-            <Link to="/fotos">Fotos</Link>
+            <Link to="/galeria">Galeria</Link>
             <Link to="/escalas">Escalas</Link>
             <Link to="/cursos">Cursos</Link>
             <Link to="/perfil">Perfil</Link>
@@ -143,7 +143,7 @@ export function Nav() {
           <Link to="/menu" onClick={() => setOpen(false)}>Home</Link>
           <Link to="/usuarios" onClick={() => setOpen(false)}>Usuários</Link>
           <Link to="/eventos" onClick={() => setOpen(false)}>Eventos</Link>
-          <Link to="/fotos" onClick={() => setOpen(false)}>Fotos</Link>
+          <Link to="/galeria" onClick={() => setOpen(false)}>Galeria</Link>
           <Link to="/escalas" onClick={() => setOpen(false)}>Escalas</Link>
           <Link to="/cursos" onClick={() => setOpen(false)}>Cursos</Link>
           <Link to="/perfil" onClick={() => setOpen(false)}>Perfil</Link>
