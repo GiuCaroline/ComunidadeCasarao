@@ -30,6 +30,7 @@ export function Input({
           bg-input dark:bg-input-dark
           rounded-xl
           outline-none
+          text-preto dark:text-branco
           shadow-md
           font-normal
         "
@@ -41,6 +42,7 @@ export function Input({
           absolute left-4 transition-all duration-200
           ${isActive ? "-top-4 text-sm" : "top-3 text-base"}
           text-[#5e5e5e]
+          dark:text-[#a5a5a5]
           pointer-events-none
         `}
       >

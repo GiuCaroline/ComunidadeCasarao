@@ -146,6 +146,7 @@ export default function Usuarios() {
         visible={confirmVisible}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
+        mnensage={"usuário"}
       />
 
       <AlertCustom

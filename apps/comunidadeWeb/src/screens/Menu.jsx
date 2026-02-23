@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { UsersIcon, CalendarBlankIcon, ImagesSquareIcon, CalendarPlusIcon, GraduationCapIcon } from "@phosphor-icons/react"
 
-export default function Inicio() {
+export default function Menu() {
   const navigate = useNavigate()
 
   return (

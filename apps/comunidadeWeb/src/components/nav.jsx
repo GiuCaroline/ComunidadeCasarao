@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { List, X, ArrowLeft, Sun, Moon } from "@phosphor-icons/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import logoPreta from "/images/logoPreto.png";
+import logoBranca from "/images/logoBranco.png";
 
 export function Nav() {
 
@@ -15,7 +17,7 @@ export function Nav() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isHome = location.pathname === "/home";
+  const isHome = location.pathname === "/menu";
 
   const routeNames = {
     "/usuarios": "Usuários",
@@ -47,11 +49,19 @@ export function Nav() {
           <div className="flex items-center gap-3 md:hidden">
 
             {isHome ? (
-              <img
-                src="/images/logoBranco.png"
-                className="h-8 object-contain"
-                alt="Logo"
-              />
+              <div>
+                <img
+                  src={logoPreta}
+                  alt="Logo"
+                  className="block dark:hidden h-10 object-contain"
+                />
+
+                <img
+                  src={logoBranca}
+                  alt="Logo"
+                  className="hidden dark:block h-10 object-contain"
+                />
+              </div>
             ) : (
               <>
                 <button onClick={() => navigate(-1)}>
@@ -67,7 +77,7 @@ export function Nav() {
 
           {/* ===== DESKTOP MENU ===== */}
           <div className="hidden md:flex gap-8 items-center">
-            <Link to="/home">Home</Link>
+            <Link to="/menu">Home</Link>
             <Link to="/usuarios">Usuários</Link>
             <Link to="/eventos">Eventos</Link>
             <Link to="/fotos">Fotos</Link>
@@ -130,7 +140,7 @@ export function Nav() {
         </button>
 
         <div className="flex flex-col gap-10 px-6 text-lg font-normal text-preto dark:text-branco items-center mt-[50%]">
-          <Link to="/home" onClick={() => setOpen(false)}>Home</Link>
+          <Link to="/menu" onClick={() => setOpen(false)}>Home</Link>
           <Link to="/usuarios" onClick={() => setOpen(false)}>Usuários</Link>
           <Link to="/eventos" onClick={() => setOpen(false)}>Eventos</Link>
           <Link to="/fotos" onClick={() => setOpen(false)}>Fotos</Link>

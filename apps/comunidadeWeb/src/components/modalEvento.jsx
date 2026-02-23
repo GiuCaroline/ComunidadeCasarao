@@ -14,8 +14,8 @@ export function ModalEvento({ visible, onClose, onSave, evento }) {
 
 
   const repeticoes = [
-    { value: "1", label: "Todos do mês" },
-    { value: "2", label: "Semana sim e semana não" },
+    { value: "1", label: "Semanal" },
+    { value: "2", label: "Quinzenal" },
   ];
 
 
@@ -47,9 +47,12 @@ export function ModalEvento({ visible, onClose, onSave, evento }) {
 
   if (!visible) return null;
 
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  function handleChange(field, value) {
+    setForm((prev) => ({
+        ...prev,
+        [field]: value
+    }));
+}
 
   function handleSubmit() {
         let horarioFinal = "";
@@ -86,24 +89,28 @@ export function ModalEvento({ visible, onClose, onSave, evento }) {
         </h2>
 
         <div className="flex flex-col gap-3 items-center justify-center">
-            <Input texto='Nome do Evento' value={form.nome} onChange={handleChange}/>
+            <Input
+                texto="Nome do Evento"
+                value={form.nome}
+                onChange={(value) => handleChange("nome", value)}
+            />
 
             <div className="w-[95%] mb-[7%] flex flex-col mt-[-6%]">
-                <label className="text-[14px] text-[#5e5e5e] mb-1">
+                <label className="text-[14px] text-[#5e5e5e] dark:text-[#a5a5a5] mb-1">
                     Data do Evento
                 </label>
         
                 <DatePicker
                     selected={form.dia}
-                    onChange={handleChange}
+                    onChange={(date) => handleChange("dia", date)}
                     dateFormat="dd/MM/yyyy"
                     locale="pt-BR"
-                    className="h-[48px] w-full shadow-md bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none"
+                    className="h-[48px] text-preto dark:text-branco w-full shadow-md bg-input dark:bg-input-dark rounded-xl px-[15px] outline-none"
                 />
             </div>
 
             <div className="mt-[-5%] ml-[3%]">
-                <label className="ml-[3%] text-[14px] text-[#5e5e5e]">
+                <label className="ml-[3%] text-[14px] text-[#5e5e5e] dark:text-[#a5a5a5]">
                     Horário
                 </label>
 

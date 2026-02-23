@@ -56,16 +56,17 @@ export function Dropdown({
           w-full
           bg-input dark:bg-input-dark
           rounded-xl
+          text-preto dark:text-branco
           px-4
           flex justify-between items-center
           shadow-md
         "
       >
-        <span className="text-placeInput text-[16px]">
+        <span className="text-placeInput dark:text-[#a5a5a5] text-[16px]">
           {selectedLabel || placeholder}
         </span>
 
-        {expanded ? <CaretUp size={22} className="text-placeInput"/> : <CaretDown size={22} className="text-placeInput"/>}
+        {expanded ? <CaretUp size={22} className="text-placeInput dark:text-[#a5a5a5]"/> : <CaretDown size={22} className="text-placeInput dark:text-[#a5a5a5]"/>}
       </button>
 
       {/* Lista */}
@@ -93,7 +94,7 @@ export function Dropdown({
                 h-[45px]
                 text-left
                 px-2
-                text-placeInput
+                text-placeInput dark:text-[#a5a5a5]
                 text-[16px]
                 hover:bg-black/5
                 rounded-lg

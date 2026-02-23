@@ -2,7 +2,7 @@ import { Nav } from "./components/nav";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
-import Inicio from "./screens/Inicio";
+import Menu from "./screens/Menu";
 import Usuarios from "./screens/Usuarios";
 import EditUsers from "./screens/EditUsers";
 import Eventos from "./screens/Eventos";
@@ -20,7 +20,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Inicio />} />
+          <Route path="/menu" element={<Menu />} />
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/editar" element={<EditUsers />} />
           <Route path="/eventos" element={<Eventos />} />

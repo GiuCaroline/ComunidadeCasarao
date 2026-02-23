@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Input } from "../components/input";
 import { useNavigate } from "react-router-dom"
+import logoPreta from "/images/logoPreto.png";
+import logoBranca from "/images/logoBranco.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,11 +16,19 @@ export default function Login() {
 
   return (
     <div className="flex flex-col items-center">
-        <img 
-          src="/images/logoPreto.png"
-          className="w-auto h-[10vh] md:h-[80vh] object-cover selection:bg-branco mt-[20%]"
-        />
-         <form
+      <img
+        src={logoPreta}
+        alt="Logo"
+        className="block dark:hidden w-auto h-[10vh] md:h-[80vh] object-cover selection:bg-branco mt-[20%]"
+      />
+
+      <img
+        src={logoBranca}
+        alt="Logo"
+        className="hidden dark:block w-auto h-[10vh] md:h-[80vh] object-cover selection:bg-branco mt-[20%]"
+      />
+
+      <form
         onSubmit={handleLogin}
         className="bg-transparent p-8 w-[400px] flex flex-col items-center mt-[5%]"
       >
@@ -44,7 +54,7 @@ export default function Login() {
 
         <button
           type="submit"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/menu")}
           className="mt-6 bg-primary text-branco bg-vermelho py-3 px-20 rounded-full hover:opacity-90 transition"
         >
           Entrar

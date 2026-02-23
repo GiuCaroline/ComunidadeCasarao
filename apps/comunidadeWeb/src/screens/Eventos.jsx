@@ -4,9 +4,16 @@ import { ConfirmDelete } from "../components/confirmDelete";
 import { AlertCustom } from "../components/alert";
 import { useNavigate } from "react-router-dom";
 import { ModalEvento } from "../components/modalEvento";
+import EventCalendarModal from "../components/eventCalendarModal";
+import { DeleteOptionsModal } from "../components/deleteOptionsModal";
 
 export default function Eventos() {
 
+  const [calendarVisible, setCalendarVisible] = useState(false);
+  const [grupoSelecionado, setGrupoSelecionado] = useState(null);
+  const [calendarAction, setCalendarAction] = useState(null);
+  const [selectedDateToDelete, setSelectedDateToDelete] = useState(null);
+  const [deleteModeVisible, setDeleteModeVisible] = useState(false);
   const [search, setSearch] = useState("");
   const [eventos, setEventos] = useState([]);
   const [filteredEventos, setFilteredEventos] = useState([]);
@@ -24,19 +31,19 @@ export default function Eventos() {
 
   const navigate = useNavigate();
 
-  // 🔹 Dados fake corrigidos com date ISO
   useEffect(() => {
     const fakeEventos = [
-      { id: 1, nome: "Culto", semana: "Domingo", horario: "10h e 18h", date: "2026-05-12", repetir: false },
-      { id: 2, nome: "Jovens", semana: "Sábado", horario: "20h", date: "2026-05-11", repetir: false },
-      { id: 3, nome: "Oração", semana: "Quarta", horario: "20h", date: "2026-05-15", repetir: false },
+      { id: 1, nome: "Culto", diaSemana: 0, horario: "10h e 18h", date: "2026-05-12", repetir: false },
+      { id: 2, nome: "Jovens", diaSemana: 6, horario: "20h", date: "2026-05-11", repetir: false },
+      { id: 3, nome: "Oração", diaSemana: 3, horario: "20h", date: "2026-05-15", repetir: false },
       {
         id: 10,
-        nome: "Culto oo",
+        nome: "Culto",
         repetir: true,
         tipoRepeticao: "semanal",
         diaSemana: 0,
-        horario: "10h"
+        horario: "10h",
+        excludedDates: [] 
       }
     ];
 
@@ -64,7 +71,6 @@ export default function Eventos() {
     return Object.values(acc);
   }, [eventos]);
 
-  // 🔹 Filtro pesquisa
   useEffect(() => {
     if (search.trim() === "") {
       setFilteredEventos([]);
@@ -81,7 +87,6 @@ export default function Eventos() {
     setFilteredEventos(result);
   }, [search, eventosAgrupados]);
 
-  // 🔹 4 eventos mais próximos
   useEffect(() => {
     const today = new Date();
 
@@ -96,28 +101,96 @@ export default function Eventos() {
     setDefaultEventos(sorted.slice(0, 4));
   }, [eventosAgrupados]);
 
-  function handleDeleteClick(id) {
-    setSelectedEventoId(id);
-    setConfirmVisible(true);
+  function handleDeleteClick(id, evento) {
+    if (evento.isGroup){
+      setGrupoSelecionado(evento);
+      setCalendarAction("delete"); // 👈
+      setCalendarVisible(true);
+    } else {
+      setSelectedEventoId(id);
+      setConfirmVisible(true);
+    }
+  }
+
+  function handleDeleteOne() {
+    const updated = eventos.map((evento) => {
+
+      if (
+        evento.id === selectedEventoId &&
+        evento.repetir &&
+        selectedDateToDelete
+      ) {
+
+        const excluded = evento.excludedDates || [];
+
+        return {
+          ...evento,
+          excludedDates: [...excluded, selectedDateToDelete]
+        };
+      }
+
+      return evento;
+    });
+
+    setEventos(updated);
+    setDeleteModeVisible(false);
+    setAlertType("success");
+    setAlertTitle("Dia removido");
+    setAlertMessage("Somente o dia selecionado foi removido.");
+    setAlertVisible(true);
+  }
+
+  function handleDeleteAll() {
+    const updated = eventos.filter(
+      (evento) => evento.id !== selectedEventoId
+    );
+
+    setEventos(updated);
+    setDeleteModeVisible(false);
+    setAlertType("success");
+    setAlertTitle("Eventos removidos");
+    setAlertMessage("Todos os eventos foram removidos.");
+    setAlertVisible(true);
   }
 
   function handleConfirmDelete() {
     setConfirmVisible(false);
 
     try {
-      const updated = eventos.filter((evento) => evento.id !== selectedEventoId);
+
+      const updated = eventos.map((evento) => {
+
+        if (
+          evento.id === selectedEventoId &&
+          evento.repetir &&
+          selectedDateToDelete
+        ) {
+
+          const excluded = evento.excludedDates || [];
+
+          return {
+            ...evento,
+            excludedDates: [...excluded, selectedDateToDelete]
+          };
+        }
+
+        return evento;
+      });
+
       setEventos(updated);
 
       setAlertType("success");
-      setAlertTitle("Evento removido");
-      setAlertMessage("O evento foi apagado com sucesso.");
+      setAlertTitle("Dia removido");
+      setAlertMessage("O dia selecionado foi removido da repetição.");
+
     } catch (error) {
       setAlertType("error");
       setAlertTitle("Erro");
-      setAlertMessage("Não foi possível apagar o evento.");
+      setAlertMessage("Não foi possível remover o dia.");
     }
 
     setAlertVisible(true);
+    setSelectedDateToDelete(null);
   }
 
   function handleCancelDelete() {
@@ -131,8 +204,14 @@ export default function Eventos() {
   }
 
   function handleEdit(evento) {
-    setEditingEvento(evento);
-    setModalVisible(true);
+    if (evento.isGroup) {
+      setGrupoSelecionado(evento);
+      setCalendarAction("edit");
+      setCalendarVisible(true);
+    } else {
+      setEditingEvento(evento);
+      setModalVisible(true);
+    }
   }
 
   function handleSaveEvento(data) {
@@ -168,7 +247,7 @@ export default function Eventos() {
           placeholder="Pesquisar..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full py-3 px-4 pr-12 rounded-full bg-input dark:bg-input-dark shadow-md outline-none"
+          className="w-full text-preto dark:text-branco py-3 px-4 pr-12 rounded-full bg-input dark:bg-input-dark shadow-md outline-none"
         />
 
         <MagnifyingGlass
@@ -177,7 +256,7 @@ export default function Eventos() {
         />
       </div>
 
-      {/* 📋 Lista */}
+      {/* Lista */}
       {listaParaRenderizar.map((evento) => (
         <div
           key={evento.id}
@@ -185,34 +264,37 @@ export default function Eventos() {
         >
           <div className="w-[72%]">
 
-            <p className="font-normal text-preto dark:text-branco">
-              {evento.nome}
-            </p>
-
             {evento.isGroup ? (
               <>
-                <p className="text-sm text-preto dark:text-branco">
-                  {diasSemana[evento.diaSemana]}
+                <p className="font-normal text-preto dark:text-branco">
+                  {evento.nome}
                 </p>
-                <p className="text-xs text-cinza">
+
+                <p className="font-normal text-preto dark:text-branco">
                   Todos os {diasSemana[evento.diaSemana].toLowerCase()}s
                 </p>
               </>
             ) : (
-              <div className="flex justify-between w-full">
-                <p className="text-sm font-light text-preto dark:text-branco">
-                  {evento.horario}
+              <div>
+                <p className="font-normal text-preto dark:text-branco">
+                  {evento.nome} - {diasSemana[evento.diaSemana]}
                 </p>
-                <p className="text-sm font-light text-preto dark:text-branco">
-                  {evento.date}
-                </p>
+                <div className="flex justify-between w-full">
+                  
+                  <p className="text-sm font-light text-preto dark:text-branco">
+                    {evento.horario}
+                  </p>
+                  <p className="text-sm font-light text-preto dark:text-branco">
+                    {evento.date}
+                  </p>
+                </div>
               </div>
             )}
 
           </div>
 
           <div className="flex gap-3">
-            <button onClick={() => handleDeleteClick(evento.id)}>
+            <button onClick={() => handleDeleteClick(evento.id, evento)}>
               <TrashIcon size={30} className="text-vermelho" />
             </button>
 
@@ -229,6 +311,7 @@ export default function Eventos() {
           setModalVisible(true);
         }}
         className="absolute bottom-20 right-5 bg-vermelho shadow-md rounded-full p-4"
+        id="editar"
       >
         <PlusIcon className="text-branco" size={30} />
       </button>
@@ -237,6 +320,7 @@ export default function Eventos() {
         visible={confirmVisible}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
+        mensage={"evento"}
       />
 
       <ModalEvento
@@ -244,6 +328,33 @@ export default function Eventos() {
         onClose={() => setModalVisible(false)}
         onSave={handleSaveEvento}
         evento={editingEvento}
+      />
+
+      <EventCalendarModal
+        visible={calendarVisible}
+        eventoGrupo={grupoSelecionado}
+        onClose={() => setCalendarVisible(false)}
+        onSelectDay={(date) => {
+          setCalendarVisible(false);
+
+          if (calendarAction === "edit") {
+            setEditingEvento({ ...grupoSelecionado, date });
+            setModalVisible(true);
+          }
+
+          if (calendarAction === "delete") {
+            setSelectedEventoId(grupoSelecionado.id);
+            setSelectedDateToDelete(date); 
+            setDeleteModeVisible(true); 
+          }
+        }}
+      />
+
+      <DeleteOptionsModal
+        visible={deleteModeVisible}
+        onDeleteOne={handleDeleteOne}
+        onDeleteAll={handleDeleteAll}
+        onCancel={() => setDeleteModeVisible(false)}
       />
 
       <AlertCustom
