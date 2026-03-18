@@ -26,18 +26,18 @@ export default function MonthHeaderWeb({ month, year, setMonth, setYear }) {
   }
 
   return (
-    <div className="flex justify-between items-center bg-input dark:bg-input-dark rounded-full px-4 py-2 mb-4">
+    <div className="flex justify-between items-center bg-input dark:bg-input-dark rounded-full px-4 h-[50px] mb-4 w-full">
 
       <button onClick={handlePrev}>
-        <CaretLeft size={20} className="text-preto dark:text-branco"/>
+        <CaretLeft size={20} className="text-preto dark:text-branco  flex items-center"/>
       </button>
 
-      <span className="bg-vermelho text-branco px-4 py-1 rounded-full text-sm">
+      <span className="bg-vermelho flex text-base items-center text-branco px-4 py-1 rounded-full text-sm h-full">
         {months[month]} {year}
       </span>
 
       <button onClick={handleNext}>
-        <CaretRight size={20} className="text-preto dark:text-branco"/>
+        <CaretRight size={20} className="text-preto dark:text-branco  flex items-center"/>
       </button>
 
     </div>

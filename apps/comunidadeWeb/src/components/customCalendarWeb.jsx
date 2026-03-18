@@ -29,13 +29,13 @@ export default function CustomCalendarWeb({
   return (
     <div>
 
-      <div className="grid grid-cols-7 text-center text-xs mb-2 text-preto dark:text-branco">
+      <div className="grid grid-cols-7 text-center gap-4 text-base mb-4 text-preto dark:text-branco">
         {weekDays.map((d) => (
           <span key={d}>{d}</span>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-4">
 
         {days.map((day, index) => {
 
@@ -51,10 +51,11 @@ export default function CustomCalendarWeb({
               onClick={() => onSelectDay(key)}
               className={`
                 relative
-                h-10 text-sm font-light
+                h-10 text-xs font-light
                 flex items-center justify-center
                 text-preto dark:text-branco
-                hover:bg-gray-200 dark:hover:bg-gray-700
+                rounded-lg
+                hover:bg-red-200 dark:hover:bg-gray-700
               `}
             >
               {day}

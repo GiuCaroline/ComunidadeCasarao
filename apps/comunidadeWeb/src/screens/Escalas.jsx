@@ -3,18 +3,20 @@ import { MagnifyingGlass, PlusIcon, PencilSimple } from "@phosphor-icons/react";
 import { ConfirmDelete } from "../components/confirmDelete";
 import { AlertCustom } from "../components/alert";
 import { useNavigate } from "react-router-dom";
+import MonthHeaderWeb from "../components/monthHeaderWeb";
+import CustomCalendarWeb from "../components/customCalendarWeb";
+
 
 export default function Escalas(){
   const [search, setSearch] = useState("");
   const [escalas, setEscalas] = useState([]);
-  const [filteredEscalas, setFilteredEscalas] = useState([]);
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
 
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
-  const [alertType, setAlertType] = useState("success");
+  const [alertType, setAlertType ] = useState("success");
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [selectedEscalaId, setSelectedEscalaId] = useState(null);
@@ -30,20 +32,7 @@ export default function Escalas(){
     setEscalas(fakeEscalas);
   }, []);
 
-  useEffect(() => {
-    if (search.trim() === "") {
-      setFilteredEscalas([]);
-      return;
-    }
-
-    const result = escalas.filter(
-      (escala) =>
-        escala.gap.toLowerCase().includes(search.toLowerCase()) ||
-        escala.diaSemana.toLowerCase().includes(search.toLowerCase())
-    );
-
-    setFilteredEscalas(result);
-  }, [search, escalas]);
+  
 
   function handleDeleteClick(id) {
     setSelectedescalaId(id);
@@ -106,27 +95,6 @@ export default function Escalas(){
   const markedDays = getMarkedDays(escalas, month, year);
   return(
       <div className="pt-5 px-4 flex flex-col items-center gap-6">
-          <div className="relative w-[95%]">
-              <input
-              type="text"
-              placeholder="Pesquisar..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="
-                  w-full py-3 px-4 pr-12
-                  rounded-full
-                  bg-input
-                  dark:bg-input-dark
-                  shadow-md
-                  outline-none
-              "
-              />
-
-              <MagnifyingGlass
-              size={22}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-preto dark:text-branco"
-              />
-          </div>
           <MonthHeaderWeb
             month={month}
             year={year}
