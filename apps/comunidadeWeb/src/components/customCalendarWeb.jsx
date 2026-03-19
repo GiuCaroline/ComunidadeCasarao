@@ -55,7 +55,7 @@ export default function CustomCalendarWeb({
                 flex items-center justify-center
                 text-preto dark:text-branco
                 rounded-lg
-                hover:bg-red-200 dark:hover:bg-gray-700
+                hover:bg-vermelho-opaci dark:hover:bg-gray-700
               `}
             >
               {day}

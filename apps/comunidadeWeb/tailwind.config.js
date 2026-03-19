@@ -21,7 +21,10 @@ export default {
           dark: '#646464',
         },
         'placeInput': '#5e5e5e',
-        'vermelho': '#BB1C00',
+        'vermelho': {
+          DEFAULT: '#BB1C00',
+          opaci: '#bb1c0073'
+        },
         'masc': {
           DEFAULT: '#BCCFFF',
           icon: '#2E9AFF'  
