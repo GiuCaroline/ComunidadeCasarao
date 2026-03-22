@@ -10,6 +10,7 @@ import { AlertCustom } from '../../components/alert';
 
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
+import { registerUser } from "../../services/authService";
 import { useCadastro } from "../CadastroContext";
 
 export function Passo3() {
@@ -81,20 +82,8 @@ export function Passo3() {
         }
 
         try {
-            const response = await fetch('https://literate-space-umbrella-x55rwwqvgxgv2vwrp-3333.app.github.dev/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(cadastro)
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                showAlert("Erro", data.error || "Erro no cadastro");
-                return;
-            }
+            const data = await registerUser(cadastro);
+            console.log("Cadastro enviado:", cadastro);
 
             showAlert("Sucesso", "Cadastro realizado com sucesso!", "success");
 
@@ -103,8 +92,8 @@ export function Passo3() {
             }, 2000);
 
         } catch (error) {
-            showAlert("Erro!", "Não foi possível conectar ao servidor.");
-            console.log('erro:', error);
+            showAlert("Erro", error.error || "Erro no cadastro");
+            console.log("erro:", error);
         }
     }
 

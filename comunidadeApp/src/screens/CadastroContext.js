@@ -33,14 +33,14 @@ export function CadastroProvider({ children }) {
 
   
   function resetCadastro() {
-    updateCadastro({
+    setCadastro({
       nome: "",
-      nascimento: "",
-      sexo: "",
-      estadoCivil: "",
+      nascimento: null,
+      sexo: null,
+      estadoCivil: null,
       conjuge: "",
-      escolaridade: "",
-      situacao: "",
+      escolaridade: null,
+      situacao: null,
       mae: "",
       pai: "",
       telefone: "",
@@ -50,8 +50,8 @@ export function CadastroProvider({ children }) {
       bairro: "",
       complemento: "",
       cargo: "",
-      membro: "",
-      batismo: "",
+      membro: null,
+      batismo: null,
       email: "",
       senha: "",
       cidade: "",
