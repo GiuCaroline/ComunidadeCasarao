@@ -252,7 +252,7 @@ export function Passo3() {
             <Input 
                 texto="Email*"
                 value={cadastro.email}
-                onChangeText={(text) => updateCadastro({ email: text.toLowerCase() })}
+                onChangeText={(text) => updateCadastro({ email: text.toLowerCase().trim() })}
                 keyboardType="email-address"
                 autoCorrect={false}
             />
@@ -397,4 +397,3 @@ const styles = StyleSheet.create({
         elevation: 6,
     }
 });
-

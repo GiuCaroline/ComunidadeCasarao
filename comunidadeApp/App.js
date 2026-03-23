@@ -17,6 +17,7 @@ import { Loading } from './src/screens/Loading';
 import { Login } from './src/screens/Login';
 import { EsqueciSenha } from './src/screens/EsqueciSenha';
 import { CadastroProvider } from './src/screens/CadastroContext';
+import { AuthProvider } from './src/context/AuthContext';
 import { Passo1 } from './src/screens/Cadastro/Passo1';
 import { Passo2 } from './src/screens/Cadastro/Passo2';
 import { Passo3 } from './src/screens/Cadastro/Passo3';
@@ -49,36 +50,38 @@ export default function App() {
   }
 
    return (
-    <CadastroProvider>
-      <ThemeProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-              animation: "fade",
-              animationDuration: 1000,
-            }}
-          > 
-          <Stack.Screen name="Splash" component={Loading} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
-          <Stack.Screen name="Cadastro" component={Passo1} />
-          <Stack.Screen name="Passo2" component={Passo2} />
-          <Stack.Screen name="Passo3" component={Passo3} />
-          <Stack.Screen name="Inicio" component={Inicio} />
-          <Stack.Screen name="Cursos" component={Cursos} />
-          <Stack.Screen name="Galeria" component={Galeria} />
-          <Stack.Screen name="Perfil" component={Perfil} />
-          <Stack.Screen name="Carteira" component={Carteira} />
-          <Stack.Screen name="Solicitacao" component={Solicitacao} />
-          <Stack.Screen name="EditPerfil" component={EditPerfil} />
-          <Stack.Screen name="Agenda" component={Agenda} />
+    <AuthProvider>
+      <CadastroProvider>
+        <ThemeProvider>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+                animation: "fade",
+                animationDuration: 1000,
+              }}
+            > 
+            <Stack.Screen name="Splash" component={Loading} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+            <Stack.Screen name="Cadastro" component={Passo1} />
+            <Stack.Screen name="Passo2" component={Passo2} />
+            <Stack.Screen name="Passo3" component={Passo3} />
+            <Stack.Screen name="Inicio" component={Inicio} />
+            <Stack.Screen name="Cursos" component={Cursos} />
+            <Stack.Screen name="Galeria" component={Galeria} />
+            <Stack.Screen name="Perfil" component={Perfil} />
+            <Stack.Screen name="Carteira" component={Carteira} />
+            <Stack.Screen name="Solicitacao" component={Solicitacao} />
+            <Stack.Screen name="EditPerfil" component={EditPerfil} />
+            <Stack.Screen name="Agenda" component={Agenda} />
 
-          </Stack.Navigator>
+            </Stack.Navigator>
 
-          <StatusBar style="auto" />
-        </NavigationContainer>
-      </ThemeProvider>
-    </CadastroProvider>
+            <StatusBar style="auto" />
+          </NavigationContainer>
+        </ThemeProvider>
+      </CadastroProvider>
+    </AuthProvider>
   );
 }
