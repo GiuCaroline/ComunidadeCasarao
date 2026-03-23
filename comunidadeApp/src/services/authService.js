@@ -22,3 +22,12 @@ export async function loginUser(email, password) {
     throw error.response?.data || { error: "Erro no servidor" };
   }
 }
+
+export async function getUserById(id) {
+  try {
+    const response = await api.get(`/auth/user/${id}`);
+    return response.data.user;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro ao buscar usuário" };
+  }
+}

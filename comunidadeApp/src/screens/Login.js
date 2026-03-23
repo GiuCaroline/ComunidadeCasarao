@@ -35,7 +35,7 @@ export function Login() {
 
   async function handleLogin() {
     if (!email || !senha) {
-      showAlert("Atenção", "Preencha email e senha");
+      showAlert("Atenção!", "Preencha email e senha.", "warning");
       return;
     }
 

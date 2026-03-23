@@ -6,33 +6,80 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Asset } from 'expo-asset';
+import { useAuth } from "../context/AuthContext";
+import { getUserById } from "../services/authService";
+import { useEffect, useState } from "react";
 
 export function Carteira() {
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
-  const usuario = [
-    { id: "1",
-     nome: "Fulano de tal",
-     cargo: "Membro",
-     dtaNascimento: "10/01/2006",
-     sexo: "Masculino",
-     estadoCivil: "Solteiro(a)",
-     grauInstrucao: "Ensino Superior",
-     situacao: "Ativo",
-     celular: "(11) 940028922",
-     mae: "Siclana de tal",
-     pai: "Siclano de tal",
-     email: "teste@teste.com",
-     endereco: "Rua dos bobos",
-     bairro: "Vila Vitória",
-     cep: "09111-231",
-     uf: "SP",
-     complemento: "Nenhum",
-     membro: "Ago/2015",
-     dtaBatismo: "19/10/2019",
-     dtaAceite: "25/10/2025"
-    },
-  ];
+    const { user } = useAuth();
+    const [usuario, setUsuario] = useState(null);
+
+    const cargos = [
+        { value: "1", label: "Cooperador" },
+        { value: "2", label: "Discipulador" },
+        { value: "3", label: "Equipe de Intercessão" },
+        { value: "4", label: "Funcionário" },
+        { value: "5", label: "Líder de Departamento" },
+        { value: "6", label: "Líder de GR" },
+        { value: "7", label: "Líder de Ministério" },
+        { value: "8", label: "Membro" },
+        { value: "9", label: "Pastor" },
+        { value: "10", label: "STAFF ILUMINAÇÃO" },
+        { value: "11", label: "STAFF MÍDIA" },
+        { value: "12", label: "STAFF PROJEÇÃO" },
+        { value: "13", label: "STAFF SOM" },
+        { value: "14", label: "STAFF VÍDEO" },
+        { value: "15", label: "Visitante" },
+    ];
+    const cargosUsuario = [
+        usuario?.cargo,
+        usuario?.cargo2,
+        usuario?.cargo3,
+        usuario?.cargo4
+    ]
+    .filter(c => c) 
+    .map(c => cargos.find(item => item.value == c)?.label)
+    .filter(c => c);
+
+
+    useEffect(() => {
+        async function carregarUsuario() {
+        try {
+            const data = await getUserById(user.id);
+            setUsuario(data);
+        } catch (error) {
+            console.log(error);
+        }
+        }
+
+        if (user?.id) {
+        carregarUsuario();
+        }
+    }, [user]);
+
+    
+    function formatarData(data) {
+        if (!data) return "";
+
+        const d = new Date(data);
+
+        return d.toLocaleDateString("pt-BR");
+    }
+
+    function formatarMesAnoCustom(data) {
+        if (!data) return "";
+
+        const d = new Date(data);
+
+        const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+        const mes = meses[d.getMonth()];
+        const ano = d.getFullYear();
+
+        return `${mes}/${ano}`;
+    }
 
     const getBase64Image = async () => {
         const asset = Asset.fromModule(require('../../assets/images/logoPreto.png'));
@@ -126,35 +173,35 @@ export function Carteira() {
                         <img src="${logoBase64}" />
                     </div>
 
-                    <div class="name">${usuario[0].nome}</div>
-                    <div class="cargo">${usuario[0].cargo}</div>
+                    <div class="name">${usuario?.nome}</div>
+                    <div class="cargo">${cargosUsuario.join(", ")}</div>
 
                     <div class="row">
                     <div>
                         <div class="label">Data de Nascimento</div>
-                        <div class="value">${usuario[0].dtaNascimento}</div>
+                        <div class="value">${formatarData(usuario?.dtanasc)}</div>
                     </div>
                     <div class="codigo">
                         <div class="label">Código</div>
-                        <div class="value"> ${usuario[0].id}</div>
+                        <div class="value"> ${usuario?.id}</div>
                     </div>
                     </div>
 
                     <div class="row">
                     <div>
                         <div class="label">Membro Desde</div>
-                        <div class="value">${usuario[0].membro}</div>
+                        <div class="value">${formatarMesAnoCustom(usuario?.membrodesde)}</div>
                     </div>
                     <div>
                         <div class="label">Batismo</div>
-                        <div class="value">${usuario[0].dtaBatismo}</div>
+                        <div class="value">${formatarData(usuario?.dtabatismo)}</div>
                     </div>
                     </div>
 
                     <div class="row">
                     <div>
                         <div class="label">Data de Emissão</div>
-                        <div class="value">${usuario[0].dtaAceite}</div>
+                        <div class="value">${formatarData(usuario?.data_aceite_termos)}</div>
                     </div>
                     <div>
                         <div class="label">Telefone Igreja</div>
@@ -176,7 +223,7 @@ export function Carteira() {
 
             const { uri } = await Print.printToFileAsync({ html });
 
-            const novoCaminho = `${FileSystem.documentDirectory}credencial_membro_${usuario[0].id}.pdf`;
+            const novoCaminho = `${FileSystem.documentDirectory}credencial_membro_${usuario?.id}.pdf`;
 
             await FileSystem.moveAsync({
                 from: uri,
@@ -229,37 +276,37 @@ export function Carteira() {
                     
                     <View className=' items-start'>
                         <View className='items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>{usuario[0].nome}</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{usuario[0].cargo}</Text>
+                            <Text className='font-popRegular text-base text-preto dark:text-branco'>{usuario?.nome}</Text>
+                            <Text className="text-[13px] font-popLight text-preto dark:text-branco">{cargosUsuario.join(", ")}</Text>
                         </View>
                     </View>
 
                     <View className='flex-row justify-between'>
                         <View className='mt-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Data de Nascimento</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{usuario[0].dtaNascimento}</Text>
+                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarData(usuario?.dtanasc)}</Text>
                         </View>
                         <View className='mt-[5%] mr-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Código</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco"> {usuario[0].id}</Text>
+                            <Text className="text-[15px] font-popLight text-preto dark:text-branco"> {usuario?.id}</Text>
                         </View>
                     </View>
 
                     <View className='flex-row justify-between'>
                         <View className='mt-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Membro Desde</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{usuario[0].membro}</Text>
+                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarMesAnoCustom(usuario?.membrodesde)}</Text>
                         </View>
                         <View className='mt-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Batismo</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{usuario[0].dtaBatismo}</Text>
+                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarData(usuario?.dtabatismo)}</Text>
                         </View>
                     </View>
 
                     <View className='flex-row justify-between'>
                         <View className='mt-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Data de Emissão</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{usuario[0].dtaAceite}</Text>
+                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarData(usuario?.data_aceite_termos)}</Text>
                         </View>
                         <View className='mt-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Telefone Igreja</Text>
