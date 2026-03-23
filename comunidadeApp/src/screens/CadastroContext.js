@@ -25,6 +25,9 @@ export function CadastroProvider({ children }) {
     email: "",
     senha: "",
     cidade: "",
+    cargo2: "",
+    cargo3: "",
+    cargo4: "",
   });
 
   function updateCadastro(dados) {
@@ -55,6 +58,9 @@ export function CadastroProvider({ children }) {
       email: "",
       senha: "",
       cidade: "",
+      cargo2: "",
+      cargo3: "",
+      cargo4: "",
     });
   }
 

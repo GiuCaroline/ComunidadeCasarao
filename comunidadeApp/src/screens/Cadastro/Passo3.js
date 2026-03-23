@@ -7,6 +7,7 @@ import { Input } from '../../components/input';
 import { Dropdown } from '../../components/dropdown';
 import { Calendario } from '../../components/calendario';
 import { AlertCustom } from '../../components/alert';
+import { PlusCircleIcon } from 'phosphor-react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
@@ -16,7 +17,8 @@ import { useCadastro } from "../CadastroContext";
 export function Passo3() {
 
     const navigation = useNavigation();
-    const { cadastro, updateCadastro } = useCadastro();
+    const { cadastro, updateCadastro, resetCadastro } = useCadastro();
+    const [cargos, setCargos] = useState([null]);
     
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -69,6 +71,30 @@ export function Passo3() {
     }
 
 
+
+    const [aceitouTermos, setAceitouTermos] = useState(false);
+    const [termosVisible, setTermosVisible] = useState(false);
+    
+    function adicionarCargo() {
+        if (cargos.length < 4) {
+            setCargos([...cargos, null]);
+        }
+    }
+
+    function atualizarCargo(index, valor) {
+        const novosCargos = [...cargos];
+        novosCargos[index] = valor;
+        setCargos(novosCargos);
+
+        updateCadastro({
+            cargo: novosCargos[0] || "",
+            cargo2: novosCargos[1] || "",
+            cargo3: novosCargos[2] || "",
+            cargo4: novosCargos[3] || "",
+        });
+    }
+
+    
     async function handleConcluir() {
         if (!aceitouTermos) {
             showAlert("Atenção!", "Você precisa aceitar os Termos de Uso.", "warning");
@@ -91,15 +117,15 @@ export function Passo3() {
                 navigation.navigate("Login");
             }, 2000);
 
+            await registerUser(cadastro);
+
+            resetCadastro();
+
         } catch (error) {
             showAlert("Erro", error.error || "Erro no cadastro");
             console.log("erro:", error);
         }
     }
-
-    const [aceitouTermos, setAceitouTermos] = useState(false);
-    const [termosVisible, setTermosVisible] = useState(false);
-    
 
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
@@ -142,29 +168,45 @@ export function Passo3() {
 
             </View>
 
-            <Dropdown
-                placeholder="Cargo"
-                data={[
-                    { value: "1", label: "Cooperador" },
-                    { value: "2", label: "Discipulador" },
-                    { value: "3", label: "Equipe de Intercessão" },
-                    { value: "4", label: "Funcionário" },
-                    { value: "5", label: "Líder de Departamento" },
-                    { value: "6", label: "Líder de GR" },
-                    { value: "7", label: "Líder de Ministério" },
-                    { value: "8", label: "Membro" },
-                    { value: "9", label: "Pastor" },
-                    { value: "10", label: "STAFF ILUMINAÇÃO" },
-                    { value: "11", label: "STAFF MÍDIA" },
-                    { value: "12", label: "STAFF PROJEÇÃO" },
-                    { value: "13", label: "STAFF SOM" },
-                    { value: "14", label: "STAFF VÍDEO" },
-                    { value: "15", label: "Visitante" },
-                ]}
-                onChange={(item) => updateCadastro({ cargo: item.value })}
-                onOpen={() => setScrollEnabled(false)}
-                onClose={() => setScrollEnabled(true)}
-            />
+
+            <View className='w-full pl-[5%]'>
+                {cargos.map((cargo, index) => (
+                    <View key={index} className="flex-row mb-2">
+                        <View className="flex-1">
+                            <Dropdown
+                                placeholder={`Cargo ${index + 1}`}
+                                data={[
+                                    { value: "1", label: "Cooperador" },
+                                    { value: "2", label: "Discipulador" },
+                                    { value: "3", label: "Equipe de Intercessão" },
+                                    { value: "4", label: "Funcionário" },
+                                    { value: "5", label: "Líder de Departamento" },
+                                    { value: "6", label: "Líder de GR" },
+                                    { value: "7", label: "Líder de Ministério" },
+                                    { value: "8", label: "Membro" },
+                                    { value: "9", label: "Pastor" },
+                                    { value: "10", label: "STAFF ILUMINAÇÃO" },
+                                    { value: "11", label: "STAFF MÍDIA" },
+                                    { value: "12", label: "STAFF PROJEÇÃO" },
+                                    { value: "13", label: "STAFF SOM" },
+                                    { value: "14", label: "STAFF VÍDEO" },
+                                    { value: "15", label: "Visitante" },
+                                ]}
+                                onChange={(item) => atualizarCargo(index, item.value)}
+                                onOpen={() => setScrollEnabled(false)}
+                                onClose={() => setScrollEnabled(true)}
+                            />
+                        </View>
+
+                        {index === cargos.length - 1 && cargos.length < 4 && (
+                            <TouchableOpacity onPress={adicionarCargo}>
+                                <PlusCircleIcon size={32} weight="fill" className="text-vermelho mt-2" />
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                ))}
+            </View>
+            
 
             <View className='flex flex-row justify-center items-baseline'>
                 <Text className="text-[16px] font-popRegular text-placeInput w-[200px]">Membro Desde</Text>
@@ -210,7 +252,9 @@ export function Passo3() {
             <Input 
                 texto="Email*"
                 value={cadastro.email}
-                onChangeText={(text) => updateCadastro({ email: text })}
+                onChangeText={(text) => updateCadastro({ email: text.toLowerCase() })}
+                keyboardType="email-address"
+                autoCorrect={false}
             />
 
             <Input

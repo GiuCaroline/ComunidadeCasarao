@@ -8,6 +8,7 @@ import { Calendario } from '../../components/calendario';
 import { Dropdown } from '../../components/dropdown';
 import { MascFem } from '../../components/genero';
 import { AlertCustom } from '../../components/alert';
+import { Animated } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
@@ -18,6 +19,8 @@ export function Passo1() {
 
     const navigation = useNavigation();
     const { cadastro, updateCadastro, resetCadastro } = useCadastro();
+    const [mostrarConjuge, setMostrarConjuge] = useState(false);
+    const animConjuge = useState(new Animated.Value(0))[0];
   
     const [show, setShow] = useState(false);
     const [day, setDay] = useState(null);
@@ -52,6 +55,12 @@ export function Passo1() {
         navigation.navigate("Login");
     }
 
+    useEffect(() => {
+        setDay(null);
+        setMostrarConjuge(false);
+        animConjuge.setValue(0);
+    }, []);
+    
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       <KeyboardAvoidingView
@@ -140,16 +149,46 @@ export function Passo1() {
                     { value: "7", label: "União Estável" },
                     { value: "8", label: "Viúvo(a)" },
                 ]}
-                onChange={(item) => updateCadastro({ estadoCivil: item.value })}
+                onChange={(item) => {
+                    updateCadastro({ estadoCivil: item.value });
+
+                    const deveMostrar = item.value === "1" || item.value === "7";
+
+                    setMostrarConjuge(deveMostrar);
+
+                    Animated.timing(animConjuge, {
+                        toValue: deveMostrar ? 1 : 0,
+                        duration: 400,
+                        useNativeDriver: true,
+                    }).start();
+                }}
                 onOpen={() => setScrollEnabled(false)}
                 onClose={() => setScrollEnabled(true)}
             />
 
-            <Input
-                texto="Cônjuge"
-                value={cadastro.conjuge}
-                onChangeText={(text) => updateCadastro({ conjuge: text })}
-            />
+           {mostrarConjuge && (
+                <Animated.View
+                    style={{
+                        width: '100%',
+                        alignItems: 'center',
+                        opacity: animConjuge,
+                        transform: [
+                            {
+                                translateY: animConjuge.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [-20, 0],
+                                }),
+                            },
+                        ],
+                    }}
+                >
+                    <Input
+                        texto="Cônjuge"
+                        value={cadastro.conjuge}
+                        onChangeText={(text) => updateCadastro({ conjuge: text })}
+                    />
+                </Animated.View>
+            )}
 
             <Dropdown
                 placeholder="Grau de Instrução"

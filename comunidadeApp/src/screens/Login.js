@@ -2,9 +2,17 @@ import { View, Text, Image, KeyboardAvoidingView, ScrollView, Platform, Touchabl
 import { Input } from '../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { GoogleLogo, FacebookLogo, InstagramLogo } from 'phosphor-react-native';
+import { useCadastro } from '../screens/CadastroContext';
 
 export function Login() {
   const navigation = useNavigation();
+  const { resetCadastro } = useCadastro();
+
+  function irParaCadastro() {
+    resetCadastro();
+    navigation.navigate('Cadastro');
+  }
+
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       <KeyboardAvoidingView 
@@ -22,7 +30,11 @@ export function Login() {
           </Text>
 
           <View className='w-[350px] items-center'>
-            <Input texto = 'Email'/>
+            <Input 
+                texto="Email"
+                keyboardType="email-address"
+                autoCorrect={false}
+            />
             <Input texto = 'Senha' seguranca={true}/>
           </View>
 
@@ -63,7 +75,7 @@ export function Login() {
             </TouchableOpacity>
           </View>
 
-          <Text className='font-popLight text-[13px] mt-[15%]' onPress={() => navigation.navigate('Cadastro')}>
+          <Text className='font-popLight text-[13px] mt-[15%]' onPress={irParaCadastro}>
             Não tem login? Faça o cadastro clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
           </Text>
         </ScrollView>
