@@ -1,6 +1,6 @@
 # 📱 Aplicativo Comunidade Casarão
 
-Este repositório contém o projeto do **Aplicativo da Igreja Comunidade Casarão**, desenvolvido de forma independente por **Giulia Caroline Claro** em parceria com **Guilherme Santana**.
+Este repositório contém o projeto do **Aplicativo da Igreja Comunidade Casarão**, desenvolvido de forma independente por **Giulia Caroline Claro**.
 
 O aplicativo tem como objetivo oferecer uma solução simples e funcional para auxiliar no gerenciamento interno da igreja, incluindo:
 
@@ -45,7 +45,6 @@ Você pode visualizar o protótipo do aplicativo no link abaixo:
 ## 👥 Desenvolvedores
 
 * **Giulia Caroline Claro**
-* **Guilherme Santana**
 
 ---
 
