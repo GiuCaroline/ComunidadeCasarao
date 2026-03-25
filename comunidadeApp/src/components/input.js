@@ -35,7 +35,7 @@ export function Input({
   return (
     <View
       style={[styles.sombra, containerStyle]}
-      className="bg-input rounded-xl flex items-center justify-center w-[95%] h-[50px] mb-[10%]"
+      className="bg-input dark:bg-input-dark rounded-xl flex items-center justify-center w-[95%] h-[50px] mb-[10%]"
     >
       <Animated.Text
         style={{
@@ -43,18 +43,18 @@ export function Input({
           left: 16,
           top: labelTop,
           fontSize: labelSize,
-          color: '#5e5e5e',
           fontFamily: isActive
             ? 'Poppins_300Light'
             : 'Poppins_400Regular',
           zIndex: 1,
         }}
+        className='text-placeInput dark:text-placeInput-dark'
       >
         {texto}
       </Animated.Text>
 
       <TextInput
-        className="font-popRegular px-[2%] w-[95%] text-[16px]"
+        className="font-popRegular px-[2%] w-[95%] text-[16px] text-preto dark:text-branco"
         style={{ height: 65 }}
         value={value}
         onChangeText={onChangeText}

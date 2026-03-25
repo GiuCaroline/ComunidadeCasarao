@@ -1,10 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { ThemeProvider } from "./src/context/themeContext";
-import { useTheme } from "./src/context/themeContext";
 import { useColorScheme } from "nativewind";
-import { useEffect } from "react";
 
 import { useFonts,
    Poppins_200ExtraLight,
@@ -51,21 +48,15 @@ export default function App() {
    return (
     <AuthProvider>
       <CadastroProvider>
-        <ThemeProvider>
-          <AppContent />
-        </ThemeProvider>
+        <AppContent />
       </CadastroProvider>
     </AuthProvider>
   );
 }
 
 function AppContent() {
-  const { theme } = useTheme();
   const { setColorScheme } = useColorScheme();
 
-  useEffect(() => {
-    setColorScheme(theme);
-  }, [theme]);
 
 
   return (
@@ -93,7 +84,7 @@ function AppContent() {
         <Stack.Screen name="Agenda" component={Agenda} />
       </Stack.Navigator>
 
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+      <StatusBar />
     </NavigationContainer>
   );
 }

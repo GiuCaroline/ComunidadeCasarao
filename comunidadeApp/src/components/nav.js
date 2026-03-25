@@ -14,7 +14,7 @@ export function Nav({ active, onChange }) {
   return (
     <View
       style={[{ paddingBottom: insets.bottom > 0 ? insets.bottom : 8 }, styles.sombra]}
-      className="absolute bottom-0 w-full bg-branco flex-row justify-around py-[2%] items-center"
+      className="absolute bottom-0 w-full bg-branco dark:bg-preto-dark flex-row justify-around py-[2%] items-center"
     >
       <Tab
         label="Cursos"
@@ -32,9 +32,9 @@ export function Nav({ active, onChange }) {
 
       <Pressable
         onPress={() => onChange("Inicio")}
-        className="bg-preto w-14 h-14 rounded-full justify-center items-center "
+        className="bg-preto dark:bg-branco w-14 h-14 rounded-full justify-center items-center "
       >
-        <House size={26} weight="fill" color="#fff" />
+        <House size={26} weight="fill" className='text-branco dark:text-preto' />
       </Pressable>
 
       <Tab
@@ -59,7 +59,7 @@ function Tab({ label, icon: Icon, active, onPress }) {
   return (
     <Pressable className="items-center justify-center" onPress={onPress}>
       {active && (
-        <View className="absolute -top-2 w-full h-[3px] bg-preto rounded-full" />
+        <View className="absolute -top-2 w-full h-[3px] bg-preto dark:bg-branco rounded-full" />
       )}
 
       <Icon

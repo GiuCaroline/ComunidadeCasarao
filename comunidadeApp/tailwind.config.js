@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./App.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
-  darkMode: 'class', 
   theme: {
     extend: {
       fontFamily:{
@@ -24,7 +23,10 @@ module.exports = {
           DEFAULT: '#F0F0F0',
           dark: '#646464',
         },
-        'placeInput': '#5e5e5e',
+        'placeInput':  {
+          DEFAULT: '#5e5e5e',
+          dark: '#a5a5a5',
+        },
         'vermelho': '#BB1C00',
         'masc': {
           DEFAULT: '#BCCFFF',
@@ -35,7 +37,6 @@ module.exports = {
           icon: '#C700A2'
         },
         
-        // Cor de erro/sucesso fundo
         'success': '#D8FFCE',
         'error': '#FFAD9E',
       },

@@ -2,11 +2,11 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "rea
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { IdentificationCard, Paperclip, PencilSimple, SunDim, MoonStars, SignOutIcon } from "phosphor-react-native";
-import { useTheme } from "../context/themeContext";
 import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
 import { AlertCustom } from '../components/alert';
+import { useColorScheme } from "nativewind";
 
 export function Perfil() {
   const navigation = useNavigation();
@@ -90,7 +90,7 @@ export function Perfil() {
     }
   }, [user]);
 
-  const { theme, toggleTheme } = useTheme();
+  const { colorScheme, toggleColorScheme } = useColorScheme();
 
   function formatarData(data) {
     if (!data) return "";
@@ -395,7 +395,7 @@ export function Perfil() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={toggleTheme}
+            onPress={toggleColorScheme}
             className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[5%]"
             style={styles.sombra}
           >
@@ -403,7 +403,7 @@ export function Perfil() {
               Tema do App
             </Text>
 
-            {theme === "dark" ? (
+            {colorScheme === "dark" ? (
               <MoonStars size={25} color="#B3261E" />
             ) : (
               <SunDim size={25} color="#B3261E" />
