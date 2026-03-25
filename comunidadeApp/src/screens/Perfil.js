@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { IdentificationCard, Paperclip, PencilSimple, SunDim, MoonStars } from "phosphor-react-native";
+import { IdentificationCard, Paperclip, PencilSimple, SunDim, MoonStars, SignOutIcon } from "phosphor-react-native";
 import { useTheme } from "../context/themeContext";
 import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
@@ -10,7 +10,7 @@ import { AlertCustom } from '../components/alert';
 
 export function Perfil() {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [usuario, setUsuario] = useState(null);
 
   const genero = [
@@ -143,7 +143,7 @@ export function Perfil() {
 
     setTimeout(() => {
         setAlertVisible(false);
-    }, 2500);
+    }, 1500);
   }
 
   function temValor(valor) {
@@ -202,7 +202,7 @@ export function Perfil() {
             <View className="flex-row items-center gap-3">
               <View>
                 <Text className="text-base font-popRegular text-preto dark:text-branco">
-                  {formataNome(user?.name)}
+                  {formataNome(user?.nome)}
                 </Text>
                 <View className="mt-[2%]">
                   {cargosUsuario.map((cargo, index) => (
@@ -396,7 +396,7 @@ export function Perfil() {
 
           <TouchableOpacity
             onPress={toggleTheme}
-            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[25%]"
+            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[5%]"
             style={styles.sombra}
           >
             <Text className="text-base font-popRegular text-preto dark:text-branco">
@@ -408,6 +408,24 @@ export function Perfil() {
             ) : (
               <SunDim size={25} color="#B3261E" />
             )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={async () => {
+              await logout();
+              navigation.navigate("Login");
+            }}
+            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[25%]"
+            style={styles.sombra}
+          >
+            <View className="flex-row items-center gap-3">
+              <Text className="text-base font-popRegular text-vermelho">
+                LogOut
+              </Text>
+            </View>
+
+            <SignOutIcon size={25} color="#B3261E"/>
           </TouchableOpacity>
         </View>
       </ScrollView>

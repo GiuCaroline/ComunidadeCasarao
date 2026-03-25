@@ -11,13 +11,18 @@ import { CaretUp, CaretDown } from "phosphor-react-native";
 
 export function Dropdown({
   data = [],
+  value: externalValue,
   onChange,
   placeholder,
   onOpen,
   onClose
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [value, setValue] = useState("");
+  const [internalValue, setInternalValue] = useState("");
+
+  const value = externalValue !== undefined ? externalValue : internalValue;
+
+  const selectedItem = data.find(item => item.value == value);
 
   const openDropdown = () => {
     onOpen && onOpen();
@@ -30,22 +35,25 @@ export function Dropdown({
   };
 
   const onSelect = (item) => {
-    setValue(item.label);
+    if (externalValue === undefined) {
+      setInternalValue(item.value);
+    }
+
     onChange && onChange(item);
     closeDropdown();
   };
-
   return (
     <View>
       <TouchableOpacity
-        style={[ styles.sombra]}
+        style={[styles.sombra]}
         className='h-[48px] bg-input rounded-xl px-[15px] flex-row justify-between items-center w-[95%] mb-[9%]'
         onPress={expanded ? closeDropdown : openDropdown}
         activeOpacity={0.8}
       >
         <Text className='text-placeInput font-popRegular text-[16px]'>
-          {value || placeholder}
+          {selectedItem?.label || placeholder}
         </Text>
+
         {expanded ? <CaretUp size={22} /> : <CaretDown size={22} />}
       </TouchableOpacity>
 
@@ -57,21 +65,21 @@ export function Dropdown({
           />
 
           <View className='absolute top-[52px] w-[95%] bg-input max-h-[300px] rounded-xl p-[10px] z-[999]'
-           style={[styles.sombra]}>
-            <ScrollView
-              showsVerticalScrollIndicator
-              >
-               {data.map((item) => (
+            style={[styles.sombra]}>
+            <ScrollView showsVerticalScrollIndicator>
+              {data.map((item) => (
                 <TouchableOpacity
                   key={item.value}
                   className='h-[45px] justify-center'
                   onPress={() => onSelect(item)}
                   activeOpacity={0.8}
                 >
-                  <Text className='text-placeInput font-popRegular text-[16px]'>{item.label}</Text>
+                  <Text className='text-placeInput font-popRegular text-[16px]'>
+                    {item.label}
+                  </Text>
                 </TouchableOpacity>
               ))}
-              </ScrollView>
+            </ScrollView>
           </View>
         </>
       )}

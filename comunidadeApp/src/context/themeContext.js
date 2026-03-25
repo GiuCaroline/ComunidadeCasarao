@@ -1,16 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { Appearance } from "react-native";
-import { NativeWindStyleSheet } from "nativewind";
+import React, { createContext, useContext, useState } from "react";
 
 const ThemeContext = createContext({});
 
 export function ThemeProvider({ children }) {
-  const systemTheme = Appearance.getColorScheme(); // dark | light
-  const [theme, setTheme] = useState(systemTheme);
-
-  useEffect(() => {
-    NativeWindStyleSheet.setColorScheme(theme);
-  }, [theme]);
+  const [theme, setTheme] = useState("light");
 
   function toggleTheme() {
     setTheme(prev => (prev === "dark" ? "light" : "dark"));

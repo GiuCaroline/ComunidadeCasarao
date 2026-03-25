@@ -20,7 +20,7 @@ export function Inicio(){
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 95 }} className='flex'>
         <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
-          <Text className='text-[18px] font-popRegular mt-[5%]'>Olá {primeiroNome(user?.name)}!</Text>
+          <Text className='text-[18px] font-popRegular mt-[5%]'>Olá {primeiroNome(user?.nome)}!</Text>
           <Image
               source={require('../../assets/images/logoPreto.png')}
               className="w-[25%] "

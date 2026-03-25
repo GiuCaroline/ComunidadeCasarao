@@ -7,7 +7,7 @@ import { Input } from '../../components/input';
 import { Dropdown } from '../../components/dropdown';
 import { Calendario } from '../../components/calendario';
 import { AlertCustom } from '../../components/alert';
-import { PlusCircleIcon } from 'phosphor-react-native';
+import { PlusCircleIcon, MinusCircleIcon } from 'phosphor-react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
@@ -40,11 +40,9 @@ export function Passo3() {
     }
     }, [batismoDay]);
 
-
     const [calMembroVisible, setCalMembroVisible] = useState(false);
     const [calBatismoVisible, setCalBatismoVisible] = useState(false);
 
-    
     function validarCadastro() {
         if (!cadastro.email) return "Informe o e-mail.";
         if (!cadastro.senha || cadastro.senha.length < 6)
@@ -70,8 +68,6 @@ export function Passo3() {
         }, 2500);
     }
 
-
-
     const [aceitouTermos, setAceitouTermos] = useState(false);
     const [termosVisible, setTermosVisible] = useState(false);
     
@@ -94,7 +90,21 @@ export function Passo3() {
         });
     }
 
-    
+    function removerCargo(index) {
+        const novosCargos = cargos.filter((_, i) => i !== index);
+
+        const listaFinal = novosCargos.length ? novosCargos : [null];
+
+        setCargos(listaFinal);
+
+        updateCadastro({
+            cargo: listaFinal[0] || "",
+            cargo2: listaFinal[1] || "",
+            cargo3: listaFinal[2] || "",
+            cargo4: listaFinal[3] || "",
+        });
+    }
+
     async function handleConcluir() {
         if (!aceitouTermos) {
             showAlert("Atenção!", "Você precisa aceitar os Termos de Uso.", "warning");
@@ -198,7 +208,14 @@ export function Passo3() {
                             />
                         </View>
 
-                        {index === cargos.length - 1 && cargos.length < 4 && (
+                        
+                        {cargos.length > 1 && (
+                            <TouchableOpacity onPress={() => removerCargo(index)}>
+                                <MinusCircleIcon size={32} weight="fill" className="text-vermelho mt-2" />
+                            </TouchableOpacity>
+                        )}
+
+                        {index === cargos.length - 1 && cargos.length < 4 &&  (
                             <TouchableOpacity onPress={adicionarCargo}>
                                 <PlusCircleIcon size={32} weight="fill" className="text-vermelho mt-2" />
                             </TouchableOpacity>

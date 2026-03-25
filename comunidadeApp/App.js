@@ -2,9 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from "./src/context/themeContext";
-import { View } from "react-native";
-
-
+import { useTheme } from "./src/context/themeContext";
+import { useColorScheme } from "nativewind";
+import { useEffect } from "react";
 
 import { useFonts,
    Poppins_200ExtraLight,
@@ -29,7 +29,6 @@ import { Carteira } from './src/screens/Carteira';
 import { Solicitacao } from './src/screens/Solicitacao';
 import { EditPerfil } from './src/screens/EditPerfil';
 import { Agenda } from './src/screens/Agenda';
-import { useTheme } from "./src/context/themeContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,35 +52,48 @@ export default function App() {
     <AuthProvider>
       <CadastroProvider>
         <ThemeProvider>
-          <NavigationContainer>
-            <Stack.Navigator
-              screenOptions={{
-                headerShown: false,
-                animation: "fade",
-                animationDuration: 1000,
-              }}
-            > 
-            <Stack.Screen name="Splash" component={Loading} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
-            <Stack.Screen name="Cadastro" component={Passo1} />
-            <Stack.Screen name="Passo2" component={Passo2} />
-            <Stack.Screen name="Passo3" component={Passo3} />
-            <Stack.Screen name="Inicio" component={Inicio} />
-            <Stack.Screen name="Cursos" component={Cursos} />
-            <Stack.Screen name="Galeria" component={Galeria} />
-            <Stack.Screen name="Perfil" component={Perfil} />
-            <Stack.Screen name="Carteira" component={Carteira} />
-            <Stack.Screen name="Solicitacao" component={Solicitacao} />
-            <Stack.Screen name="EditPerfil" component={EditPerfil} />
-            <Stack.Screen name="Agenda" component={Agenda} />
-
-            </Stack.Navigator>
-
-            <StatusBar style="auto" />
-          </NavigationContainer>
+          <AppContent />
         </ThemeProvider>
       </CadastroProvider>
     </AuthProvider>
+  );
+}
+
+function AppContent() {
+  const { theme } = useTheme();
+  const { setColorScheme } = useColorScheme();
+
+  useEffect(() => {
+    setColorScheme(theme);
+  }, [theme]);
+
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          animation: "fade",
+          animationDuration: 1000,
+        }}
+      > 
+        <Stack.Screen name="Splash" component={Loading} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+        <Stack.Screen name="Cadastro" component={Passo1} />
+        <Stack.Screen name="Passo2" component={Passo2} />
+        <Stack.Screen name="Passo3" component={Passo3} />
+        <Stack.Screen name="Inicio" component={Inicio} />
+        <Stack.Screen name="Cursos" component={Cursos} />
+        <Stack.Screen name="Galeria" component={Galeria} />
+        <Stack.Screen name="Perfil" component={Perfil} />
+        <Stack.Screen name="Carteira" component={Carteira} />
+        <Stack.Screen name="Solicitacao" component={Solicitacao} />
+        <Stack.Screen name="EditPerfil" component={EditPerfil} />
+        <Stack.Screen name="Agenda" component={Agenda} />
+      </Stack.Navigator>
+
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+    </NavigationContainer>
   );
 }

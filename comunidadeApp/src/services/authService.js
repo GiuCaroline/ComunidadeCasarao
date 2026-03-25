@@ -31,3 +31,12 @@ export async function getUserById(id) {
     throw error.response?.data || { error: "Erro ao buscar usuário" };
   }
 }
+
+export async function updateUser(data) {
+  try {
+    const response = await api.put(`/auth/updateUser/${data.id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro ao atualizar usuário" };
+  }
+}
