@@ -220,7 +220,7 @@ export function Perfil() {
               </View>
             </View>
 
-            <IdentificationCard size={30} color={camposFaltando().length === 0 ? "#B3261E" : "#999"}/>
+            <IdentificationCard size={30} weight="light" color={camposFaltando().length === 0 ? "#B3261E" : "#999"}/>
           </TouchableOpacity>
         </View>
 
@@ -394,7 +394,7 @@ export function Perfil() {
               </Text>
             </View>
 
-            <Paperclip size={25} color="#B3261E"/>
+            <Paperclip size={25} weight="light" color="#B3261E"/>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -407,9 +407,9 @@ export function Perfil() {
             </Text>
 
             {colorScheme === "dark" ? (
-              <MoonStars size={25} color="#B3261E" />
+              <MoonStars size={25} weight="light" color="#B3261E" />
             ) : (
-              <SunDim size={25} color="#B3261E" />
+              <SunDim size={25} weight="light" color="#B3261E" />
             )}
           </TouchableOpacity>
 
@@ -428,7 +428,7 @@ export function Perfil() {
               </Text>
             </View>
 
-            <SignOutIcon size={25} color="#BB1C00"/>
+            <SignOutIcon size={25} weight="light" color="#BB1C00"/>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -439,7 +439,7 @@ export function Perfil() {
           className="absolute bottom-32 right-5 bg-vermelho rounded-full p-4"
           style={styles.sombra}
         >
-          <PencilSimple  size={28} color="#FAFAFA"/>
+          <PencilSimple  size={28} weight="light" color="#FAFAFA"/>
         </TouchableOpacity>
 
       <Nav

@@ -350,14 +350,14 @@ export function Passo3() {
             <Modal visible={termosVisible} transparent animationType="fade">
                 <View className="flex-1 bg-black/60 items-center justify-center px-4">
                     
-                    <View className="bg-branco rounded-2xl w-full max-h-[80%] p-4">
+                    <View className="bg-branco dark:bg-input-dark rounded-2xl w-full max-h-[80%] p-4">
 
                     <Text className="font-popSemibold text-[18px] text-vermelho mb-3 text-center">
                         Termos de Uso
                     </Text>
 
                     <ScrollView className="mb-[5%]">
-                        <Text className="font-popLight text-[14px] text-black leading-5">
+                        <Text className="font-popLight text-[14px] text-preto dark:text-branco leading-5">
                         Ao realizar seu cadastro, você concorda com o uso das informações
                         fornecidas para fins administrativos, organizacionais e de
                         comunicação interna da instituição.

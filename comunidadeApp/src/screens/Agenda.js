@@ -118,6 +118,7 @@ export function Agenda(){
                         <CalendarDots
                             size={26}
                             color={event.color}
+                            weight="light"
                         />
 
                         <View className='flex-1 ml-[3%]'>
