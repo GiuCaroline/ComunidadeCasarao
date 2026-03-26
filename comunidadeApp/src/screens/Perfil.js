@@ -91,6 +91,9 @@ export function Perfil() {
   }, [user]);
 
   const { colorScheme, toggleColorScheme } = useColorScheme();
+  const logo = colorScheme === 'dark' 
+  ? require('../../assets/images/logoBranco.png') 
+  : require('../../assets/images/logoPreto.png');
 
   function formatarData(data) {
     if (!data) return "";
@@ -177,7 +180,7 @@ export function Perfil() {
       <View className='w-full flex-row justify-between items-center px-[4%] mb-[-18%] mt-[-12%]'>
           <Text className='text-[18px] font-popRegular mt-[5%] text-preto dark:text-branco'>Perfil</Text>
           <Image
-            source={require('../../assets/images/logoPreto.png')}
+            source={logo}
             className="w-[25%] "
             resizeMode="contain"
           />
@@ -416,8 +419,8 @@ export function Perfil() {
               await logout();
               navigation.navigate("Login");
             }}
-            className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[25%]"
-            style={styles.sombra}
+            className="w-[95%] px-4 py-5 bg-transparent border-solid border-[#BB1C00] border-[1px] rounded-[20px] flex-row items-center justify-between mb-[25%]"
+            
           >
             <View className="flex-row items-center gap-3">
               <Text className="text-base font-popRegular text-vermelho">
@@ -425,7 +428,7 @@ export function Perfil() {
               </Text>
             </View>
 
-            <SignOutIcon size={25} color="#B3261E"/>
+            <SignOutIcon size={25} color="#BB1C00"/>
           </TouchableOpacity>
         </View>
       </ScrollView>

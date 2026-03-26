@@ -7,6 +7,7 @@ import { useState } from "react";
 import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import { AlertCustom } from '../components/alert';
+import { useColorScheme } from "nativewind";
 
 export function Login() {
   const navigation = useNavigation();
@@ -14,6 +15,11 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const { login } = useAuth();
+  const { colorScheme } = useColorScheme();
+
+  const logo = colorScheme === 'dark' 
+  ? require('../../assets/images/logoBranco.png') 
+  : require('../../assets/images/logoPreto.png');
 
   const [loading, setLoading] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
@@ -70,7 +76,7 @@ export function Login() {
       >
         <ScrollView contentContainerStyle={{ padding: 10, alignItems:'center', }} className='flex'>
           <Image
-            source={require('../../assets/images/logoPreto.png')}
+            source={logo}
             className="w-[60%]  mt-[10%]"
             resizeMode="contain"
           />
@@ -96,7 +102,7 @@ export function Login() {
           </View>
 
           <View className='w-[95%]'>
-            <Text className="font-popLight text-[12px] text-placeInput mt-[-5%] mb-[10%]"
+            <Text className="font-popLight text-[12px] text-placeInput dark:text-placeInput-dark mt-[-5%] mb-[10%]"
             onPress={() => navigation.navigate('EsqueciSenha')}>
               Esqueci minha senha
             </Text>
@@ -107,32 +113,32 @@ export function Login() {
             onPress={handleLogin}
             activeOpacity={0.8}
           >
-            <Text className="text-white font-popLight text-[16px]">
+            <Text className="text-branco font-popLight text-[16px]">
               Entrar
             </Text>
           </TouchableOpacity>
 
-          <Text className='font-popLight mt-[10%] mb-[10%]'>
+          <Text className='font-popLight mt-[10%] mb-[10%] text-preto dark:text-branco'>
             - ou acesse por -
           </Text>
 
           <View className='flex flex-row gap-14'>
             <TouchableOpacity>
-              <GoogleLogo size={30} color='#000' weight="light"/>
+              <GoogleLogo size={30} className='text-preto dark:text-branco' weight="light"/>
             </TouchableOpacity>
 
             
             <TouchableOpacity>
-              <FacebookLogo size={30} color='#000' weight="light"/>
+              <FacebookLogo size={30} className='text-preto dark:text-branco' weight="light"/>
             </TouchableOpacity>
 
             
             <TouchableOpacity>
-              <InstagramLogo size={30} color='#000' weight="light"/>
+              <InstagramLogo size={30} className='text-preto dark:text-branco' weight="light"/>
             </TouchableOpacity>
           </View>
 
-          <Text className='font-popLight text-[13px] mt-[15%]' onPress={irParaCadastro}>
+          <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' onPress={irParaCadastro}>
             Não tem login? Faça o cadastro clicando <Text className='text-vermelho underline' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
           </Text>
         </ScrollView>

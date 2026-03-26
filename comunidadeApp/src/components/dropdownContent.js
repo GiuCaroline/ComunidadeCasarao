@@ -48,8 +48,8 @@ export function DropdownContent({
           className="bg-input dark:bg-input-dark rounded-xl mt-2 p-4"
           style={styles.sombra}
         >
-          <Text className="font-popRegular mb-2 text-preto dark:text-branco">Descrção</Text>
-          <Text className="font-popLight text-sm mb-4">
+          <Text className="font-popRegular mb-2 text-preto dark:text-branco">Descrição</Text>
+          <Text className="font-popLight text-sm mb-4 text-preto dark:text-branco">
             {description}
           </Text>
 
@@ -60,7 +60,7 @@ export function DropdownContent({
             onPress={openWhatsApp}
             className="flex-row items-center mb-2"
           >
-            <WhatsappLogo size={20} className='text-vermelho' />
+            <WhatsappLogo size={20} className='text-vermelho' weight="light" />
             <Text className="ml-2 font-popRegular text-preto dark:text-branco">{whatsapp}</Text>
           </TouchableOpacity>
 
@@ -69,7 +69,7 @@ export function DropdownContent({
             onPress={openEmail}
             className="flex-row items-center"
           >
-            <Envelope size={20}  className='text-vermelho' />
+            <Envelope size={20}  className='text-vermelho' weight="light" />
             <Text className="ml-2 font-popRegular text-preto dark:text-branco">{email}</Text>
           </TouchableOpacity>
         </View>

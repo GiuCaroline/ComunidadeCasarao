@@ -13,6 +13,7 @@ import { Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
 import { useCadastro } from "../CadastroContext";
+import { useColorScheme } from "nativewind";
 
 
 export function Passo1() {
@@ -21,6 +22,11 @@ export function Passo1() {
     const { cadastro, updateCadastro, resetCadastro } = useCadastro();
     const [mostrarConjuge, setMostrarConjuge] = useState(false);
     const animConjuge = useState(new Animated.Value(0))[0];
+    const { colorScheme } = useColorScheme();
+
+    const logo = colorScheme === 'dark' 
+    ? require('../../../assets/images/logoBranco.png') 
+    : require('../../../assets/images/logoPreto.png');
   
     const [show, setShow] = useState(false);
     const [day, setDay] = useState(null);
@@ -73,7 +79,7 @@ export function Passo1() {
         >
 
             <Image
-                source={require('../../../assets/images/logoPreto.png')}
+                source={logo}
                 className="w-[50%] mt-[-10%]"
                 resizeMode="contain"
             />
@@ -84,19 +90,19 @@ export function Passo1() {
 
             <View className="w-[70%] flex-row items-center justify-between mb-[10%]">
         
-                <View className="w-10 h-10 bg-input rounded-full items-center justify-center">
+                <View className="w-10 h-10 bg-input dark:bg-input-dark rounded-full items-center justify-center">
                     <Text className="font-popSemibold text-[15px] text-vermelho">1</Text>
                 </View>
 
-                <View className="flex-1 h-[4px] bg-input" />
+                <View className="flex-1 h-[4px] bg-input dark:bg-input-dark" />
 
-                <View className="w-10 h-10 bg-input rounded-full items-center justify-center">
+                <View className="w-10 h-10 bg-input dark:bg-input-dark rounded-full items-center justify-center">
                     <Text className="font-popSemibold text-[15px] text-vermelho/50">2</Text>
                 </View>
 
-                <View className="flex-1 h-[4px] bg-input" />
+                <View className="flex-1 h-[4px] bg-input dark:bg-input-dark" />
 
-                <View className="w-10 h-10 bg-input rounded-full items-center justify-center">
+                <View className="w-10 h-10 bg-input dark:bg-input-dark rounded-full items-center justify-center">
                     <Text className="font-popSemibold text-[15px] text-vermelho/50">3</Text>
                 </View>
 
@@ -111,9 +117,9 @@ export function Passo1() {
 
             {/* Data */}
                 <View className='flex flex-row justify-center items-baseline'>
-                    <Text className="text-[16px] font-popRegular text-placeInput w-[200px]">Data de Nascimento*</Text>
-                    <TouchableOpacity className='bg-[#BB1C00] rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalendarioVisible(true)}>
-                        <Text className='text-[#fafafa]'>Selecionar Data</Text>
+                    <Text className="text-[16px] font-popRegular text-placeInput dark:text-placeInput-dark w-[200px]">Data de Nascimento*</Text>
+                    <TouchableOpacity className='bg-vermelho rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalendarioVisible(true)}>
+                        <Text className='text-branco'>Selecionar Data</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -123,9 +129,9 @@ export function Passo1() {
 
 
                 <View style={[styles.sombra]}
-                    className="bg-input rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-[10%]"
+                    className="bg-input dark:bg-input-dark rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-[10%]"
                 >
-                    <Text>
+                    <Text className='text-preto dark:text-branco'>
                     {day?.dateString}
                     </Text>
                 </View>
@@ -255,7 +261,7 @@ export function Passo1() {
                 </Text>
             </TouchableOpacity>
 
-            <Text className='font-popLight text-[13px] mt-[10%] mb-[10%]'  onPress={handleIrParaLogin}>
+            <Text className='font-popLight text-[13px] mt-[10%] mb-[10%] text-preto dark:text-branco'  onPress={handleIrParaLogin}>
                 Já tem cadastro? Faça o login clicando <Text className='text-vermelho underline'>aqui</Text>
             </Text>
 

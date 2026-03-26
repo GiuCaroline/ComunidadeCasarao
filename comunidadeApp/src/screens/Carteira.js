@@ -9,9 +9,15 @@ import { Asset } from 'expo-asset';
 import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
+import { useColorScheme } from "nativewind";
 
 export function Carteira() {
     const navigation = useNavigation();
+    const { colorScheme } = useColorScheme();
+
+    const logo = colorScheme === 'dark' 
+    ? require('../../assets/images/logoBranco.png') 
+    : require('../../assets/images/logoPreto.png');
 
     const { user } = useAuth();
     const [usuario, setUsuario] = useState(null);
@@ -237,8 +243,6 @@ export function Carteira() {
         }
         };
 
-
-
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
         <TouchableOpacity
@@ -268,7 +272,7 @@ export function Carteira() {
             >  
                     <View className='items-center'>
                         <Image
-                            source={require('../../assets/images/logoPreto.png')}
+                            source={logo}
                             className="w-[35%] mt-[-27%] mb-[-20%]"
                             resizeMode="contain"
                         />
@@ -320,7 +324,7 @@ export function Carteira() {
                     </View>
                     
                     <View className='items-center flex mt-[10%]'>
-                        <Text className='text-center font-popLight text-[10px]'>É assegurada, nos termos da lei, a prestação de assistência religiosas nas entidades civis e militares de internação  coletiva. Artigo 5, inciso VII, CF.</Text>
+                        <Text className='text-center font-popLight text-[10px] text-preto dark:text-branco'>É assegurada, nos termos da lei, a prestação de assistência religiosas nas entidades civis e militares de internação  coletiva. Artigo 5, inciso VII, CF.</Text>
                     </View>
                 </View>
                 

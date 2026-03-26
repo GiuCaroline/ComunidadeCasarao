@@ -3,9 +3,15 @@ import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { Info } from "phosphor-react-native";
 import { DropdownContent } from '../components/dropdownContent'
+import { useColorScheme } from "nativewind";
 
 export function Cursos() {
   const navigation = useNavigation();
+  const { colorScheme } = useColorScheme();
+
+  const logo = colorScheme === 'dark' 
+  ? require('../../assets/images/logoBranco.png') 
+  : require('../../assets/images/logoPreto.png');
 
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
@@ -13,7 +19,7 @@ export function Cursos() {
           <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
               <Text className='text-[18px] text-preto dark:text-branco font-popRegular mt-[5%]'>Cursos</Text>
               <Image
-                  source={require('../../assets/images/logoPreto.png')}
+                  source={logo}
                   className="w-[25%] "
                   resizeMode="contain"
               />

@@ -3,12 +3,16 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import { CaretLeft, CaretRight } from "phosphor-react-native"
 import { ptBr } from '../utils/localeCalendarConfig'
 import { useState } from "react";
+import { useColorScheme } from "nativewind";
 
 LocaleConfig.locales["pt-br"] = ptBr
 LocaleConfig.defaultLocale = "pt-br"
 
 export function Calendario({ day, setDay, close }){
     const currentYear = new Date().getFullYear();
+    const { colorScheme } = useColorScheme();
+
+    const corFont = colorScheme === 'dark' ? '#fafafa': '#000';
 
     const [yearPickerVisible, setYearPickerVisible] = useState(false);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -18,27 +22,27 @@ export function Calendario({ day, setDay, close }){
   }
     return(
         <View className='flex justify-center items-center' style={styles.modalBackground}>
-            <View style={styles.modalBoxCalendar}>
-                <TouchableOpacity className='mb-[5%] bg-[#BB1C00] rounded-xl py-2 flex items-center w-[150px]' onPress={() => setYearPickerVisible(true)}>
-                    <Text className='text-[#fafafa]'>Selecionar Ano</Text>
+            <View className="bg-branco dark:bg-input-dark" style={styles.modalBoxCalendar}>
+                <TouchableOpacity className='mb-[5%] bg-vermelho rounded-xl py-2 flex items-center w-[150px]' onPress={() => setYearPickerVisible(true)}>
+                    <Text className='text-branco'>Selecionar Ano</Text>
                 </TouchableOpacity>
 
                 <Calendar style={styles.calendar}
-                    key={selectedYear}                      // <- força remount quando muda o ano
+                    key={selectedYear}                      
                     current={`${selectedYear}-01-01`}
                     onMonthChange={(month) => setSelectedYear(month.year)}
-                    renderArrow={( direction ) => (direction == "left"? <CaretLeft className='text-black' size={20}/> 
-                    : <CaretRight className='text-black' size={20}/>)}
+                    renderArrow={( direction ) => (direction == "left"? <CaretLeft className='text-preto dark:text-branco' size={20}/> 
+                    : <CaretRight className='text-preto dark:text-branco' size={20}/>)}
                     theme={{
                         textMonthFontSize: 16,
-                        monthTextColor: '#000',
+                        monthTextColor: corFont,
                         textMonthFontFamily: "Poppins_300Light",
                         todayTextColor: '#BB1C00',
                         selectedDayBackgroundColor: '#BB1C00',
                         selectedDayTextColor: '#fafafa',
-                        arrowColor: '#000',
+                        arrowColor: corFont,
                         calendarBackground: 'transparent',
-                        textDayStyle: { color: '#000' },
+                        textDayStyle: { color: corFont },
                         arrowStyle: {
                             margin: 0,
                             padding: 0,
@@ -53,13 +57,14 @@ export function Calendario({ day, setDay, close }){
                         const isSelected = day?.dateString === date.dateString;
                         return(
                             <TouchableOpacity 
-                    onPress={() => {setDay(date);setTimeout(close, 150);}}    
+                    onPress={() => {setDay(date);setTimeout(close, 150);}}   
                     style={[
                                 styles.day,
                                 isSelected && styles.daySelected
                                 ]}>
                                 <Text style={[
                                     styles.daytext,
+                                    { color: corFont },
                                     state === "today" && styles.today,
                                     isSelected && styles.daytextSelected,
                                     ]}
@@ -72,7 +77,7 @@ export function Calendario({ day, setDay, close }){
              {yearPickerVisible && (
                 <Modal transparent animationType="fade">
                 <View style={styles.modalBackground}>
-                    <View style={styles.modalBox}>
+                    <View className="bg-branco dark:bg-input-dark" style={styles.modalBox}>
                     <FlatList
                         data={Array.from({ length: 81 }, (_, i) => currentYear - i)}
                         keyExtractor={(item) => item.toString()}
@@ -84,7 +89,7 @@ export function Calendario({ day, setDay, close }){
                             }}
                             style={styles.yearItem}
                         >
-                            <Text style={{ fontSize: 18 }}>{item}</Text>
+                            <Text className="text-preto dark:text-branco" style={{ fontSize: 18 }}>{item}</Text>
                         </TouchableOpacity>
                         )}
                     />
@@ -101,7 +106,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     daytext:{
-        color: '#000',
         fontFamily: "Poppins_300Light" ,
     },
     day: {
@@ -118,23 +122,20 @@ const styles = StyleSheet.create({
         borderBottomColor: '#BB1C00',
         borderBottomWidth: 2,
         height: 'auto',
-
     },
     daytextSelected: {
         fontFamily: "Poppins_500Medium",
         paddingBottom: 0,   
     },
-
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalBox: {
     width: 250,
     height: 350,
-    backgroundColor: "#f0f0f0",
     borderRadius: 10,
     padding: 10,
   },
@@ -145,12 +146,7 @@ const styles = StyleSheet.create({
   modalBoxCalendar: {
     width: 300,
     height: 450,
-    backgroundColor: "#f0f0f0",
     borderRadius: 15,
     padding: 10,
   },
 });
-
-
-
-

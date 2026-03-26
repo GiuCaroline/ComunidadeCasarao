@@ -4,10 +4,16 @@ import { useNavigation } from "@react-navigation/native";
 import { useState, useMemo } from "react";
 import { Search } from "../components/search";
 import { CalendarCheck, CaretRight } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 export function Galeria() {
   const [search, setSearch] = useState("");
   const navigation = useNavigation();
+  const { colorScheme } = useColorScheme();
+
+  const logo = colorScheme === 'dark' 
+  ? require('../../assets/images/logoBranco.png') 
+  : require('../../assets/images/logoPreto.png');
 
   const eventos = [
     { id: "1", nome: "Culto", data: "12/05/2025" },
@@ -27,7 +33,7 @@ export function Galeria() {
       <View className='w-full flex-row justify-between items-center px-[4%] mb-[-18%] mt-[-12%]'>
           <Text className='text-[18px] font-popRegular mt-[5%] text-preto dark:text-branco'>Galeria</Text>
           <Image
-              source={require('../../assets/images/logoPreto.png')}
+              source={logo}
               className="w-[25%] "
               resizeMode="contain"
           />

@@ -33,7 +33,7 @@ export function CustomCalendar({
           {weekDays.map((day, index) => (
             <Text
               key={index}
-              className="w-[14.28%] text-center text-[12px] font-popSemibold text-preto daark:text-branco mt-[2%]"
+              className="w-[14.28%] text-center text-[12px] font-popSemibold text-preto dark:text-branco mt-[2%]"
             >
               {day}
             </Text>

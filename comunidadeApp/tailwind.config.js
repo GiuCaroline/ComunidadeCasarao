@@ -21,13 +21,16 @@ module.exports = {
         },
         'input': {
           DEFAULT: '#F0F0F0',
-          dark: '#646464',
+          dark: '#212124',
         },
         'placeInput':  {
           DEFAULT: '#5e5e5e',
           dark: '#a5a5a5',
         },
-        'vermelho': '#BB1C00',
+        'vermelho': {
+          DEFAULT: '#BB1C00',
+          dark: '#ee2400'  
+        },
         'masc': {
           DEFAULT: '#BCCFFF',
           icon: '#2E9AFF'  

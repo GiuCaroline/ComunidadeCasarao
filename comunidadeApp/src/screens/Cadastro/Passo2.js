@@ -7,9 +7,14 @@ import { Input } from '../../components/input';
 
 import { useNavigation } from '@react-navigation/native';
 import { useCadastro } from "../CadastroContext";
+import { useColorScheme } from 'nativewind';
 
 export function Passo2() {
     const navigation = useNavigation();
+    const { colorScheme } = useColorScheme();
+
+    const logo = colorScheme === 'dark'? require('../../../assets/images/logoBranco.png'): require('../../../assets/images/logoPreto.png');
+
     const { cadastro, updateCadastro } = useCadastro();
 
     async function buscarCep(cep) {
@@ -48,7 +53,7 @@ export function Passo2() {
         >
 
             <Image
-                source={require('../../../assets/images/logoPreto.png')}
+                source={logo}
                 className="w-[50%] mt-[-10%]"
                 resizeMode="contain"
             />
@@ -60,18 +65,18 @@ export function Passo2() {
             <View className="w-[70%] flex-row items-center justify-between mb-[10%]">
         
                 <View className="w-10 h-10 bg-vermelho rounded-full items-center justify-center">
-                    <Text className="font-popSemibold text-[15px] text-branco">1</Text>
+                    <Text className="font-popSemibold text-[15px] text-branco dark:text-preto-dark">1</Text>
                 </View>
 
                 <View className="flex-1 h-[4px] bg-vermelho" />
 
-                <View className="w-10 h-10 bg-input rounded-full items-center justify-center">
+                <View className="w-10 h-10 bg-input dark:bg-input-dark rounded-full items-center justify-center">
                     <Text className="font-popSemibold text-[15px] text-vermelho">2</Text>
                 </View>
 
-                <View className="flex-1 h-[4px] bg-input" />
+                <View className="flex-1 h-[4px] bg-input dark:bg-input-dark" />
 
-                <View className="w-10 h-10 bg-input rounded-full items-center justify-center">
+                <View className="w-10 h-10 bg-input dark:bg-input-dark rounded-full items-center justify-center">
                     <Text className="font-popSemibold text-[15px] text-vermelho/50">3</Text>
                 </View>
 

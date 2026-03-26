@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { GenderMale, GenderFemale } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 export function MascFem({ onChange }) {
   const [selected, setSelected] = useState(null); // "M" | "F"
+  const { colorScheme } = useColorScheme();
 
   const selectMale = () => {
     setSelected("M");
@@ -18,7 +20,7 @@ export function MascFem({ onChange }) {
   return (
     <View>
       <View className="w-[310px]">
-        <Text className="text-[16px] font-popRegular text-placeInput">
+        <Text className="text-[16px] font-popRegular text-placeInput dark:text-placeInput-dark">
           Sexo
         </Text>
       </View>
@@ -31,7 +33,7 @@ export function MascFem({ onChange }) {
           className="flex flex-row items-center gap-2"
         >
           <View
-            className='w-[64px] h-[64px] rounded-full bg-input items-center justify-center'
+            className='w-[64px] h-[64px] rounded-full bg-input dark:bg-input-dark items-center justify-center'
             style={[
               styles.sombra,
               selected === "M" && styles.activeMale
@@ -39,11 +41,11 @@ export function MascFem({ onChange }) {
           >
             <GenderMale
               size={30}
-              color={selected === "M" ? "#2E9AFF" : "#5e5e5e"}
+              color={selected === "M" ? "#2E9AFF" : colorScheme == 'dark'? '#a5a5a5' : '#5e5e5e'}
             />
           </View>
 
-          <Text className="text-black font-popLight text-[16px]">
+          <Text className="text-preto dark:text-branco font-popLight text-[16px]">
             Masculino
           </Text>
         </TouchableOpacity>
@@ -55,7 +57,7 @@ export function MascFem({ onChange }) {
           className="flex flex-row items-center gap-2"
         >
           <View
-            className='w-[64px] h-[64px] rounded-full bg-input items-center justify-center'
+            className='w-[64px] h-[64px] rounded-full bg-input dark:bg-input-dark items-center justify-center'
             style={[
               styles.sombra,
               selected === "F" && styles.activeFemale
@@ -63,11 +65,11 @@ export function MascFem({ onChange }) {
           >
             <GenderFemale
               size={30}
-              color={selected === "F" ? "#C700A2" : "#5e5e5e"}
+              color={selected === "F" ? "#C700A2" : colorScheme == 'dark'? '#a5a5a5' : '#5e5e5e'}
             />
           </View>
 
-          <Text className="text-black font-popLight text-[16px]">
+          <Text className="text-preto dark:text-branco font-popLight text-[16px]">
             Feminino
           </Text>
         </TouchableOpacity>

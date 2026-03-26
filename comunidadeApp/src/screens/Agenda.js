@@ -5,11 +5,16 @@ import { CustomCalendar } from "../components/customCalendar";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { CalendarDots , Paperclip, PencilSimple  } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 export function Agenda(){
-
   const navigation = useNavigation();
   const today = new Date();
+    const { colorScheme } = useColorScheme();
+
+    const logo = colorScheme === 'dark' 
+    ? require('../../assets/images/logoBranco.png') 
+    : require('../../assets/images/logoPreto.png');
 
   const [month,setMonth] = useState(today.getMonth());
   const [year,setYear] = useState(today.getFullYear());
@@ -69,7 +74,7 @@ export function Agenda(){
         <View className='w-full flex-row justify-between items-center px-[4%] mb-[-25%] mt-[-12%]'>
             <Text className='text-[18px] font-popRegular mt-[5%] text-preto dark:text-branco'>Agenda</Text>
             <Image
-            source={require('../../assets/images/logoPreto.png')}
+            source={logo}
             className="w-[25%] "
             resizeMode="contain"
             />
@@ -106,7 +111,7 @@ export function Agenda(){
 
                         <View
                         key={event.id}
-                        className='bg-input rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
+                        className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
                         >
 
                         {/* Ícone colorido */}
@@ -122,12 +127,12 @@ export function Agenda(){
                                     {event.title}
                                 </Text>
 
-                                <Text className='font-popLight text-[14px] text-cinza'>
+                                <Text className='font-popLight text-[14px] text-preto dark:text-branco'>
                                     {event.time}
                                 </Text>
                                 </View>
 
-                                <Text className='font-popLight text-[14px] text-cinza mt-[2%]'>
+                                <Text className='font-popLight text-[14px] text-preto dark:text-branco mt-[2%]'>
                                 Dia {event.date.split("-").reverse().join("/")}
                                 </Text>
 

@@ -1,53 +1,52 @@
 import { View, Image, Dimensions, FlatList, Animated, Text } from "react-native";
 import { useRef, useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-
-
+import { useColorScheme } from "nativewind";
 
 const { width } = Dimensions.get('window');
 
 export function Carousel(){
+  const { colorScheme } = useColorScheme();
+  const carouselData = [
+      { id: '1', image: require('../../assets/images/carousel1.png') },
+      { id: '2', image: require('../../assets/images/carousel2.png') },
+      { id: '3', image: require('../../assets/images/carousel3.jpeg') },
+  ];
 
-    const carouselData = [
-        { id: '1', image: require('../../assets/images/carousel1.png') },
-        { id: '2', image: require('../../assets/images/carousel2.png') },
-        { id: '3', image: require('../../assets/images/carousel3.jpeg') },
-    ];
+  const flatListRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const animations = useRef(
+    carouselData.map(() => new Animated.Value(8))
+  ).current;
 
-    const flatListRef = useRef(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const animations = useRef(
-      carouselData.map(() => new Animated.Value(8))
-    ).current;
+  useEffect(() => {
+    animations.forEach((anim, index) => {
+      Animated.timing(anim, {
+        toValue: currentIndex === index ? 20 : 8,
+        duration: 400,
+        useNativeDriver: false,
+      }).start();
+    });
+  }, [currentIndex]);
 
-    useEffect(() => {
-      animations.forEach((anim, index) => {
-        Animated.timing(anim, {
-          toValue: currentIndex === index ? 20 : 8,
-          duration: 400,
-          useNativeDriver: false,
-        }).start();
+
+  useEffect(() => {
+      const interval = setInterval(() => {
+      const nextIndex =
+          currentIndex === carouselData.length - 1
+          ? 0
+          : currentIndex + 1;
+
+      flatListRef.current?.scrollToIndex({
+          index: nextIndex,
+          animated: true,
       });
-    }, [currentIndex]);
 
+      setCurrentIndex(nextIndex);
+      }, 4500);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-        const nextIndex =
-            currentIndex === carouselData.length - 1
-            ? 0
-            : currentIndex + 1;
-
-        flatListRef.current?.scrollToIndex({
-            index: nextIndex,
-            animated: true,
-        });
-
-        setCurrentIndex(nextIndex);
-        }, 4500); // troca a cada 3s
-
-        return () => clearInterval(interval);
-    }, [currentIndex]);
+      return () => clearInterval(interval);
+  }, [currentIndex]);
 
     return (
     <View className='relative'>
@@ -115,8 +114,11 @@ export function Carousel(){
               width: animations[index],
               borderRadius: 999,
               marginHorizontal: 4,
-              backgroundColor:
-                currentIndex === index ? '#BB1C00' : '#D9D9D9',
+              backgroundColor:currentIndex === index
+            ? '#BB1C00'
+            : colorScheme === 'dark'
+            ? '#646464'
+            : '#D9D9D9',
             }}
           />
         ))}

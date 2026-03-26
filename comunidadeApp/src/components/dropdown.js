@@ -46,15 +46,15 @@ export function Dropdown({
     <View>
       <TouchableOpacity
         style={[styles.sombra]}
-        className='h-[48px] bg-input rounded-xl px-[15px] flex-row justify-between items-center w-[95%] mb-[9%]'
+        className='h-[48px] bg-input dark:bg-input-dark rounded-xl px-[15px] flex-row justify-between items-center w-[95%] mb-[9%]'
         onPress={expanded ? closeDropdown : openDropdown}
         activeOpacity={0.8}
       >
-        <Text className='text-placeInput font-popRegular text-[16px]'>
+        <Text className='text-placeInput dark:text-placeInput-dark font-popRegular text-[16px]'>
           {selectedItem?.label || placeholder}
         </Text>
 
-        {expanded ? <CaretUp size={22} /> : <CaretDown size={22} />}
+        {expanded ? <CaretUp size={22} className='text-placeInput dark:text-placeInput-dark'/> : <CaretDown size={22}  className='text-placeInput dark:text-placeInput-dark'/>}
       </TouchableOpacity>
 
       {expanded && (
@@ -64,7 +64,7 @@ export function Dropdown({
             onPress={closeDropdown}
           />
 
-          <View className='absolute top-[52px] w-[95%] bg-input max-h-[300px] rounded-xl p-[10px] z-[999]'
+          <View className='absolute top-[52px] w-[95%] bg-input dark:bg-input-dark max-h-[300px] rounded-xl p-[10px] z-[999]'
             style={[styles.sombra]}>
             <ScrollView showsVerticalScrollIndicator>
               {data.map((item) => (
@@ -74,7 +74,7 @@ export function Dropdown({
                   onPress={() => onSelect(item)}
                   activeOpacity={0.8}
                 >
-                  <Text className='text-placeInput font-popRegular text-[16px]'>
+                  <Text className='text-placeInput dark:text-placeInput-dark font-popRegular text-[16px]'>
                     {item.label}
                   </Text>
                 </TouchableOpacity>
