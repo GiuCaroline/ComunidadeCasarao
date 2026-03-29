@@ -1,16 +1,17 @@
-import {  View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
 import { MonthHeader } from "../components/monthHeader";
 import { CustomCalendar } from "../components/customCalendar";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { CalendarDots , Paperclip, PencilSimple  } from "phosphor-react-native";
+import { CalendarDots, Paperclip, PencilSimple } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
+import { getEventos } from "../services/authService";
 
 export function Agenda(){
   const navigation = useNavigation();
   const today = new Date();
-    const { colorScheme } = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
     const logo = colorScheme === 'dark' 
     ? require('../../assets/images/logoBranco.png') 
@@ -19,55 +20,40 @@ export function Agenda(){
   const [month,setMonth] = useState(today.getMonth());
   const [year,setYear] = useState(today.getFullYear());
   const [selected,setSelected] = useState(null);
+  const [eventos, setEventos] = useState([]);
 
-    const events = [
-        {
-            id: 1,
-            title: "Culto e Santa Ceia",
-            time: "10h e 18h",
-            date: "2026-02-07",
-            color: "#BB1C00"
-        },
-        {
-            id: 2,
-            title: "Reunião Iluminação",
-            time: "19h",
-            date: "2026-02-07",
-            color: "#1E3A8A"
-        },
-        {
-            id: 3,
-            title: "Culto Geral",
-            time: "19h",
-            date: "2026-02-11",
-            color: "#BB1C00"
-        },
-        {
-            id: 4,
-            title: "Culto Geral",
-            time: "19h",
-            date: "2026-02-07",
-            color: "#BB1C00"
-        }
-    ];
+  useEffect(() => {
+    async function carregarEventos() {
+      try {
+        const data = await getEventos();
+        setEventos(data.eventos);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    carregarEventos();
+  }, []);
 
-    const eventsByDate = events.reduce((acc, event) => {
-        if (!acc[event.date]) {
-            acc[event.date] = [];
-        }
+  const eventsByDate = eventos.reduce((acc, event) => {
+    if (!event || !event.dia1) return acc;
 
-        acc[event.date].push(event.color);
-        return acc;
-    }, {});
+    if (!acc[event.dia1]) {
+        acc[event.dia1] = [];
+    }
+    acc[event.dia1].push(event.color);
+    return acc;
+  }, {});
 
-    const filteredEvents = selected
-        ? events.filter(event => event.date === selected)
-        : events.filter(event => {
-            return event.date.startsWith(
-                `${year}-${String(month + 1).padStart(2, "0")}`
-            );
-        }
-    );
+  const filteredEvents = selected
+    ? eventos.filter(event => event && event.dia1 === selected)
+    : eventos.filter(event => {
+        if (!event || !event.dia1) return false;
+
+        return event.dia1.startsWith(
+            `${year}-${String(month + 1).padStart(2, "0")}`
+        );
+    }
+  );
 
   return(
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -114,7 +100,6 @@ export function Agenda(){
                         className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
                         >
 
-                        {/* Ícone colorido */}
                         <CalendarDots
                             size={26}
                             color={event.color}

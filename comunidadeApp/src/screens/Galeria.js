@@ -5,6 +5,7 @@ import { useState, useMemo } from "react";
 import { Search } from "../components/search";
 import { CalendarCheck, CaretRight } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
+import { getEventos } from "../services/authService";
 
 export function Galeria() {
   const [search, setSearch] = useState("");
@@ -14,12 +15,19 @@ export function Galeria() {
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
+  const [eventos, setEventos] = useState([]);
 
-  const eventos = [
-    { id: "1", nome: "Culto", data: "12/05/2025" },
-    { id: "2", nome: "Devocional", data: "20/06/2025" },
-    { id: "3", nome: "Jovens", data: "10/12/2025" },
-  ];
+  useEffect(() => {
+    async function carregarEventos() {
+      try {
+        const data = await getEventos();
+        setEventos(data.eventos);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    carregarEventos();
+  }, []);
 
   const eventosFiltrados = useMemo(() => {
     return eventos.filter((evento) =>
@@ -54,8 +62,8 @@ export function Galeria() {
             activeOpacity={0.8}
             onPress={() =>
               navigation.navigate("DetalhesEvento", {
-                nome: item.nome,
-                data: item.data,
+                nome: item.nomeEvento,
+                data: item.dia1,
               })
             }
             className="w-full p-4 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mt-3"
@@ -66,11 +74,12 @@ export function Galeria() {
 
               <View>
                 <Text className="text-base font-popRegular text-preto dark:text-branco">
-                  {item.nome}
+                  {item.nomeEvento}
                 </Text>
                 <Text className="text-[14px] font-popLight text-preto dark:text-branco">
-                  Dia {item.data}
+                  Dia {item.dia1}
                 </Text>
+
               </View>
             </View>
 

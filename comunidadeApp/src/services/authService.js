@@ -49,3 +49,12 @@ export async function getCursos() {
     throw error.response?.data || { error: "Erro ao buscar cursos" };
   }
 }
+
+export async function getEventos() {
+  try {
+    const response = await api.get('/auth/eventos');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro ao buscar eventos" };
+  }
+}
