@@ -40,3 +40,12 @@ export async function updateUser(data) {
     throw error.response?.data || { error: "Erro ao atualizar usuário" };
   }
 }
+
+export async function getCursos() {
+  try {
+    const response = await api.get('/auth/cursos');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro ao buscar cursos" };
+  }
+}

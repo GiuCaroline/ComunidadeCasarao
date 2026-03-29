@@ -1,17 +1,33 @@
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { Info } from "phosphor-react-native";
-import { DropdownContent } from '../components/dropdownContent'
+import { DropdownContent } from '../components/dropdownContent';
 import { useColorScheme } from "nativewind";
+import { getCursos } from "../services/authService";
 
 export function Cursos() {
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
+  
+  const [cursos, setCursos] = useState([]);
 
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
+
+  useEffect(() => {
+    async function carregarCursos() {
+      try {
+        const data = await getCursos();
+        setCursos(data.cursos);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    carregarCursos();
+  }, []);
 
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
@@ -41,35 +57,16 @@ export function Cursos() {
           </View>
 
           <View className='items-center mt-[10%]'>
-            <DropdownContent
-              title="Curso de Casais"
-              subtitle="Às terças e quintas - 20h"
-              description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
-              whatsapp="(11) 94002-8922"
-              email="teste@gmail.com"
-            />
-            <DropdownContent
-              title="Maturidade"
-              subtitle="Às terças - 20h"
-              description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
-              whatsapp="(11) 94002-8922"
-              email="teste@gmail.com"
-            />
-            <DropdownContent
-              title="Curso de Casais"
-              subtitle="Às terças e quintas - 20h"
-              description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
-              whatsapp="(11) 94002-8922"
-              email="teste@gmail.com"
-            />
-            <DropdownContent
-              title="Maturidade"
-              subtitle="Às terças - 20h"
-              description="Este curso aborda temas importantes denro de um casamento. Sobre ter filhos e mesmo assim continuar sendo um belo casal."
-              whatsapp="(11) 94002-8922"
-              email="teste@gmail.com"
-            />
-
+            {cursos.map((curso) => (
+              <DropdownContent
+                key={curso.id}
+                title={curso.nomeCurso}
+                subtitle={curso.dias + ' - ' + curso.horario}
+                description={curso.descricao}
+                whatsapp={curso.celular}
+                email={curso.email}
+              />
+            ))}
           </View>
 
       </ScrollView>
@@ -80,7 +77,6 @@ export function Cursos() {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   shadow: {
