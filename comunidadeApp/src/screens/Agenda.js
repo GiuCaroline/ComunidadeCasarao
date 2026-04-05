@@ -13,6 +13,22 @@ export function Agenda(){
   const today = new Date();
   const { colorScheme } = useColorScheme();
 
+    function formatarData(data) {
+        if (!data) return "";
+
+        if (typeof data === "string") {
+            const datePart = data.split("T")[0];
+            const partes = datePart.split("-");
+            if (partes.length === 3) {
+                return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            }
+        }
+
+        const d = new Date(data);
+
+        return d.toLocaleDateString("pt-BR");
+    }
+
     const logo = colorScheme === 'dark' 
     ? require('../../assets/images/logoBranco.png') 
     : require('../../assets/images/logoPreto.png');
@@ -26,7 +42,35 @@ export function Agenda(){
     async function carregarEventos() {
       try {
         const data = await getEventos();
-        setEventos(data.eventos);
+        const eventosNormalizados = [];
+        if (data.eventos) {
+          data.eventos.forEach(evento => {
+            const horariosDoDia = [evento.horario1, evento.horario2].filter(Boolean);
+
+            if (evento.dia1) {
+              eventosNormalizados.push({
+                ...evento,
+                diaExibicao: evento.dia1,
+                horariosExibicao: horariosDoDia
+              });
+            }
+            if (evento.dia2 && evento.dia2 !== evento.dia1) {
+              eventosNormalizados.push({
+                ...evento,
+                diaExibicao: evento.dia2,
+                horariosExibicao: horariosDoDia
+              });
+            }
+            if (evento.dia3 && evento.dia3 !== evento.dia1 && evento.dia3 !== evento.dia2) {
+              eventosNormalizados.push({
+                ...evento,
+                diaExibicao: evento.dia3,
+                horariosExibicao: horariosDoDia
+              });
+            }
+          });
+        }
+        setEventos(eventosNormalizados);
       } catch (error) {
         console.log(error);
       }
@@ -35,25 +79,26 @@ export function Agenda(){
   }, []);
 
   const eventsByDate = eventos.reduce((acc, event) => {
-    if (!event || !event.dia1) return acc;
+    if (!event || !event.diaExibicao) return acc;
 
-    if (!acc[event.dia1]) {
-        acc[event.dia1] = [];
+    if (!acc[event.diaExibicao]) {
+        acc[event.diaExibicao] = [];
     }
-    acc[event.dia1].push(event.color);
+    acc[event.diaExibicao].push(event.color);
     return acc;
   }, {});
 
   const filteredEvents = selected
-    ? eventos.filter(event => event && event.dia1 === selected)
+    ? eventos.filter(event => event && event.diaExibicao === selected)
     : eventos.filter(event => {
-        if (!event || !event.dia1) return false;
+        if (!event || !event.diaExibicao) return false;
 
-        return event.dia1.startsWith(
+        return event.diaExibicao.startsWith(
             `${year}-${String(month + 1).padStart(2, "0")}`
         );
     }
   );
+
 
   return(
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -93,39 +138,34 @@ export function Agenda(){
             <View className='mt-[5%] px-[3%]'>
                 <View className='mt-[5%] px-[3%]'>
 
-                    {filteredEvents.map((event) => (
-
+                    {filteredEvents.map((event, index) => (
                         <View
-                        key={event.id}
-                        className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
+                            key={`${event.id}-${index}`}
+                            className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
                         >
-
-                        <CalendarDots
-                            size={26}
-                            color={event.color}
-                            weight="light"
-                        />
-
-                        <View className='flex-1 ml-[3%]'>
-
-                            <View className='flex-row justify-between items-center'>
-                                <Text className='font-popRegular text-[16px] text-preto dark:text-branco'>
-                                    {event.title}
-                                </Text>
-
-                                <Text className='font-popLight text-[14px] text-preto dark:text-branco'>
-                                    {event.time}
-                                </Text>
+                            <CalendarDots
+                                size={26}
+                                color={event?.color}
+                                weight="light"
+                            />
+                            <View className='flex-1 ml-[3%]'>
+                                <View className='flex-row justify-between items-center'>
+                                    <Text className='font-popRegular text-[16px] text-preto dark:text-branco'>
+                                        {event?.nomeEvento}
+                                    </Text>
+                                    <View className="items-end flex-row gap-2">
+                                        {event?.horariosExibicao?.map((horario, idx) => (
+                                            <Text key={idx} className="font-popLight text-[14px] text-preto dark:text-branco">
+                                                {horario}
+                                            </Text>
+                                        ))}
+                                    </View>
                                 </View>
-
                                 <Text className='font-popLight text-[14px] text-preto dark:text-branco mt-[2%]'>
-                                Dia {event.date.split("-").reverse().join("/")}
+                                    Dia {formatarData(event?.diaExibicao)}
                                 </Text>
-
                             </View>
-
                         </View>
-
                     ))}
 
                     {filteredEvents.length === 0 && (

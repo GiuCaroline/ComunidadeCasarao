@@ -98,6 +98,14 @@ export function Perfil() {
   function formatarData(data) {
     if (!data) return "";
 
+    if (typeof data === "string") {
+        const datePart = data.split("T")[0];
+        const partes = datePart.split("-");
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+    }
+
     const d = new Date(data);
 
     return d.toLocaleDateString("pt-BR");
@@ -106,9 +114,18 @@ export function Perfil() {
   function formatarMesAnoCustom(data) {
     if (!data) return "";
 
-    const d = new Date(data);
-
     const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+    if (typeof data === "string") {
+        const datePart = data.split("T")[0];
+        const partes = datePart.split("-");
+        if (partes.length === 3) {
+            const mes = meses[parseInt(partes[1], 10) - 1];
+            return `${mes}/${partes[0]}`;
+        }
+    }
+
+    const d = new Date(data);
 
     const mes = meses[d.getMonth()];
     const ano = d.getFullYear();

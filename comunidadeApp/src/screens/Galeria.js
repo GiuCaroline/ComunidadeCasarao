@@ -6,6 +6,7 @@ import { Search } from "../components/search";
 import { CalendarCheck, CaretRight } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
 import { getEventos } from "../services/authService";
+import { useEffect } from "react";
 
 export function Galeria() {
   const [search, setSearch] = useState("");
@@ -17,11 +18,50 @@ export function Galeria() {
   : require('../../assets/images/logoPreto.png');
   const [eventos, setEventos] = useState([]);
 
+  function formatarData(data) {
+      if (!data) return "";
+
+      if (typeof data === "string") {
+          const datePart = data.split("T")[0];
+          const partes = datePart.split("-");
+          if (partes.length === 3) {
+              return `${partes[2]}/${partes[1]}/${partes[0]}`;
+          }
+      }
+
+      const d = new Date(data);
+
+      return d.toLocaleDateString("pt-BR");
+  }
+
   useEffect(() => {
     async function carregarEventos() {
       try {
         const data = await getEventos();
-        setEventos(data.eventos);
+        const eventosNormalizados = [];
+        if (data.eventos) {
+          data.eventos.forEach(evento => {
+            if (evento.dia1) {
+              eventosNormalizados.push({
+                ...evento,
+                diaExibicao: evento.dia1,
+              });
+            }
+            if (evento.dia2 && evento.dia2 !== evento.dia1) {
+              eventosNormalizados.push({
+                ...evento,
+                diaExibicao: evento.dia2,
+              });
+            }
+            if (evento.dia3 && evento.dia3 !== evento.dia1 && evento.dia3 !== evento.dia2) {
+              eventosNormalizados.push({
+                ...evento,
+                diaExibicao: evento.dia3,
+              });
+            }
+          });
+        }
+        setEventos(eventosNormalizados);
       } catch (error) {
         console.log(error);
       }
@@ -30,11 +70,16 @@ export function Galeria() {
   }, []);
 
   const eventosFiltrados = useMemo(() => {
-    return eventos.filter((evento) =>
-      evento.nome.toLowerCase().includes(search.toLowerCase()) ||
-      evento.data.includes(search)
-    );
-  }, [search]);
+    return eventos.filter((evento) => {
+      const nomeEvento = evento.nomeEvento ? evento.nomeEvento.toLowerCase() : "";
+      const dia = evento.diaExibicao ? evento.diaExibicao : "";
+      
+      return (
+        nomeEvento.includes(search.toLowerCase()) ||
+        dia.includes(search)
+      );
+    });
+  }, [search, eventos]);
 
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -55,7 +100,7 @@ export function Galeria() {
       {/* Lista */}
       <FlatList
         data={eventosFiltrados}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100 }}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -63,7 +108,7 @@ export function Galeria() {
             onPress={() =>
               navigation.navigate("DetalhesEvento", {
                 nome: item.nomeEvento,
-                data: item.dia1,
+                data: item.diaExibicao,
               })
             }
             className="w-full p-4 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mt-3"
@@ -77,7 +122,7 @@ export function Galeria() {
                   {item.nomeEvento}
                 </Text>
                 <Text className="text-[14px] font-popLight text-preto dark:text-branco">
-                  Dia {item.dia1}
+                  Dia {formatarData(item.diaExibicao)}
                 </Text>
 
               </View>
