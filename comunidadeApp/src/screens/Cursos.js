@@ -6,8 +6,10 @@ import { Info } from "phosphor-react-native";
 import { DropdownContent } from '../components/dropdownContent';
 import { useColorScheme } from "nativewind";
 import { getCursos } from "../services/authService";
+import LoadingOverlay from '../components/loadingOverlay';
 
 export function Cursos() {
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
   
@@ -19,11 +21,14 @@ export function Cursos() {
 
   useEffect(() => {
     async function carregarCursos() {
+    setIsLoading(true);
       try {
         const data = await getCursos();
         setCursos(data.cursos);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
     carregarCursos();
@@ -70,10 +75,12 @@ export function Cursos() {
           </View>
 
       </ScrollView>
-        <Nav
-          active="Cursos"
-          onChange={(r) => navigation.navigate(r)} 
-        />
+      <Nav
+        active="Cursos"
+        onChange={(r) => navigation.navigate(r)} 
+      />
+      
+      <LoadingOverlay visible={isLoading} />
     </View>
   );
 }

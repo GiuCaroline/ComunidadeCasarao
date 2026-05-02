@@ -7,8 +7,10 @@ import { CalendarCheck, CaretRight } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
 import { getEventos } from "../services/authService";
 import { useEffect } from "react";
+import LoadingOverlay from '../components/loadingOverlay';
 
 export function Galeria() {
+  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
@@ -36,6 +38,7 @@ export function Galeria() {
 
   useEffect(() => {
     async function carregarEventos() {
+      setIsLoading(true);
       try {
         const data = await getEventos();
         const eventosNormalizados = [];
@@ -64,6 +67,8 @@ export function Galeria() {
         setEventos(eventosNormalizados);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
     carregarEventos();
@@ -138,6 +143,8 @@ export function Galeria() {
         active="Galeria"
         onChange={(r) => navigation.navigate(r)}
       />
+      
+      <LoadingOverlay visible={isLoading} />
     </View>
   );
 }

@@ -14,10 +14,12 @@ import { useState, useEffect } from "react";
 import { registerUser } from "../../services/authService";
 import { useCadastro } from "../CadastroContext";
 import { useColorScheme } from 'nativewind';
+import LoadingOverlay from '../../components/loadingOverlay';
 
 
 export function Passo3() {
 
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
     const { cadastro, updateCadastro, resetCadastro } = useCadastro();
     const [cargos, setCargos] = useState([null]);
@@ -111,6 +113,8 @@ export function Passo3() {
     }
 
     async function handleConcluir() {
+        setIsLoading(true);
+
         if (!aceitouTermos) {
             showAlert("Atenção!", "Você precisa aceitar os Termos de Uso.", "warning");
             return;
@@ -139,6 +143,8 @@ export function Passo3() {
         } catch (error) {
             showAlert("Erro", error.error || "Erro no cadastro");
             console.log("erro:", error);
+        } finally {
+        setIsLoading(false);
         }
     }
 
@@ -399,10 +405,9 @@ export function Passo3() {
                     </View>
                 </View>
             </Modal>
-
-
         </ScrollView>
       </KeyboardAvoidingView>
+      <LoadingOverlay visible={isLoading} />
     </View>
   );
 }

@@ -7,8 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 import { CalendarDots, Paperclip, PencilSimple } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
 import { getEventos } from "../services/authService";
+import LoadingOverlay from '../components/loadingOverlay';
 
 export function Agenda(){
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const today = new Date();
   const { colorScheme } = useColorScheme();
@@ -40,6 +42,7 @@ export function Agenda(){
 
   useEffect(() => {
     async function carregarEventos() {
+        setIsLoading(true);
       try {
         const data = await getEventos();
         const eventosNormalizados = [];
@@ -73,7 +76,9 @@ export function Agenda(){
         setEventos(eventosNormalizados);
       } catch (error) {
         console.log(error);
-      }
+      } finally {
+        setIsLoading(false);
+        }
     }
     carregarEventos();
   }, []);
@@ -183,6 +188,8 @@ export function Agenda(){
             active="Agenda"
             onChange={(r) => navigation.navigate(r)}
         />
+        
+        <LoadingOverlay visible={isLoading} />
     </View>
   )
 }

@@ -7,8 +7,10 @@ import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
 import { AlertCustom } from '../components/alert';
 import { useColorScheme } from "nativewind";
+import LoadingOverlay from '../components/loadingOverlay';
 
 export function Perfil() {
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const { user, logout } = useAuth();
   const [usuario, setUsuario] = useState(null);
@@ -77,11 +79,14 @@ export function Perfil() {
 
   useEffect(() => {
     async function carregarUsuario() {
+    setIsLoading(true);
       try {
         const data = await getUserById(user.id);
         setUsuario(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -463,6 +468,7 @@ export function Perfil() {
         active="Perfil"
         onChange={(r) => navigation.navigate(r)}
       />
+      <LoadingOverlay visible={isLoading} />
 
       <AlertCustom
         visible={alertVisible}

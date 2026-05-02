@@ -8,8 +8,10 @@ import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import { AlertCustom } from '../components/alert';
 import { useColorScheme } from "nativewind";
+import LoadingOverlay from '../components/loadingOverlay';
 
 export function Login() {
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const { resetCadastro } = useCadastro();
   const [email, setEmail] = useState("");
@@ -21,7 +23,6 @@ export function Login() {
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
 
-  const [loading, setLoading] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertConfig, setAlertConfig] = useState({
       title: "",
@@ -40,13 +41,14 @@ export function Login() {
 
 
   async function handleLogin() {
+    setIsLoading(true);
+
     if (!email || !senha) {
       showAlert("Atenção!", "Preencha email e senha.", "warning");
       return;
     }
 
     try {
-      setLoading(true);
 
       const data = await loginUser(email, senha);
 
@@ -59,7 +61,7 @@ export function Login() {
     } catch (error) {
       showAlert("Erro", error.error || "Erro no login");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 
@@ -143,15 +145,15 @@ export function Login() {
           </Text>
         </ScrollView>
       </KeyboardAvoidingView>
+      <LoadingOverlay visible={isLoading} />
 
-
-        <AlertCustom
-            visible={alertVisible}
-            onClose={() => setAlertVisible(false)}
-            title={alertConfig.title}
-            message={alertConfig.message}
-            type={alertConfig.type}
-        />
+      <AlertCustom
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
     </View>
   );
 }

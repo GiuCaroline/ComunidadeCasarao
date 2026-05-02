@@ -10,8 +10,10 @@ import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "nativewind";
+import LoadingOverlay from '../components/loadingOverlay';
 
 export function Carteira() {
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
     const { colorScheme } = useColorScheme();
 
@@ -52,16 +54,19 @@ export function Carteira() {
 
     useEffect(() => {
         async function carregarUsuario() {
-        try {
-            const data = await getUserById(user.id);
-            setUsuario(data);
-        } catch (error) {
-            console.log(error);
-        }
-        }
+            setIsLoading(true);
+            try {
+                const data = await getUserById(user.id);
+                setUsuario(data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+            }
 
-        if (user?.id) {
-        carregarUsuario();
+            if (user?.id) {
+            carregarUsuario();
         }
     }, [user]);
 
@@ -352,6 +357,8 @@ export function Carteira() {
         active="Perfil"
         onChange={(r) => navigation.navigate(r)}
       />
+      
+      <LoadingOverlay visible={isLoading} />
     </View>
   );
 }
