@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="64" viewBox="0 0 800 64">
+<svg xmlns="http://www.w3.org/2000/svg" width="1267" height="64" viewBox="0 0 1267 64">
   <style>
     .spin {
       transform-origin: 18px 15px;
@@ -37,7 +37,7 @@
     }
   </style>
 
-  <rect class="container" x="1" y="1" width="798" height="62" />
+  <rect class="container" x="1" y="1" width="1265" height="62" />
 
   <path d="M 24 44 L 32 32 L 40 36 L 48 20" fill="none" stroke="#D1A73E" stroke-width="2"/>
   <circle cx="24" cy="44" r="2.5" fill="#CE7A36"/>
@@ -45,7 +45,7 @@
 
   <text x="64" y="37" class="text-title">Status do Projeto</text>
 
-  <g transform="translate(630, 17)">
+  <g transform="translate(1097, 17)">
     <rect class="status-badge" width="140" height="30" />
     <g transform="translate(14, 0)">
       <circle class="spinner spin" cx="18" cy="15" r="6" />
