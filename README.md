@@ -23,5 +23,11 @@ Você pode visualizar o protótipo do aplicativo no link abaixo:
 ##
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/GiuCaroline/ComunidadeCasarao/main/imagesReadme/Footer.png" alt="Casarão" />
+  <img src="./imagesReadme/progress.svg" alt="Status do Projeto">
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/GiuCaroline/ComunidadeCasarao/main/imagesReadme/footer.png" alt="Casarão" />
 </div>
