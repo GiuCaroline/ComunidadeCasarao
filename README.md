@@ -1,26 +1,62 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/GiuCaroline/ComunidadeCasarao/main/imagesReadme/Top1.png" alt="Casarão" />
+  <img src="imagesReadme/Top1.png" alt="Banner Comunidade Casarão" width="100%">
 </div>
 
-#
+<br>
 
-Este repositório contém o projeto do **Aplicativo da Igreja Comunidade Casarão**, desenvolvido de forma independente por Giulia Caroline Claro.
+Este projeto nasceu com o propósito de conectar e facilitar o dia a dia da nossa comunidade. Nosso objetivo é centralizar tudo o que você precisa em um só lugar, trazendo as informações para a palma da sua mão de forma simples, rápida e muito intuitiva.
 
-O aplicativo tem como objetivo oferecer uma solução simples e funcional para auxiliar no gerenciamento interno da igreja, incluindo:
 
-* 📋 **Cadastro de novos membros**
+## <img src="./imagesReadme/sparkle.png" width='23'> O que você encontra por aqui?
 
-Atualmente, esses cadastros são sistemas separados, mas futuramente poderão ser integrados totalmente ao app.
+Nosso aplicativo foi carinhosamente pensado para atender às principais necessidades da comunidade. Veja o que preparamos:
 
----
+<div>
+<div>
+  <img src="./imagesReadme/calendar-dots.png" width="20">
+  <b>Agenda e Eventos</b><br>
+  <sub>Fique por dentro de tudo o que vai acontecer. Acompanhe nosso calendário e não perca nenhum encontro importante.</sub>
+</div>
 
-## 🎨 Protótipo no Figma
+<br>
 
-Você pode visualizar o protótipo do aplicativo no link abaixo:
+<div>
+  <img src="./imagesReadme/camera.png" width="20">
+  <b>Galeria de Fotos</b><br>
+  <sub>Reviva os melhores momentos da comunidade com um mural especial de lembranças.</sub>
+</div>
 
-👉 **Markdown:** [Acessar Protótipo no Figma](https://www.figma.com/design/NB4nHXF9NbfRRigPwNe1rI/Comunidade-Casar%C3%A3o?node-id=0-1&t=5LXCBC1w9jk5yeLS-1)
+<br>
 
-##
+<div>
+  <img src="./imagesReadme/graduation-cap.png" width="20">
+  <b>Cursos</b><br>
+  <sub>Um espaço dedicado ao aprendizado e crescimento com acesso prático às informações.</sub>
+</div>
+
+<br>
+
+<div>
+  <img src="./imagesReadme/user-circle.png" width="20">
+  <b>Perfil Personalizado</b><br>
+  <sub>Gerencie suas informações e personalize sua experiência no app.</sub>
+</div>
+
+<br>
+
+<div>
+  <img src="./imagesReadme/chat-dots.png" width="20">
+  <b>Canal de Solicitações</b><br>
+  <sub>Um canal direto para dúvidas, ajuda ou pedidos.</sub>
+</div>
+
+</div>
+
+## <img src="./imagesReadme/cross.png" width='23'> Nosso Propósito
+
+O **Comunidade Casarão** é muito mais do que um aplicativo; é uma ferramenta para aproximar pessoas. Queremos que cada membro se sinta parte ativa da nossa história, com acesso imediato à informação e muita facilidade para interagir com o que a comunidade tem de melhor.
+
+<br>
 
 <div align="center">
   <img src="./imagesReadme/progress.svg" alt="Status do Projeto">
