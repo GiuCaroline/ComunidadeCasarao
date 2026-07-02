@@ -211,7 +211,7 @@ export function Carteira() {
                     </div>
                     <div class="codigo">
                         <div class="label">Código</div>
-                        <div class="value"> ${usuario?.id}</div>
+                        <div class="value"> ${usuario?.codigo}</div>
                     </div>
                     </div>
 
@@ -251,7 +251,7 @@ export function Carteira() {
 
             const { uri } = await Print.printToFileAsync({ html });
 
-            const novoCaminho = `${FileSystem.documentDirectory}credencial_membro_${usuario?.id}.pdf`;
+            const novoCaminho = `${FileSystem.documentDirectory}credencial_membro_${usuario?.codigo}.pdf`;
 
             await FileSystem.moveAsync({
                 from: uri,
@@ -314,7 +314,7 @@ export function Carteira() {
                         </View>
                         <View className='mt-[5%] mr-[5%] items-start'>
                             <Text className='font-popRegular text-base text-preto dark:text-branco'>Código</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco"> {usuario?.id}</Text>
+                            <Text className="text-[15px] font-popLight text-preto dark:text-branco"> {usuario?.codigo}</Text>
                         </View>
                     </View>
 

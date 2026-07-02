@@ -18,16 +18,16 @@ export function CadastroProvider({ children }) {
     uf: "",
     endereco: "",
     bairro: "",
+    cidade: "",
     complemento: "",
     cargo: "",
+    cargo2: "",
+    cargo3: "",
+    cargo4: "",
     membro: null,
     batismo: null,
     email: "",
     senha: "",
-    cidade: "",
-    cargo2: "",
-    cargo3: "",
-    cargo4: "",
   });
 
   function updateCadastro(dados) {
@@ -51,16 +51,16 @@ export function CadastroProvider({ children }) {
       uf: "",
       endereco: "",
       bairro: "",
+      cidade: "",
       complemento: "",
       cargo: "",
+      cargo2: "",
+      cargo3: "",
+      cargo4: "",
       membro: null,
       batismo: null,
       email: "",
       senha: "",
-      cidade: "",
-      cargo2: "",
-      cargo3: "",
-      cargo4: "",
     });
   }
 
