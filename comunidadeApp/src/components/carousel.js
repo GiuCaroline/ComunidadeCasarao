@@ -2,55 +2,73 @@ import { View, Image, Dimensions, FlatList, Animated, Text } from "react-native"
 import { useRef, useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useColorScheme } from "nativewind";
+import { getCarrossel } from "../services/authService";
 
 const { width } = Dimensions.get('window');
 
 export function Carousel(){
   const { colorScheme } = useColorScheme();
-  const carouselData = [
-      { id: '1', image: require('../../assets/images/carousel1.png') },
-      { id: '2', image: require('../../assets/images/carousel2.png') },
-      { id: '3', image: require('../../assets/images/carousel3.jpeg') },
-  ];
+  const [carouselData, setCarouselData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getCarrossel();
+        setCarouselData(data);
+      } catch (error) {
+        console.error("Erro ao carregar carrossel:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const animations = useRef(
-    carouselData.map(() => new Animated.Value(8))
-  ).current;
+  
+  const animations = useRef([]).current;
 
-  useEffect(() => {
-    animations.forEach((anim, index) => {
-      Animated.timing(anim, {
-        toValue: currentIndex === index ? 20 : 8,
-        duration: 400,
-        useNativeDriver: false,
-      }).start();
+useEffect(() => {
+  if (carouselData.length > 0) {
+    const newAnimations = carouselData.map(() => new Animated.Value(8));
+    animations.splice(0, animations.length, ...newAnimations);
+    
+    setCurrentIndex(0); 
+  }
+}, [carouselData]);
+
+useEffect(() => {
+  if (animations.length === 0) return;
+
+  animations.forEach((anim, index) => {
+    Animated.timing(anim, {
+      toValue: currentIndex === index ? 20 : 8,
+      duration: 400,
+      useNativeDriver: false,
+    }).start();
+  });
+}, [currentIndex, carouselData]);
+
+
+useEffect(() => {
+  if (carouselData.length === 0) return;
+
+  const interval = setInterval(() => {
+    const nextIndex = currentIndex === carouselData.length - 1 ? 0 : currentIndex + 1;
+    flatListRef.current?.scrollToIndex({
+      index: nextIndex,
+      animated: true,
     });
-  }, [currentIndex]);
 
+    setCurrentIndex(nextIndex);
+  }, 4500);
 
-  useEffect(() => {
-      const interval = setInterval(() => {
-      const nextIndex =
-          currentIndex === carouselData.length - 1
-          ? 0
-          : currentIndex + 1;
-
-      flatListRef.current?.scrollToIndex({
-          index: nextIndex,
-          animated: true,
-      });
-
-      setCurrentIndex(nextIndex);
-      }, 4500);
-
-      return () => clearInterval(interval);
-  }, [currentIndex]);
+    return () => clearInterval(interval);
+  }, [currentIndex, carouselData]);
 
     return (
     <View className='relative'>
-      {/* CARROSSEL */}
       <FlatList
         ref={flatListRef}
         data={carouselData}
@@ -67,7 +85,7 @@ export function Carousel(){
         renderItem={({ item }) => (
           <View className="px-3 ">
             <Image
-              source={item.image}
+              source={{ uri: item.url_arquivo }}
               className="rounded-xl"
               style={{
                 width: width - 40,
@@ -85,14 +103,13 @@ export function Carousel(){
                 bottom: 0,
                 width: width - 40,
                 height: 110,
-                borderBottomLeftRadius: 16,
-                borderBottomRightRadius: 16,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
               }}
             />
 
           </View>
         )}
-        
       />
 
       <View
@@ -103,7 +120,6 @@ export function Carousel(){
           Veja um pouco da nossa última reunião
         </Text>
       </View>
-
 
       <View className="flex-row justify-center mt-[4%]">
         {carouselData.map((_, index) => (
@@ -123,7 +139,6 @@ export function Carousel(){
           />
         ))}
       </View>
-      
     </View>
   );
 }

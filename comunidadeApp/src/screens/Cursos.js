@@ -65,8 +65,8 @@ export function Cursos() {
             {cursos.map((curso) => (
               <DropdownContent
                 key={curso.id}
-                title={curso.nomeCurso}
-                subtitle={curso.dias + ' - ' + curso.horario}
+                title={curso.nome_curso}
+                subtitle={curso.dias + ' - ' + formataHora(curso.horario)}
                 description={curso.descricao}
                 whatsapp={curso.celular}
                 email={curso.email}
@@ -97,3 +97,19 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
 });
+
+function formataHora(tempo) {
+  if (!tempo) return "";
+  
+  const partes = tempo.split(":");
+  if (partes.length >= 2) {
+    const hora = partes[0];
+    const minuto = partes[1];
+
+    if (minuto === "00") {
+      return `${hora}h`;
+    }
+    return `${hora}h${minuto}`;
+  }
+  return tempo;
+}

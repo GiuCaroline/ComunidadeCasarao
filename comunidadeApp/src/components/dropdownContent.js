@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Linking } from "react-native";
+import { useState, useRef } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Animated } from "react-native";
 import { CaretUp, CaretDown, WhatsappLogo, Envelope } from "phosphor-react-native";
 
 export function DropdownContent({
@@ -10,8 +10,18 @@ export function DropdownContent({
   email,
 }) {
   const [expanded, setExpanded] = useState(false);
+  const animation = useRef(new Animated.Value(0)).current;
 
-  const toggle = () => setExpanded(!expanded);
+  const toggle = () => {
+    const toValue = expanded ? 0 : 1;
+    setExpanded(!expanded);
+    
+    Animated.timing(animation, {
+      toValue,
+      duration: 450,
+      useNativeDriver: false,
+    }).start();
+  };
 
   const openWhatsApp = () => {
     const phone = whatsapp.replace(/\D/g, "");
@@ -22,9 +32,18 @@ export function DropdownContent({
     Linking.openURL(`mailto:${email}`);
   };
 
+  const maxHeight = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 500],
+  });
+
+  const opacity = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
   return (
     <View className="w-[95%] mb-4">
-      {/* HEADER */}
       <TouchableOpacity
         onPress={toggle}
         activeOpacity={0.8}
@@ -43,7 +62,11 @@ export function DropdownContent({
         {expanded ? <CaretUp size={22} className='text-placeInput dark:text-branco' /> : <CaretDown size={22} className='text-placeInput dark:text-branco'/>}
       </TouchableOpacity>
 
-      {expanded && (
+      <Animated.View
+        style={[
+          { maxHeight, opacity, overflow: "hidden" }
+        ]}
+      >
         <View
           className="bg-input dark:bg-input-dark rounded-xl mt-2 p-4"
           style={styles.sombra}
@@ -55,7 +78,6 @@ export function DropdownContent({
 
           <Text className="font-popRegular mb-2 text-preto dark:text-branco">Responsáveis</Text>
 
-          {/* WhatsApp */}
           <TouchableOpacity
             onPress={openWhatsApp}
             className="flex-row items-center mb-2"
@@ -64,16 +86,15 @@ export function DropdownContent({
             <Text className="ml-2 font-popRegular text-preto dark:text-branco">{whatsapp}</Text>
           </TouchableOpacity>
 
-          {/* Email */}
           <TouchableOpacity
             onPress={openEmail}
             className="flex-row items-center"
           >
-            <Envelope size={20}  className='text-vermelho' weight="light" />
+            <Envelope size={20} className='text-vermelho' weight="light" />
             <Text className="ml-2 font-popRegular text-preto dark:text-branco">{email}</Text>
           </TouchableOpacity>
         </View>
-      )}
+      </Animated.View>
     </View>
   );
 }

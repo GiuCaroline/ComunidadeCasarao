@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 import { Search } from "../components/search";
 import { CalendarCheck, CaretRight } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
-import { getEventos } from "../services/authService";
+import { getGaleriaEventos } from "../services/authService";
 import { useEffect } from "react";
 import LoadingOverlay from '../components/loadingOverlay';
 
@@ -14,6 +14,7 @@ export function Galeria() {
   const [search, setSearch] = useState("");
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
+  const [busca, setBusca] = useState("");
 
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
@@ -37,47 +38,27 @@ export function Galeria() {
   }
 
   useEffect(() => {
-    async function carregarEventos() {
-      setIsLoading(true);
+    setIsLoading(true);
+
+    async function fetchEventos() {
       try {
-        const data = await getEventos();
-        const eventosNormalizados = [];
-        if (data.eventos) {
-          data.eventos.forEach(evento => {
-            if (evento.dia1) {
-              eventosNormalizados.push({
-                ...evento,
-                diaExibicao: evento.dia1,
-              });
-            }
-            if (evento.dia2 && evento.dia2 !== evento.dia1) {
-              eventosNormalizados.push({
-                ...evento,
-                diaExibicao: evento.dia2,
-              });
-            }
-            if (evento.dia3 && evento.dia3 !== evento.dia1 && evento.dia3 !== evento.dia2) {
-              eventosNormalizados.push({
-                ...evento,
-                diaExibicao: evento.dia3,
-              });
-            }
-          });
-        }
-        setEventos(eventosNormalizados);
+        const data = await getGaleriaEventos();
+        const agora = new Date();
+        const eventosPassados = data.filter((evento) => new Date(evento.data) < agora);
+        setEventos(eventosPassados);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
     }
-    carregarEventos();
+    fetchEventos();
   }, []);
 
   const eventosFiltrados = useMemo(() => {
     return eventos.filter((evento) => {
-      const nomeEvento = evento.nomeEvento ? evento.nomeEvento.toLowerCase() : "";
-      const dia = evento.diaExibicao ? evento.diaExibicao : "";
+      const nomeEvento = evento.nome ? evento.nome.toLowerCase() : "";
+      const dia = evento.data ? evento.data : "";
       
       return (
         nomeEvento.includes(search.toLowerCase()) ||
@@ -97,12 +78,10 @@ export function Galeria() {
           />
       </View>
 
-      {/* Search */}
       <View className="px-5 mb-3 items-center">
         <Search value={search} onChange={setSearch} />
       </View>
 
-      {/* Lista */}
       <FlatList
         data={eventosFiltrados}
         keyExtractor={(item, index) => `${item.id}-${index}`}
@@ -112,8 +91,8 @@ export function Galeria() {
             activeOpacity={0.8}
             onPress={() =>
               navigation.navigate("DetalhesEvento", {
-                nome: item.nomeEvento,
-                data: item.diaExibicao,
+                nome: item.nome,
+                data: item.data,
               })
             }
             className="w-full p-4 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mt-3"
@@ -124,16 +103,15 @@ export function Galeria() {
 
               <View>
                 <Text className="text-base font-popRegular text-preto dark:text-branco">
-                  {item.nomeEvento}
+                  {item.nome} - {formataHora(item.horario)}
                 </Text>
                 <Text className="text-[14px] font-popLight text-preto dark:text-branco">
-                  Dia {formatarData(item.diaExibicao)}
+                  Dia {formatarData(item.data)}
                 </Text>
 
               </View>
             </View>
 
-            {/* Seta direita */}
             <CaretRight size={24} color="#B3261E" />
           </TouchableOpacity>
         )}
@@ -158,3 +136,18 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
 });
+
+function formataHora(tempo) {
+  if (!tempo) return "";
+
+  const partes = tempo.split(":");
+  if (partes.length >= 2) {
+    const hora = partes[0];
+    const minuto = partes[1];
+
+    if (minuto === "00") {
+      return `${hora}h`;
+    }
+    return `${hora}h${minuto}`;
+  }
+}
