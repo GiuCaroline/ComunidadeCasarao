@@ -59,6 +59,16 @@ export async function getEventos() {
   }
 }
 
+export async function getProximosEventos() {
+  try {
+    const response = await api.get('/auth/eventos/proximos');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro ao buscar eventos" };
+  }
+}
+
+
 export async function getCarrossel() {
   try{
     const response = await api.get('/auth/galeria/carrossel');
@@ -76,3 +86,4 @@ export async function getGaleriaEventos() {
     throw error.response?.data || { error: "Erro ao buscar carrossel." }
   }
 }
+

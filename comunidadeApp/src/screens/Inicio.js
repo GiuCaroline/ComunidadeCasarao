@@ -1,18 +1,27 @@
 import { View, Image, ScrollView, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
 import { InstagramLogo, YoutubeLogo, FacebookLogo, MapPinAreaIcon, Bank, PixLogo } from "phosphor-react-native";
 import { WhatsappLogo, Phone, EnvelopeSimple } from "phosphor-react-native";
 import { Carousel } from '../components/carousel';
 import { Nav } from '../components/nav';
+import LoadingOverlay from '../components/loadingOverlay';
 import { useAuth } from "../context/AuthContext";
 import { useColorScheme } from "nativewind";
-
+import { getProximosEventos } from "../services/authService";
 import { useNavigation } from "@react-navigation/native";
-
 
 export function Inicio(){
   const navigation = useNavigation();
   const { user } = useAuth();
   const { colorScheme } = useColorScheme();
+
+  const [loading, setLoading] = useState(true);
+  const [proximosEventos, setProximosEventos] = useState([]);
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertType, setAlertType] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
@@ -22,9 +31,28 @@ export function Inicio(){
     if (!nome) return "Visitante";
     return nome.split(" ")[0];
   }
+
+  async function carregarDados() {
+    try {
+      const data = await getProximosEventos();
+      setProximosEventos(data || []);
+    } catch (error) {
+      setAlertType("error");
+      setAlertTitle("Erro");
+      setAlertMessage("Não foi possível carregar os próximos eventos.");
+      setAlertVisible(true);
+    }
+  }
+
+  useEffect(() => {
+    carregarDados();
+  }, []);
+  
   return (
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
-      <ScrollView contentContainerStyle={{ padding: 10,  paddingBottom: 95 }} className='flex'>
+      {loading && <LoadingOverlay />}
+
+      <ScrollView contentContainerStyle={{ padding: 10, paddingBottom: 95 }} className='flex w-full'>
         <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
           <Text className='text-[18px] font-popRegular mt-[5%] text-preto dark:text-branco'>Olá {primeiroNome(user?.nome)}!</Text>
           <Image
@@ -34,34 +62,25 @@ export function Inicio(){
           />
         </View>
 
-        <Carousel />
+        <Carousel setLoading={setLoading} />
 
         <View className='mt-[5%] px-[5%]'>
           <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Próximos Eventos</Text>
 
-          <View className='bg-input dark:bg-input-dark rounded-xl px-[3%] py-[1%] mt-[5%]' style={[styles.sombra]}>
-            <View className='flex-row items-center justify-between'>
-              <Text className='font-popLight text-[16px] ml-[2%] text-preto dark:text-branco'>Culto e Santa Ceia</Text>
-              <Text className='font-popLight text-[14px] text-preto dark:text-branco'>10h e 18h</Text>
-            </View>
-            <Text className='font-popExtralight text-[16px] ml-[2%] text-preto dark:text-branco'>07/12</Text>
-          </View>
+          {proximosEventos.length > 0 ? (
+            proximosEventos.map((evento, index) => (
+              <View key={evento.id || index} className='bg-input dark:bg-input-dark rounded-xl px-[3%] py-[1%] mt-[5%]' style={[styles.sombra]}>
+                <View className='flex-row items-center justify-between'>
+                  <Text className='font-popLight text-[16px] ml-[2%] text-preto dark:text-branco'>{evento.nome}</Text>
+                  <Text className='font-popLight text-[14px] text-preto dark:text-branco'>{evento.horarioString}</Text>
+                </View>
+                <Text className='font-popExtralight text-[16px] ml-[2%] text-preto dark:text-branco'>{evento.data}</Text>
+              </View>
+            ))
+          ) : (
+            <Text className='font-popLight text-[14px] text-preto dark:text-branco mt-[5%]'>Nenhum evento próximo programado.</Text>
+          )}
 
-          <View className='bg-input dark:bg-input-dark rounded-xl px-[3%] py-[1%] mt-[5%]' style={[styles.sombra]}>
-            <View className='flex-row items-center justify-between'>
-              <Text className='font-popLight text-[16px] ml-[2%] text-preto dark:text-branco'>Jantar Líderes</Text>
-              <Text className='font-popLight text-[14px] text-preto dark:text-branco'>18h</Text>
-            </View>
-            <Text className='font-popExtralight text-[16px] ml-[2%] text-preto dark:text-branco'>13/12</Text>
-          </View>
-
-          <View className='bg-input dark:bg-input-dark rounded-xl px-[3%] py-[1%] mt-[5%]' style={[styles.sombra]}>
-            <View className='flex-row items-center justify-between'>
-              <Text className='font-popLight text-[16px] ml-[2%] text-preto dark:text-branco'>Cantata de Natal</Text>
-              <Text className='font-popLight text-[14px] text-preto dark:text-branco'>10h</Text>
-            </View>
-            <Text className='font-popExtralight text-[16px] ml-[2%] text-preto dark:text-branco'>21/12</Text>
-          </View>
         </View>
 
         <View className='items-center mt-[15%]'>
@@ -126,7 +145,7 @@ export function Inicio(){
         <View className='mt-[15%] px-[5%]'>
           <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Dízimos e Ofertas</Text>
 
-          <Text className='font-popLight text-[15px] mt-[3%] text-preto dark:text-branco'>{'     Contribuir é um ato de fé e gratidão.\nA sua oferta ajuda a sustentar os projetos da Comunidade Casarão e a expandir o Reino de Deus na cidade.'} </Text>
+          <Text className='font-popLight text-[15px] mt-[3%] text-preto dark:text-branco'>{'    Contribuir é um ato de fé e gratidão.\nA sua oferta ajuda a sustentar os projetos da Comunidade Casarão e a expandir o Reino de Deus na cidade.'} </Text>
 
           <View className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[3%] mt-[5%]' style={[styles.sombra]}>
             <View className='flex-row items-center gap-2'>
