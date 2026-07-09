@@ -4,9 +4,9 @@ import { MonthHeader } from "../components/monthHeader";
 import { CustomCalendar } from "../components/customCalendar";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { CalendarDots } from "phosphor-react-native";
+import { CalendarDots, UserCircle } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
-import { getEventos } from "../services/authService";
+import { getEventos, getEscalas } from "../services/authService";
 import LoadingOverlay from '../components/loadingOverlay';
 
 export function Agenda() {
@@ -26,6 +26,7 @@ export function Agenda() {
   const [eventosBase, setEventosBase] = useState([]);
   const [agendaBase, setAgendaBase] = useState([]);
   const [canceladosBase, setCanceladosBase] = useState([]);
+  const [escalasBase, setEscalasBase] = useState([]);
   
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [eventsByDate, setEventsByDate] = useState({});
@@ -33,17 +34,42 @@ export function Agenda() {
   useEffect(() => {
     async function carregarDados() {
       setIsLoading(true);
+      
       try {
-        const data = await getEventos();
-        setEventosBase(data.eventos || []);
-        setAgendaBase(data.agenda || []);
-        setCanceladosBase(data.cancelados || []);
+        const evData = await getEventos();
+        setEventosBase(evData.eventos || []);
+        setAgendaBase(evData.agenda || []);
+        setCanceladosBase(evData.cancelados || []);
       } catch (error) {
         console.log(error);
+      }
+
+      try {
+        const escData = await getEscalas().catch(() => null);
+        let arrayEscalas = [];
+        
+        if (escData) {
+          if (Array.isArray(escData)) {
+            arrayEscalas = escData;
+          } else if (escData.escalas && Array.isArray(escData.escalas)) {
+            arrayEscalas = escData.escalas;
+          } else if (escData.data && Array.isArray(escData.data)) {
+            arrayEscalas = escData.data;
+          } else if (typeof escData === 'object') {
+            const extrairArray = Object.values(escData).find(Array.isArray);
+            if (extrairArray) arrayEscalas = extrairArray;
+          }
+        }
+        
+        setEscalasBase(arrayEscalas);
+      } catch (error) {
+        console.log(error);
+        setEscalasBase([]);
       } finally {
         setIsLoading(false);
       }
     }
+    
     carregarDados();
   }, []);
 
@@ -81,13 +107,13 @@ export function Agenda() {
     return true;
   }, []);
 
-  const getEventosParaData = useCallback((dateString, deventos, dagenda, dcancelados) => {
+  const getDadosParaData = useCallback((dateString, deventos, dagenda, dcancelados, descalas) => {
     const resultado = [];
     const dateObj = new Date(dateString + "T00:00:00");
     const dayOfWeek = dateObj.getDay();
 
     const daAgenda = dagenda.filter(ae => safeToDateString(ae.data) === dateString);
-    resultado.push(...daAgenda.map(e => ({ ...e, agenda_id: e.agenda_id, id: e.evento_id, date: dateString })));
+    resultado.push(...daAgenda.map(e => ({ ...e, type: 'evento', agenda_id: e.agenda_id, id: e.evento_id, date: dateString })));
 
     deventos.forEach(evento => {
       if ((evento.recorrente || evento.recorrencia_id) && evento.ativo !== false) {
@@ -125,11 +151,27 @@ export function Agenda() {
 
           resultado.push({
             ...evento,
+            type: 'evento',
             date: dateString,
             isGroup: true
           });
         }
       }
+    });
+
+    const escalasDoDia = descalas.filter(escala => {
+      const rawDate = escala.dia || escala.data;
+      const dataEscala = rawDate ? String(rawDate).split("T")[0] : "";
+      return dataEscala === dateString;
+    });
+
+    escalasDoDia.forEach(es => {
+      resultado.push({
+        ...es,
+        type: 'escala',
+        date: dateString,
+        color: es.cor || "#000000"
+      });
     });
 
     return resultado;
@@ -149,7 +191,23 @@ export function Agenda() {
     return tempo;
   }
 
-  function agruparEventos(eventos) {
+  function primeiroNome(nome) {
+    if (!nome) return "";
+    return nome.split(" ")[0];
+  }
+
+  function formatarData(dataString) {
+    if (!dataString) return "";
+    const partes = dataString.split("-");
+    if (partes.length === 3) {
+      return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    return dataString;
+  }
+
+  function agruparListagem(lista) {
+    const eventos = lista.filter(item => item.type === 'evento');
+    const escalas = lista.filter(item => item.type === 'escala');
     const agrupados = [];
     
     eventos.sort((a, b) => new Date(`${a.date}T${a.horario || '00:00:00'}`) - new Date(`${b.date}T${b.horario || '00:00:00'}`));
@@ -170,7 +228,7 @@ export function Agenda() {
       }
     });
 
-    return agrupados;
+    return [...agrupados, ...escalas];
   }
 
   useEffect(() => {
@@ -179,38 +237,29 @@ export function Agenda() {
 
     for (let i = 1; i <= daysInMonth; i++) {
       const currentDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
-      const lista = getEventosParaData(currentDate, eventosBase, agendaBase, canceladosBase);
+      const lista = getDadosParaData(currentDate, eventosBase, agendaBase, canceladosBase, escalasBase);
       
       if (lista.length > 0) {
         resultByDate[currentDate] = lista.map(e => e.color || '#E53935');
       }
     }
     setEventsByDate(resultByDate);
-  }, [month, year, eventosBase, agendaBase, canceladosBase, getEventosParaData]);
+  }, [month, year, eventosBase, agendaBase, canceladosBase, escalasBase, getDadosParaData]);
 
   useEffect(() => {
     let lista = [];
     if (selected) {
-      lista = getEventosParaData(selected, eventosBase, agendaBase, canceladosBase);
+      lista = getDadosParaData(selected, eventosBase, agendaBase, canceladosBase, escalasBase);
     } else {
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       for (let i = 1; i <= daysInMonth; i++) {
         const currentDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}`;
-        lista.push(...getEventosParaData(currentDate, eventosBase, agendaBase, canceladosBase));
+        lista.push(...getDadosParaData(currentDate, eventosBase, agendaBase, canceladosBase, escalasBase));
       }
     }
 
-    setFilteredEvents(agruparEventos(lista));
-  }, [selected, month, year, eventosBase, agendaBase, canceladosBase, getEventosParaData]);
-
-  function formatarData(dataString) {
-    if (!dataString) return "";
-    const partes = dataString.split("-");
-    if (partes.length === 3) {
-      return `${partes[2]}/${partes[1]}/${partes[0]}`;
-    }
-    return dataString;
-  }
+    setFilteredEvents(agruparListagem(lista));
+  }, [selected, month, year, eventosBase, agendaBase, canceladosBase, escalasBase, getDadosParaData]);
 
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -249,38 +298,79 @@ export function Agenda() {
 
         <View className='mt-[5%] px-[3%]'>
           <View className='mt-[5%] px-[3%]'>
-            {filteredEvents.map((event, index) => (
-              <View
-                key={`${event.id || event.agenda_id}-${index}`}
-                className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
-                style={styles.sombra}
-              >
-                <CalendarDots
-                  size={26}
-                  color={event?.color || '#E53935'}
-                  weight="light"
-                />
-                <View className='flex-1 ml-[3%]'>
-                  <View className='flex-row justify-between items-center'>
-                    <Text className='font-popRegular text-[16px] text-preto dark:text-branco'>
-                      {event?.nome}
-                    </Text>
-                    <View className="items-end flex-row gap-2">
-                      <Text className="font-popLight text-[14px] text-preto dark:text-branco">
-                        {event?.horarios?.length > 1 ? event.horarios.join(' e ') : event?.horarios[0]}
-                      </Text>
+            {filteredEvents.map((item, index) => {
+              if (item.type === 'escala') {
+                return (
+                  <View
+                    key={`escala-${item.id}-${index}`}
+                    className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
+                    style={styles.sombra}
+                  >
+                    <UserCircle
+                      size={26}
+                      color={item.cor || '#000000'}
+                      weight="light"
+                    />
+                    <View className='flex-1 ml-[3%]'>
+                      <View className='flex-row justify-between items-center'>
+                        <Text style={{ color: item.cor || '#000000' }} className='font-popRegular text-[16px]'>
+                          {item.nome_departamento || "Desconhecido"}
+                        </Text>
+                        <View className="items-end">
+                          <Text className='font-popLight text-[14px] text-preto dark:text-branco'>
+                            Dia {formatarData(item.date)}
+                          </Text>
+                        </View>
+                      </View>
+                      
+                      <View className="mt-[2%]">
+                        <Text className="font-popLight text-[14px] text-preto dark:text-branco">
+                          {formataHora(item.horario1)} - {primeiroNome(item.responsavel1)}
+                        </Text>
+                        {item.responsavel2 && (
+                          <Text className="font-popLight text-[14px] text-preto dark:text-branco mt-[1%]">
+                            {formataHora(item.horario2)} - {primeiroNome(item.responsavel2)}
+                          </Text>
+                        )}
+                      </View>
                     </View>
                   </View>
-                  <Text className='font-popLight text-[14px] text-preto dark:text-branco mt-[2%]'>
-                    Dia {formatarData(event?.date)}
-                  </Text>
+                );
+              }
+
+              return (
+                <View
+                  key={`evento-${item.id || item.agenda_id}-${index}`}
+                  className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
+                  style={styles.sombra}
+                >
+                  <CalendarDots
+                    size={26}
+                    color={item.color || '#BB1C00'}
+                    weight="light"
+                  />
+                  <View className='flex-1 ml-[3%]'>
+                    <View className='flex-row justify-between items-center'>
+                      <Text className='font-popRegular text-[16px] text-preto dark:text-branco'>
+                        {item.nome}
+                      </Text>
+                      <View className="items-end flex-row gap-2">
+                        <Text className="font-popLight text-[14px] text-preto dark:text-branco">
+                          {item.horarios?.length > 1 ? item.horarios.join(' e ') : item.horarios[0]}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text className='font-popLight text-[14px] text-preto dark:text-branco mt-[2%]'>
+                      Dia {formatarData(item.date)}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              );
+            })}
 
             {filteredEvents.length === 0 && (
               <Text className="text-center text-cinza mt-[10%] font-popLight">
-                Nenhum evento encontrado
+                Nenhum evento ou escala encontrados
               </Text>
             )}
           </View>

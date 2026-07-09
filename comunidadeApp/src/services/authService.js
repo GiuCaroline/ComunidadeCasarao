@@ -17,6 +17,10 @@ export async function loginUser(email, password) {
       password,
     });
 
+    if (response.data.token) {
+      await AsyncStorage.setItem('@casarao:token', response.data.token);
+    }
+
     return response.data;
 
   } catch (error) {
@@ -109,9 +113,9 @@ export async function getGaleriaEvento(agendaevento_id) {
 }
 
 export async function getEscalas(data) {
-  const token = localStorage.getItem('@casarao:token');
+  const token = await AsyncStorage.getItem('@casarao:token');
   try {
-    const response = await api.get("/auth/escalas", {
+    const response = await api.get("/auth/escalasapp", {
       params: data,
       headers: {
         Authorization: `Bearer ${token}`

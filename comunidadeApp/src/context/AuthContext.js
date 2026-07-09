@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     await AsyncStorage.removeItem("user");
+    await AsyncStorage.removeItem("@casarao:token");
     setUser(null);
   }
 
