@@ -107,3 +107,18 @@ export async function getGaleriaEvento(agendaevento_id) {
     throw error.response?.data || { error: "Erro ao buscar mídias do evento" };
   }
 }
+
+export async function getEscalas(data) {
+  const token = localStorage.getItem('@casarao:token');
+  try {
+    const response = await api.get("/auth/escalas", {
+      params: data,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
+  }
+}

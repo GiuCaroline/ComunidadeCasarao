@@ -63,7 +63,7 @@ export function EventGalery() {
     
     Animated.timing(animationPhotos, {
       toValue,
-      duration: 450,
+      duration: 500,
       useNativeDriver: false,
     }).start();
   };
@@ -74,7 +74,7 @@ export function EventGalery() {
     
     Animated.timing(animationVideos, {
       toValue,
-      duration: 450,
+      duration: 500,
       useNativeDriver: false,
     }).start();
   };

@@ -1,5 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { CaretLeft, CaretRight } from "phosphor-react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { generateCalendar } from "../utils/calendarUtils";
 import { DayCell } from "./dayCell";
 
@@ -48,7 +47,7 @@ export function CustomCalendar({
             }
 
             const dateKey = `${year}-${String(month + 1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-            const markers = events[dateKey] || [];
+            const markers = [...new Set(events[dateKey] || [])];
 
             return (
               <DayCell
@@ -58,7 +57,6 @@ export function CustomCalendar({
                 onPress={() => onSelectDay(dateKey)}
                 markers={markers}
               />
-
             );
           })}
         </View>
