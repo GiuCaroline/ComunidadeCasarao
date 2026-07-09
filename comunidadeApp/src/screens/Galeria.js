@@ -1,12 +1,11 @@
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search } from "../components/search";
 import { CalendarCheck, CaretRight } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
-import { getGaleriaEventos } from "../services/authService";
-import { useEffect } from "react";
+import { getGaleriaEventos, getGaleriaEvento } from "../services/authService";
 import LoadingOverlay from '../components/loadingOverlay';
 
 export function Galeria() {
@@ -14,11 +13,11 @@ export function Galeria() {
   const [search, setSearch] = useState("");
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
-  const [busca, setBusca] = useState("");
 
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
+  
   const [eventos, setEventos] = useState([]);
 
   function formatarData(data) {
@@ -33,7 +32,6 @@ export function Galeria() {
       }
 
       const d = new Date(data);
-
       return d.toLocaleDateString("pt-BR");
   }
 
@@ -45,13 +43,30 @@ export function Galeria() {
         const data = await getGaleriaEventos();
         const agora = new Date();
         const eventosPassados = data.filter((evento) => new Date(evento.data) < agora);
-        setEventos(eventosPassados);
+
+        const eventosComFotosPromises = eventosPassados.map(async (evento) => {
+          try {
+            const midias = await getGaleriaEvento(evento.agendaevento_id);
+            if (midias && midias.length > 0) {
+              return evento;
+            }
+            return null;
+          } catch (error) {
+            return null;
+          }
+        });
+
+        const eventosVerificados = await Promise.all(eventosComFotosPromises);
+        const eventosComFotos = eventosVerificados.filter((evento) => evento !== null);
+
+        setEventos(eventosComFotos);
       } catch (error) {
         console.error(error);
       } finally {
         setIsLoading(false);
       }
     }
+    
     fetchEventos();
   }, []);
 
@@ -90,9 +105,8 @@ export function Galeria() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() =>
-              navigation.navigate("DetalhesEvento", {
-                nome: item.nome,
-                data: item.data,
+              navigation.navigate("EventGalery", {
+                evento: item,
               })
             }
             className="w-full p-4 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mt-3"

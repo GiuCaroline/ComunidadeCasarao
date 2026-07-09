@@ -1,4 +1,5 @@
 import api from "./api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export async function registerUser(data) {
   try {
@@ -68,7 +69,6 @@ export async function getProximosEventos() {
   }
 }
 
-
 export async function getCarrossel() {
   try{
     const response = await api.get('/auth/galeria/carrossel');
@@ -79,11 +79,31 @@ export async function getCarrossel() {
 }
 
 export async function getGaleriaEventos() {
-  try{
-    const response = await api.get('/auth/galeria/eventos');
+  const token = await AsyncStorage.getItem('@casarao:token');
+  
+  try {
+    const response = await api.get("/auth/galeria/eventos", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {
-    throw error.response?.data || { error: "Erro ao buscar carrossel." }
+    throw error.response?.data || { error: "Erro ao buscar eventos da galeria" };
   }
 }
 
+export async function getGaleriaEvento(agendaevento_id) {
+  const token = await AsyncStorage.getItem('@casarao:token');
+  
+  try {
+    const response = await api.get(`/auth/galeria/evento/${agendaevento_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro ao buscar mídias do evento" };
+  }
+}
