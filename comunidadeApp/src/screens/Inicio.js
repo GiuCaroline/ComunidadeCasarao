@@ -1,4 +1,4 @@
-import { View, Image, ScrollView, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, ScrollView, Text, StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { useState, useEffect } from "react";
 import { InstagramLogo, YoutubeLogo, FacebookLogo, MapPinAreaIcon, Bank, PixLogo } from "phosphor-react-native";
 import { WhatsappLogo, Phone, EnvelopeSimple } from "phosphor-react-native";
@@ -9,6 +9,13 @@ import { useAuth } from "../context/AuthContext";
 import { useColorScheme } from "nativewind";
 import { getProximosEventos } from "../services/authService";
 import { useNavigation } from "@react-navigation/native";
+import * as Clipboard from 'expo-clipboard';
+import { Alert } from 'react-native';
+
+const copiarTexto = async (texto) => {
+  await Clipboard.setStringAsync(texto);
+  Alert.alert("Copiado!", "Foi copiado para a área de transferência.");
+};
 
 export function Inicio(){
   const navigation = useNavigation();
@@ -72,7 +79,7 @@ export function Inicio(){
               <View key={evento.id || index} className='bg-input dark:bg-input-dark rounded-xl px-[3%] py-[1%] mt-[5%]' style={[styles.sombra]}>
                 <View className='flex-row items-center justify-between'>
                   <Text className='font-popLight text-[16px] ml-[2%] text-preto dark:text-branco'>{evento.nome}</Text>
-                  <Text className='font-popLight text-[14px] text-preto dark:text-branco'>{evento.horarioString}</Text>
+                  <Text className='font-popLight text-[14px] text-preto dark:text-branco'>{formataHora(evento.horarioString)}</Text>
                 </View>
                 <Text className='font-popExtralight text-[16px] ml-[2%] text-preto dark:text-branco'>{evento.data}</Text>
               </View>
@@ -88,22 +95,31 @@ export function Inicio(){
             <Text className='text-vermelho underline'>redes</Text>
           </Text>
 
-          <View className='mt-[5%]'>
-            <TouchableOpacity className='flex-row items-center gap-2'>
-              <InstagramLogo className='text-preto dark:text-branco' weight="light" size={35} />
-              <Text className='text-[16px] text-vermelho'>@comunidade.casarao</Text>
-            </TouchableOpacity>
+         <View className='mt-[5%]'>
+          <TouchableOpacity 
+            className='flex-row items-center gap-2'
+            onPress={() => Linking.openURL('https://instagram.com/comunidade.casarao')}
+          >
+            <InstagramLogo className='text-preto dark:text-branco' weight="light" size={35} />
+            <Text className='text-[16px] text-vermelho'>@comunidade.casarao</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity className='flex-row items-center gap-2 mt-[2%]'>
-              <YoutubeLogo className='text-preto dark:text-branco' weight="light" size={35} />
-              <Text className='text-[16px] text-vermelho'>Comunidade Casarão</Text>
-            </TouchableOpacity>
+          <TouchableOpacity 
+            className='flex-row items-center gap-2 mt-[2%]'
+            onPress={() => Linking.openURL('https://www.youtube.com/@comunidade.casarao')}
+          >
+            <YoutubeLogo className='text-preto dark:text-branco' weight="light" size={35} />
+            <Text className='text-[16px] text-vermelho'>Comunidade Casarão</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity className='flex-row items-center gap-2 mt-[2%]'>
-              <FacebookLogo className='text-preto dark:text-branco' weight="light" size={35} />
-              <Text className='text-[16px] text-vermelho'>comunidade.casarao</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            className='flex-row items-center gap-2 mt-[2%]'
+            onPress={() => Linking.openURL('https://facebook.com/comunidade.casarao')}
+          >
+            <FacebookLogo className='text-preto dark:text-branco' weight="light" size={35} />
+            <Text className='text-[16px] text-vermelho'>comunidade.casarao</Text>
+          </TouchableOpacity>
+        </View>
         </View>
 
         <View className='mt-[20%] bg-input dark:bg-input-dark mx-[5%] px-[4%] py-[3%] rounded-xl' style={[styles.sombra]}>
@@ -153,10 +169,17 @@ export function Inicio(){
               <Text className='text-preto dark:text-branco font-popRegular text-[16px]'>Transferência Bancária</Text>
             </View>
 
-            <Text className='text-[15px] mt-[5%] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Banco:</Text> 001 - Banco Santander</Text>
-            <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Agência:</Text> 1234-5</Text>
-            <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Conta:</Text> 67890-1</Text>
+            <TouchableOpacity className='mt-[5%]' onPress={() => copiarTexto('001')}>
+              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Banco:</Text> 001 - Banco Santander</Text>
+            </TouchableOpacity>
 
+            <TouchableOpacity onPress={() => copiarTexto('1234-5')}>
+              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Agência:</Text> 1234-5</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => copiarTexto('67890-1')}>
+              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Conta:</Text> 67890-1</Text>
+            </TouchableOpacity>
             
             <View className='flex-row justify-between'>
               <View>
@@ -173,11 +196,12 @@ export function Inicio(){
                   resizeMode="contain"
                 />
             </View>
-            <Text className='text-[16px] font-popLight text-preto dark:text-branco'>contato@comunidadecasarao.com</Text>
-          </View>
 
+            <TouchableOpacity onPress={() => copiarTexto('contato@comunidadecasarao.com')}>
+              <Text className='text-[16px] font-popLight text-preto dark:text-branco'>contato@comunidadecasarao.com</Text>
+            </TouchableOpacity>
+          </View> 
         </View>
-
         <Text className='text-[16px] text-preto dark:text-branco font-popLightItalic px-[5%] text-center mt-[5%]'>Cada um dê conforme determinou em seu coração, não com pesar ou por obrigação, pois Deus ama quem dá com alegria.</Text>
         <Text className='text-[16px] text-vermelho font-popSemiboldItalic px-[5%] text-center'>2 Coríntios 9:7</Text>
 
@@ -200,3 +224,27 @@ const styles = StyleSheet.create({
         elevation: 6,
     }
 });
+
+function formataHora(tempo) {
+  if (!tempo) return "";
+
+  const horarios = tempo.split(" e ");
+
+  const horariosFormatados = horarios.map(horario => {
+    const partes = horario.split("h");
+    
+    if (partes.length >= 2) {
+      const hora = partes[0];
+      const minuto = partes[1];
+
+      if (minuto === "00") {
+        return `${hora}h`;
+      }
+      return `${hora}h${minuto}`;
+    }
+    
+    return horario;
+  });
+
+  return horariosFormatados.join(" e ");
+}
