@@ -21,6 +21,7 @@ import { Passo3 } from './src/screens/Cadastro/Passo3';
 import { Inicio } from './src/screens/Inicio';
 import { Cursos } from './src/screens/Cursos';
 import { Galeria } from './src/screens/Galeria';
+import { EventGalery } from './src/screens/EventGalery';
 import { Perfil } from './src/screens/Perfil';
 import { Carteira } from './src/screens/Carteira';
 import { Solicitacao } from './src/screens/Solicitacao';
@@ -77,6 +78,7 @@ function AppContent() {
         <Stack.Screen name="Inicio" component={Inicio} />
         <Stack.Screen name="Cursos" component={Cursos} />
         <Stack.Screen name="Galeria" component={Galeria} />
+        <Stack.Screen name="EventGalery" component={EventGalery} />
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="Carteira" component={Carteira} />
         <Stack.Screen name="Solicitacao" component={Solicitacao} />
