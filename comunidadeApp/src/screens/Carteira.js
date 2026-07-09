@@ -71,7 +71,7 @@ export function Carteira() {
 
     const coresPorCodigo = {
         1: '#700700',
-        2: '#ff82f9',
+        2: '#FB8CAC',
         3: '#8cb3ff',
     };
 
@@ -125,8 +125,8 @@ export function Carteira() {
         return `${mes}/${ano}`;
     }
 
-    const getBase64Image = async (source) => {
-        const asset = Asset.fromModule(source);
+    const getBase64Image = async () => {
+        const asset = Asset.fromModule(require('../../assets/images/logoPreto.png'));
         await asset.downloadAsync();
 
         const base64 = await FileSystem.readAsStringAsync(asset.localUri || asset.uri, {
@@ -138,20 +138,7 @@ export function Carteira() {
 
     const gerarPDF = async () => {
         try {
-            const logoSource = temCorPersonalizada
-                ? require('../../assets/images/logoBranco.png')
-                : require('../../assets/images/logoPreto.png');
-
-            const logoBase64 = await getBase64Image(logoSource);
-            const corTextoPdf = temCorPersonalizada ? '#FFFFFF' : '#000000';
-            
-            const coresPorCodigo = {
-                1: '#700700',
-                2: '#ff82f9',
-                3: '#8cb3ff',
-            };
-
-            const corCredpdf = temCorPersonalizada ? coresPorCodigo[usuario?.codigo] : '#F0F0F0';
+            const logoBase64 = await getBase64Image();
 
             const html = `
             <html>
@@ -169,7 +156,7 @@ export function Carteira() {
 
                     .card {
                         width: 300px;
-                        background: ${corCredpdf};
+                        background: #F0F0F0;
                         padding: 20px;
                         border-radius: 20px;
                     }
@@ -186,14 +173,12 @@ export function Carteira() {
                     .name {
                         font-size: 18px;
                         font-weight: normal;
-                        color: ${corTextoPdf};
                     }
 
                     .cargo {
                         font-size: 14px;
                         margin-bottom: 15px;
                         font-weight: 300;
-                        color: ${corTextoPdf};
                     }
 
                     .row {
@@ -205,13 +190,11 @@ export function Carteira() {
                     .label {
                         font-size: 16px;
                         font-weight: normal;
-                        color: ${corTextoPdf};
                     }
 
                     .value {
                         font-size: 12px;
                         font-weight: 300;
-                        color: ${corTextoPdf};
                     }
 
                     .footer {
@@ -219,7 +202,6 @@ export function Carteira() {
                         margin-top: 20px;
                         text-align: center;
                         font-weight: 300;
-                        color: ${corTextoPdf};
                     }
 
                     .codigo {
