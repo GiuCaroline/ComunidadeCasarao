@@ -17,10 +17,6 @@ export function Carteira() {
     const navigation = useNavigation();
     const { colorScheme } = useColorScheme();
 
-    const logo = colorScheme === 'dark' 
-    ? require('../../assets/images/logoBranco.png') 
-    : require('../../assets/images/logoPreto.png');
-
     const { user } = useAuth();
     const [usuario, setUsuario] = useState(null);
 
@@ -70,6 +66,26 @@ export function Carteira() {
         }
     }, [user]);
 
+    const codigosPersonalizados = [1, 2, 3];
+    const temCorPersonalizada = codigosPersonalizados.includes(usuario?.codigo);
+
+    const coresPorCodigo = {
+        1: '#700700',
+        2: '#ff82f9',
+        3: '#8cb3ff',
+    };
+
+    const corCredpdf = temCorPersonalizada ? coresPorCodigo[usuario?.codigo] : '#F0F0F0';
+
+    const textoClasse = temCorPersonalizada ? 'text-branco' : 'text-preto dark:text-branco';
+    
+    const logo = temCorPersonalizada
+    ? require('../../assets/images/logoBranco.png')
+    : (colorScheme === 'dark'
+        ? require('../../assets/images/logoBranco.png')
+        : require('../../assets/images/logoPreto.png')
+    );
+
     
     function formatarData(data) {
         if (!data) return "";
@@ -109,8 +125,8 @@ export function Carteira() {
         return `${mes}/${ano}`;
     }
 
-    const getBase64Image = async () => {
-        const asset = Asset.fromModule(require('../../assets/images/logoPreto.png'));
+    const getBase64Image = async (source) => {
+        const asset = Asset.fromModule(source);
         await asset.downloadAsync();
 
         const base64 = await FileSystem.readAsStringAsync(asset.localUri || asset.uri, {
@@ -122,7 +138,20 @@ export function Carteira() {
 
     const gerarPDF = async () => {
         try {
-            const logoBase64 = await getBase64Image();
+            const logoSource = temCorPersonalizada
+                ? require('../../assets/images/logoBranco.png')
+                : require('../../assets/images/logoPreto.png');
+
+            const logoBase64 = await getBase64Image(logoSource);
+            const corTextoPdf = temCorPersonalizada ? '#FFFFFF' : '#000000';
+            
+            const coresPorCodigo = {
+                1: '#700700',
+                2: '#ff82f9',
+                3: '#8cb3ff',
+            };
+
+            const corCredpdf = temCorPersonalizada ? coresPorCodigo[usuario?.codigo] : '#F0F0F0';
 
             const html = `
             <html>
@@ -140,7 +169,7 @@ export function Carteira() {
 
                     .card {
                         width: 300px;
-                        background: #F0F0F0;
+                        background: ${corCredpdf};
                         padding: 20px;
                         border-radius: 20px;
                     }
@@ -157,12 +186,14 @@ export function Carteira() {
                     .name {
                         font-size: 18px;
                         font-weight: normal;
+                        color: ${corTextoPdf};
                     }
 
                     .cargo {
                         font-size: 14px;
                         margin-bottom: 15px;
                         font-weight: 300;
+                        color: ${corTextoPdf};
                     }
 
                     .row {
@@ -174,11 +205,13 @@ export function Carteira() {
                     .label {
                         font-size: 16px;
                         font-weight: normal;
+                        color: ${corTextoPdf};
                     }
 
                     .value {
                         font-size: 12px;
                         font-weight: 300;
+                        color: ${corTextoPdf};
                     }
 
                     .footer {
@@ -186,6 +219,7 @@ export function Carteira() {
                         margin-top: 20px;
                         text-align: center;
                         font-weight: 300;
+                        color: ${corTextoPdf};
                     }
 
                     .codigo {
@@ -263,7 +297,7 @@ export function Carteira() {
         } catch (error) {
             console.log("Erro ao gerar PDF:", error);
         }
-        };
+    };
 
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -289,9 +323,10 @@ export function Carteira() {
             </TouchableOpacity>
 
             <View className='items-center mt-[6%]'>
-                <View className='w-[95%] px-5 py-5 bg-input dark:bg-input-dark rounded-[20px]'
-                style={styles.sombra}
-            >  
+                <View 
+                    className='w-[95%] px-5 py-5 rounded-[20px]'
+                    style={[styles.sombra, { backgroundColor: corCredpdf }]}
+                >  
                     <View className='items-center'>
                         <Image
                             source={logo}
@@ -302,51 +337,51 @@ export function Carteira() {
                     
                     <View className=' items-start'>
                         <View className='items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>{usuario?.nome}</Text>
-                            <Text className="text-[13px] font-popLight text-preto dark:text-branco">{cargosUsuario.join(", ")}</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>{usuario?.nome}</Text>
+                            <Text className={`text-[13px] font-popLight ${textoClasse}`}>{cargosUsuario.join(", ")}</Text>
                         </View>
                     </View>
 
                     <View className='flex-row justify-between'>
                         <View className='mt-[5%] items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>Data de Nascimento</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarData(usuario?.dtanasc)}</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>Data de Nascimento</Text>
+                            <Text className={`text-[15px] font-popLight ${textoClasse}`}>{formatarData(usuario?.dtanasc)}</Text>
                         </View>
                         <View className='mt-[5%] mr-[5%] items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>Código</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco"> {usuario?.codigo}</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>Código</Text>
+                            <Text className={`text-[15px] font-popLight ${textoClasse}`}> {usuario?.codigo}</Text>
                         </View>
                     </View>
 
                     <View className='flex-row justify-between'>
                         <View className='mt-[5%] items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>Membro Desde</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarMesAnoCustom(usuario?.membrodesde)}</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>Membro Desde</Text>
+                            <Text className={`text-[15px] font-popLight ${textoClasse}`}>{formatarMesAnoCustom(usuario?.membrodesde)}</Text>
                         </View>
                         <View className='mt-[5%] items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>Batismo</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarData(usuario?.dtabatismo)}</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>Batismo</Text>
+                            <Text className={`text-[15px] font-popLight ${textoClasse}`}>{formatarData(usuario?.dtabatismo)}</Text>
                         </View>
                     </View>
 
                     <View className='flex-row justify-between'>
                         <View className='mt-[5%] items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>Data de Emissão</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">{formatarData(usuario?.data_aceite_termos)}</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>Data de Emissão</Text>
+                            <Text className={`text-[15px] font-popLight ${textoClasse}`}>{formatarData(usuario?.data_aceite_termos)}</Text>
                         </View>
                         <View className='mt-[5%] items-start'>
-                            <Text className='font-popRegular text-base text-preto dark:text-branco'>Telefone Igreja</Text>
-                            <Text className="text-[15px] font-popLight text-preto dark:text-branco">(11) 4555-0002</Text>
+                            <Text className={`font-popRegular text-base ${textoClasse}`}>Telefone Igreja</Text>
+                            <Text className={`text-[15px] font-popLight ${textoClasse}`}>(11) 4555-0002</Text>
                         </View>
                     </View>
 
                     <View className='mt-[5%] items-start'>
-                        <Text className='font-popRegular text-base text-preto dark:text-branco'>Congregação</Text>
-                        <Text className="text-[15px] font-popLight text-preto dark:text-branco">Comunidade Casarão</Text>
+                        <Text className={`font-popRegular text-base ${textoClasse}`}>Congregação</Text>
+                        <Text className={`text-[15px] font-popLight ${textoClasse}`}>Comunidade Casarão</Text>
                     </View>
                     
                     <View className='items-center flex mt-[10%]'>
-                        <Text className='text-center font-popLight text-[10px] text-preto dark:text-branco'>É assegurada, nos termos da lei, a prestação de assistência religiosas nas entidades civis e militares de internação  coletiva. Artigo 5, inciso VII, CF.</Text>
+                        <Text className={`text-center font-popLight text-[10px] ${textoClasse}`}>É assegurada, nos termos da lei, a prestação de assistência religiosas nas entidades civis e militares de internação  coletiva. Artigo 5, inciso VII, CF.</Text>
                     </View>
                 </View>
                 
