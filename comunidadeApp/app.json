@@ -9,30 +9,38 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.giucaroline.comunidadecasarao"
+      "bundleIdentifier": "com.giucaroline.comunidadecasarao",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "package": "com.giucaroline.comunidadecasarao",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "softwareKeyboardLayoutMode": "resize",
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.jpg",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.jpg"
     },
     "plugins": [
       "expo-font",
       "expo-video",
-      "expo-web-browser"
-    ]
+      "expo-web-browser",
+      "@react-native-google-signin/google-signin"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cdbcd63a-a476-4db9-9594-3c3d0ddc6b4b"
+      }
+    }
   }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>516052641888-bdt821geunivto0eabf93d1ntc0i1anv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.516052641888-bdt821geunivto0eabf93d1ntc0i1anv</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>516052641888-kpp1hahdt25noosrdind0e8h6uchmpl8.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA2J11RheQtM6h2KrhUUmyVbbEsS_HEBYo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>516052641888</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.giucaroline.comunidadecasarao</string>
+	<key>PROJECT_ID</key>
+	<string>comunidadecasarao</string>
+	<key>STORAGE_BUCKET</key>
+	<string>comunidadecasarao.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:516052641888:ios:42b1bd71a54d0d0edafb05</string>
+</dict>
+</plist>

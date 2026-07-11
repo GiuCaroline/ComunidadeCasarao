@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "516052641888",
+    "project_id": "comunidadecasarao",
+    "storage_bucket": "comunidadecasarao.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516052641888:android:b686748d1db1e52ddafb05",
+        "android_client_info": {
+          "package_name": "com.giucaroline.comunidadecasarao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516052641888-kj7q0rs3sa34937970uk4fsknqd1jgf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkxDWb0jQGQaZ7FkWi6agz4YMKkXBxWP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516052641888-kj7q0rs3sa34937970uk4fsknqd1jgf3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "516052641888-bdt821geunivto0eabf93d1ntc0i1anv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.giucaroline.comunidadecasarao"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

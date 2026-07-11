@@ -9,13 +9,11 @@ import { useAuth } from "../context/AuthContext";
 import { AlertCustom } from '../components/alert';
 import { useColorScheme } from "nativewind";
 import LoadingOverlay from '../components/loadingOverlay';
+import { makeRedirectUri } from 'expo-auth-session';
 
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '../services/firebaseConfig';
-
-WebBrowser.maybeCompleteAuthSession();
+import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 
 export function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,20 +35,10 @@ export function Login() {
       type: "error",
   });
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
-    redirectUri: 'https://auth.expo.io/@giucaroline/comunidadecasarao',
+  GoogleSignin.configure({
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, // o mesmo Web Client ID de sempre
   });
 
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { id_token } = response.params;
-      const credential = GoogleAuthProvider.credential(id_token);
-      handleFirebaseGoogleLogin(credential);
-    }
-  }, [response]);
 
   async function handleFirebaseGoogleLogin(credential) {
     setIsLoading(true);
@@ -73,6 +61,27 @@ export function Login() {
       }
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+
+      if (isSuccessResponse(response)) {
+        const { idToken } = response.data;
+        const credential = GoogleAuthProvider.credential(idToken);
+        await handleFirebaseGoogleLogin(credential); 
+      }
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          showAlert("Erro", "Google Play Services indisponível");
+        }
+      } else {
+        showAlert("Erro", "Erro ao autenticar com o Google");
+      }
     }
   }
 
