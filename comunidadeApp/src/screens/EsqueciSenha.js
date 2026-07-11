@@ -6,6 +6,7 @@ import { forgotPassword, resetPassword } from '../services/authService';
 import { AlertCustom } from "../components/alert";
 import LoadingOverlay from '../components/loadingOverlay';
 import { useColorScheme } from "nativewind";
+import { EyeSlash, Eye } from 'phosphor-react-native';
 
 export function EsqueciSenha(){
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,7 @@ export function EsqueciSenha(){
   const [open, setOpen] = useState(false);
   const { colorScheme } = useColorScheme();
   const navigation = useNavigation();
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
@@ -154,12 +156,27 @@ export function EsqueciSenha(){
                                 value={token}
                                 onChangeText={setToken}
                             />
-                            <Input 
-                                texto='Nova Senha'
-                                seguranca={true}
-                                value={novaSenha}
-                                onChangeText={setNovaSenha}
-                            />
+
+                            <View className="w-full justify-center items-center relative">
+                                <Input
+                                    texto="Nova Senha"
+                                    seguranca={!mostrarSenha}
+                                    value={novaSenha}
+                                    onChangeText={setNovaSenha}
+                                />
+
+                                <TouchableOpacity
+                                    onPress={() => setMostrarSenha(!mostrarSenha)}
+                                    className="absolute right-6 z-10 top-3"
+                                >
+                                {mostrarSenha ? (
+                                    <Eye size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                                ) : (
+                                    <EyeSlash size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                                )}
+                                </TouchableOpacity>
+            </View>
+
                         </View>
             
                         <TouchableOpacity 

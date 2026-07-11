@@ -6,7 +6,8 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -18,6 +19,7 @@ import { Eye, EyeSlash, PlusCircleIcon, MinusCircleIcon } from "phosphor-react-n
 import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
+import { Calendario } from "../components/calendario";
 
 export function EditPerfil() {
   const navigation = useNavigation();
@@ -26,6 +28,11 @@ export function EditPerfil() {
   const [cargos, setCargos] = useState([]);
 
   const [usuario, setUsuario] = useState(null);
+
+  const [calMembroVisible, setCalMembroVisible] = useState(false);
+  const [calBatismoVisible, setCalBatismoVisible] = useState(false);
+  const [membroDay, setMembroDay] = useState(null);
+  const [batismoDay, setBatismoDay] = useState(null);
 
   
   const [form, setForm] = useState({
@@ -112,15 +119,22 @@ export function EditPerfil() {
           grauInstrucao: data.grauinst || "",
           situacao: data.situacao || "",
           celular: data.celular || "",
+          mae: data.mae || "",
+          pai: data.pai || "",
           cep: data.cep || "",
           uf: data.uf || "",
           endereco: data.endereco || "",
           bairro: data.bairro || "",
           cidade: data.cidade || "",
           complemento: data.complemento || "",
+          membrodesde: data.membrodesde || "",
+          dtabatismo: data.dtabatismo || "",
           email: data.email || "",
           senha: "", 
         });
+        
+        setMembroDay(data.membrodesde ? { dateString: data.membrodesde } : null);
+        setBatismoDay(data.dtabatismo ? { dateString: data.dtabatismo } : null);
 
         const listaCargos = [
           data.cargo,
@@ -171,6 +185,18 @@ export function EditPerfil() {
     }
   }
 
+  useEffect(() => {
+    if (membroDay?.dateString) {
+      handleChange("membrodesde", membroDay.dateString);
+    }
+  }, [membroDay]);
+
+  useEffect(() => {
+    if (batismoDay?.dateString) {
+      handleChange("dtabatismo", batismoDay.dateString);
+    }
+  }, [batismoDay]);
+
   function adicionarCargo() {
     if (cargos.length < 4) {
       setCargos([...cargos, null]);
@@ -199,12 +225,16 @@ export function EditPerfil() {
         escolaridade: form.grauInstrucao,
         situacao: form.situacao,
         telefone: form.celular,
+        mae: form.mae,
+        pai: form.pai,
         cep: form.cep,
         uf: form.uf,
         endereco: form.endereco,
         bairro: form.bairro,
         complemento: form.complemento,
         cidade: form.cidade,
+        membrodesde: form.membrodesde,
+        dtabatismo: form.dtabatismo,
         email: form.email,
         senha: form.senha,
         cargo: cargos[0] || null,
@@ -312,6 +342,18 @@ export function EditPerfil() {
               keyboardType="phone-pad"
             />
 
+            <Input
+              texto="Mãe"
+              value={form?.mae || ""}
+              onChangeText={(text) => handleChange("mae", text)}
+            />
+            
+            <Input
+              texto="Pai"
+              value={form?.pai || ""}
+              onChangeText={(text) => handleChange("pai", text)}
+            />
+
             <View className="w-full pl-[2%]">
 
               {cargos.map((cargo, index) => (
@@ -416,16 +458,47 @@ export function EditPerfil() {
               onChangeText={(text) => handleChange("complemento", text)}
             />
 
-            {/* Conta */}
+            <View className='w-full items-center mt-[-5%] mb-[7%]'>
+                <View className='flex flex-row justify-center items-baseline'>
+                    <Text className="text-[16px] font-popRegular text-placeInput dark:text-placeInput-dark w-[200px]">Membro Desde</Text>
+                    <TouchableOpacity className='bg-vermelho rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalMembroVisible(true)}>
+                        <Text className='text-branco'>Selecionar Data</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <Modal visible={calMembroVisible} transparent animationType="fade">
+                    <Calendario day={membroDay} setDay={setMembroDay} close={() => setCalMembroVisible(false)} />
+                </Modal>
+
+                <View style={[styles.sombra]} className="bg-input dark:bg-input-dark rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-4 mt-2">
+                    <Text className='text-preto dark:text-branco'>{form?.membrodesde}</Text>
+                </View>
+
+                <View className='flex flex-row justify-center items-baseline'>
+                    <Text className="text-[16px] font-popRegular text-placeInput dark:text-placeInput-dark w-[200px]">Data de Batismo</Text>
+                    <TouchableOpacity className='bg-vermelho rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalBatismoVisible(true)}>
+                        <Text className='text-branco'>Selecionar Data</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <Modal visible={calBatismoVisible} transparent animationType="fade">
+                    <Calendario day={batismoDay} setDay={setBatismoDay} close={() => setCalBatismoVisible(false)} />
+                </Modal>
+
+                <View style={[styles.sombra]} className="bg-input dark:bg-input-dark rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-4 mt-2">
+                    <Text className='text-preto dark:text-branco'>{form?.dtabatismo}</Text>
+                </View>
+            </View>
+
             <Input
               texto="Email"
               value={form?.email || ""}
               onChangeText={(text) => handleChange("email", text)}
             />
 
-            <View className="w-full items-center justify-center ">
+            <View className="w-full items-center justify-center relative">
               <Input
-                texto="Nova senha"
+                texto="Nova Senha"
                 seguranca={!mostrarSenha}
                 value={form?.senha || ""}
                 onChangeText={(text) => handleChange("senha", text)}
@@ -434,6 +507,7 @@ export function EditPerfil() {
               <TouchableOpacity
                 onPress={() => setMostrarSenha(!mostrarSenha)}
                 style={styles.eye}
+                className="absolute right-6 z-10 top-3"
               >
                 {mostrarSenha ? (
                   <Eye size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
@@ -492,11 +566,15 @@ export function EditPerfil() {
 }
 
 const styles = StyleSheet.create({
-  eye: {
-    position: "absolute",
-    right: 25,
-    top: "-18%",
-  },
+  sombra: {
+    // iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    // Android
+    elevation: 6,
+  }
 });
 
 function maskPhone(value) {

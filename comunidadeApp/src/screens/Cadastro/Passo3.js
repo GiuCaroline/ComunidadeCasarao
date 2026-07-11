@@ -7,7 +7,7 @@ import { Input } from '../../components/input';
 import { Dropdown } from '../../components/dropdown';
 import { Calendario } from '../../components/calendario';
 import { AlertCustom } from '../../components/alert';
-import { PlusCircleIcon, MinusCircleIcon } from 'phosphor-react-native';
+import { PlusCircleIcon, MinusCircleIcon, EyeSlash, Eye } from 'phosphor-react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
@@ -24,6 +24,7 @@ export function Passo3() {
     const { cadastro, updateCadastro, resetCadastro } = useCadastro();
     const [cargos, setCargos] = useState([null]);
     const { colorScheme } = useColorScheme();
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const logo = colorScheme === 'dark'? require('../../../assets/images/logoBranco.png') : require('../../../assets/images/logoPreto.png') ;
     
@@ -285,12 +286,26 @@ export function Passo3() {
                 autoCorrect={false}
             />
 
-            <Input
-                texto = 'Senha*' 
-                seguranca={true}
-                value={cadastro.senha}
-                onChangeText={(text) => updateCadastro({ senha: text })}
-            />
+            <View className="w-full justify-center items-center relative">
+                <Input
+                    texto="Senha*"
+                    seguranca={!mostrarSenha}
+                    value={cadastro.senha}
+                    onChangeText={(text) => updateCadastro({ senha: text })}
+                />
+
+                <TouchableOpacity
+                    onPress={() => setMostrarSenha(!mostrarSenha)}
+                    className="absolute right-6 z-10 top-3"
+                >
+                {mostrarSenha ? (
+                    <Eye size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                ) : (
+                    <EyeSlash size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                )}
+                </TouchableOpacity>
+            </View>
+
 
             <TouchableOpacity
                 className="flex-row items-center mb-[10%] w-[90%]"

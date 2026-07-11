@@ -11,11 +11,7 @@ import { getProximosEventos } from "../services/authService";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from 'expo-clipboard';
 import { Alert } from 'react-native';
-
-const copiarTexto = async (texto) => {
-  await Clipboard.setStringAsync(texto);
-  Alert.alert("Copiado!", "Foi copiado para a área de transferência.");
-};
+import { AlertCustom } from "../components/alert";
 
 export function Inicio(){
   const navigation = useNavigation();
@@ -28,7 +24,23 @@ export function Inicio(){
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
+  
+  const [alerta, setAlerta] = useState({
+    visible: false,
+    title: "",
+    message: "",
+    type: "error"
+  });
+
+  const copiarTexto = async (texto) => {
+    await Clipboard.setStringAsync(texto);
+      setAlerta({
+        visible: true,
+        title: "Copiado!",
+        message: "Foi copiado para a área de transferência.",
+        type: "success"
+      });
+  };
 
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
@@ -44,10 +56,12 @@ export function Inicio(){
       const data = await getProximosEventos();
       setProximosEventos(data || []);
     } catch (error) {
-      setAlertType("error");
-      setAlertTitle("Erro");
-      setAlertMessage("Não foi possível carregar os próximos eventos.");
-      setAlertVisible(true);
+      setAlerta({
+        visible: true,
+        title: "Erro",
+        message: "Não foi possível carregar os próximos eventos.",
+        type: "error"
+      });
     }
   }
 
@@ -56,6 +70,15 @@ export function Inicio(){
   }, []);
   
   return (
+    <>
+    <AlertCustom
+        visible={alerta.visible}
+        title={alerta.title}
+        message={alerta.message}
+        type={alerta.type}
+        onClose={() => setAlerta({ ...alerta, visible: false })}
+    />
+
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       {loading && <LoadingOverlay />}
 
@@ -210,19 +233,20 @@ export function Inicio(){
         active="Inicio"
         onChange={(r) => navigation.navigate(r)} />
     </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-    sombra: {
-        // iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-        // Android
-        elevation: 6,
-    }
+  sombra: {
+    // iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    // Android
+    elevation: 6,
+  }
 });
 
 function formataHora(tempo) {
