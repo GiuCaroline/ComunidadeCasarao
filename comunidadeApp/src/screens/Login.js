@@ -3,12 +3,19 @@ import { Input } from '../components/input';
 import { useNavigation } from '@react-navigation/native';
 import { GoogleLogo, FacebookLogo, InstagramLogo } from 'phosphor-react-native';
 import { useCadastro } from '../screens/CadastroContext';
-import { useState } from "react";
-import { loginUser } from "../services/authService";
+import { useState, useEffect } from "react";
+import { loginUser, loginGoogle } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import { AlertCustom } from '../components/alert';
 import { useColorScheme } from "nativewind";
 import LoadingOverlay from '../components/loadingOverlay';
+
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import { auth } from '../services/firebaseConfig';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,26 +37,64 @@ export function Login() {
       type: "error",
   });
 
-    function showAlert(title, message, type = "error") {
-        setAlertConfig({ title, message, type });
-        setAlertVisible(true);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    redirectUri: 'https://auth.expo.io/@giucaroline/comunidadecasarao',
+  });
 
-        setTimeout(() => {
-            setAlertVisible(false);
-        }, 2500);
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      handleFirebaseGoogleLogin(credential);
     }
+  }, [response]);
 
+  async function handleFirebaseGoogleLogin(credential) {
+    setIsLoading(true);
+    try {
+      const userCredential = await signInWithCredential(auth, credential);
+      const userEmail = userCredential.user.email;
+
+      const data = await loginGoogle(userEmail);
+
+      login(data.user);
+      showAlert("Sucesso", "Usuário logado!", "success");
+      navigation.navigate("Inicio");
+
+    } catch (error) {
+      if (error.status === 404 || error.response?.status === 404) {
+        showAlert("Aviso", "Conta não encontrada. Redirecionando...", "warning");
+        irParaCadastro();
+      } else {
+        showAlert("Erro", "Erro ao autenticar com o Google");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function showAlert(title, message, type = "error") {
+      setAlertConfig({ title, message, type });
+      setAlertVisible(true);
+
+      setTimeout(() => {
+          setAlertVisible(false);
+      }, 2500);
+  }
 
   async function handleLogin() {
     setIsLoading(true);
 
     if (!email || !senha) {
       showAlert("Atenção!", "Preencha email e senha.", "warning");
+      setIsLoading(false);
       return;
     }
 
     try {
-
       const data = await loginUser(email, senha);
 
       login(data.user);
@@ -79,7 +124,7 @@ export function Login() {
         <ScrollView contentContainerStyle={{ padding: 10, alignItems:'center', }} className='flex'>
           <Image
             source={logo}
-            className="w-[60%]  mt-[10%]"
+            className="w-[60%] mt-[10%]"
             resizeMode="contain"
           />
           <Text className="font-popMedium text-[22px] text-vermelho mt-[-10%] mb-[10%]">
@@ -111,7 +156,7 @@ export function Login() {
           </View>
 
           <TouchableOpacity 
-            className="px-16 bg-vermelho rounded-full items-center justify-center mt-2 py-2 mt-2"
+            className="px-16 bg-vermelho rounded-full items-center justify-center mt-2 py-2"
             onPress={handleLogin}
             activeOpacity={0.8}
           >
@@ -120,23 +165,14 @@ export function Login() {
             </Text>
           </TouchableOpacity>
 
-          <Text className='font-popLight mt-[10%] mb-[10%] text-preto dark:text-branco'>
-            - ou acesse por -
-          </Text>
-
-          <View className='flex flex-row gap-14'>
-            <TouchableOpacity>
-              <GoogleLogo size={30} className='text-preto dark:text-branco' weight="light"/>
-            </TouchableOpacity>
-
-            
-            <TouchableOpacity>
-              <FacebookLogo size={30} className='text-preto dark:text-branco' weight="light"/>
-            </TouchableOpacity>
-
-            
-            <TouchableOpacity>
-              <InstagramLogo size={30} className='text-preto dark:text-branco' weight="light"/>
+          <View className='mt-[20%]'>
+            <TouchableOpacity 
+              className='flex-row items-center gap-1 border p-2 rounded-xl border-vermelho dark:border-vermelho-dark'
+              onPress={() => promptAsync()}
+              disabled={!request}
+            >
+              <GoogleLogo size={23} className='text-preto dark:text-branco' weight="light"/>
+              <Text className='font-popLight text-[16px] text-preto dark:text-branco'> Acesse pelo Google</Text>
             </TouchableOpacity>
           </View>
 

@@ -37,6 +37,15 @@ export async function loginUser(email, password) {
   }
 }
 
+export async function loginGoogle(email) {
+  try {
+    const response = await api.post('/auth/google', { email });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getUserById(id) {
   try {
     const response = await api.get(`/auth/user/${id}`);

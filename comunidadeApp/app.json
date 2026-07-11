@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "comunidadeApp",
-    "slug": "comunidadeApp",
+    "name": "Comunidade Casarão",
+    "slug": "comunidadecasarao",
+    "scheme": "comunidadecasarao",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.jpg",
@@ -13,9 +14,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.giucaroline.comunidadecasarao"
     },
     "android": {
+      "package": "com.giucaroline.comunidadecasarao",
       "adaptiveIcon": {
         "softwareKeyboardLayoutMode": "resize",
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -28,7 +31,8 @@
     },
     "plugins": [
       "expo-font",
-      "expo-video"
+      "expo-video",
+      "expo-web-browser"
     ]
   }
 }
