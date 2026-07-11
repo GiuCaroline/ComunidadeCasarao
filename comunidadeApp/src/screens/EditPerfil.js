@@ -20,6 +20,7 @@ import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
 import { DateField } from '../components/dateField';
+import { Animated } from 'react-native';
 
 export function EditPerfil() {
   const navigation = useNavigation();
@@ -51,8 +52,9 @@ export function EditPerfil() {
     email: "",
     senha: "",
   });
-  const isCasadoOuUniao =
-  form.estadoCivil === 1 || form.estadoCivil === 7;
+  
+  const [mostrarConjuge, setMostrarConjuge] = useState(false);
+  const animConjuge = useState(new Animated.Value(0))[0];
   
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -132,6 +134,11 @@ export function EditPerfil() {
           email: data.email || "",
           senha: "", 
         });
+
+        const estadoInicial = data.estadocivil;
+        const deveMostrarInicial = estadoInicial === 1 || estadoInicial === 7;
+        setMostrarConjuge(deveMostrarInicial);
+        animConjuge.setValue(deveMostrarInicial ? 1 : 0);
         
         setMembroDay(data.membrodesde ? { dateString: data.membrodesde } : null);
         setBatismoDay(data.dtabatismo ? { dateString: data.dtabatismo } : null);
@@ -297,40 +304,79 @@ export function EditPerfil() {
               onChangeText={(text) => handleChange("nome", text)}
             />
 
-            <Dropdown
-                placeholder="Estado Civil"
-                data={estadoCivilOptions}
-                value={form?.estadoCivil || ""}
-                onChange={(item) => handleEstadoCivilChange(item.value)}
-                onOpen={() => setScrollEnabled(false)}
-                onClose={() => setScrollEnabled(true)}
-            />
+            <View className='w-full ml-[5%]'>
+              <Dropdown
+                  placeholder="Estado Civil"
+                  data={estadoCivilOptions}
+                  value={form?.estadoCivil || ""}
+                  onChange={(item) => {
+                      const value = item.value;
+                      const deveMostrar = value === 1 || value === 7;
 
-            {isCasadoOuUniao && (
-              <Input
-                texto="Cônjuge"
-                value={form?.conjuge || ""}
-                onChangeText={(text) => handleChange("conjuge", text)}
+                      setForm((prev) => ({
+                          ...prev,
+                          estadoCivil: value,
+                          conjuge: !deveMostrar ? "" : prev.conjuge,
+                      }));
+
+                      setMostrarConjuge(deveMostrar);
+
+                      Animated.timing(animConjuge, {
+                          toValue: deveMostrar ? 1 : 0,
+                          duration: 400,
+                          useNativeDriver: false,
+                      }).start();
+                  }}
+                  onOpen={() => setScrollEnabled(false)}
+                  onClose={() => setScrollEnabled(true)}
               />
-            )}
-            
-            <Dropdown
-              placeholder="Grau de Instrução"
-              data={grauInstrucaoOptions}
-              value={form?.grauInstrucao || ""}  
-              onChange={(item) => handleChange("grauInstrucao", item.value)}
-              onOpen={() => setScrollEnabled(false)}
-              onClose={() => setScrollEnabled(true)}
-            />
 
-            <Dropdown
-                placeholder="Situação"
-                data={situacaoOptions}
-                value={form?.situacao  || ""}  
-                onChange={(item) => handleChange("situacao", item.label)}
+              <Animated.View
+                  style={{
+                      width: '100%',
+                      overflow: 'hidden',
+                      height: animConjuge.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [0, 100],
+                      }),
+                      opacity: animConjuge,
+                      transform: [
+                          {
+                              translateY: animConjuge.interpolate({
+                                  inputRange: [0, 1],
+                                  outputRange: [-20, 0],
+                              }),
+                          },
+                      ],
+                  }}
+              >
+                  <View className='w-full pt-[15px]'>
+                      <Input
+                          texto="Cônjuge"
+                          value={form?.conjuge || ""}
+                          onChangeText={(text) => handleChange("conjuge", text)}
+                      />
+                  </View>
+              </Animated.View>
+              
+              <Dropdown
+                placeholder="Grau de Instrução"
+                data={grauInstrucaoOptions}
+                value={form?.grauInstrucao || ""}  
+                onChange={(item) => handleChange("grauInstrucao", item.value)}
                 onOpen={() => setScrollEnabled(false)}
                 onClose={() => setScrollEnabled(true)}
-            />
+              />
+
+              <Dropdown
+                  placeholder="Situação"
+                  data={situacaoOptions}
+                  value={form?.situacao  || ""}  
+                  onChange={(item) => handleChange("situacao", item.label)}
+                  onOpen={() => setScrollEnabled(false)}
+                  onClose={() => setScrollEnabled(true)}
+              />
+            </View>
 
             <Input
               texto="Celular"

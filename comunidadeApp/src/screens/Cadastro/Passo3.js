@@ -235,20 +235,22 @@ export function Passo3() {
                     </View>
                 ))}
             </View>
-            
-            <DateField
-                label="Membro Desde"
-                value={cadastro.membro}
-                onChange={(dateString) => updateCadastro({ membro: dateString })}
-                maximumDate={new Date()}
-            />
 
-            <DateField
-                label="Data de Batismo"
-                value={cadastro.batismo}
-                onChange={(dateString) => updateCadastro({ batismo: dateString })}
-                maximumDate={new Date()}
-            />
+            <View className='w-full mb-[7%]'>
+                <DateField
+                    label="Membro Desde"
+                    value={cadastro.membro}
+                    onChange={(dateString) => updateCadastro({ membro: dateString })}
+                    maximumDate={new Date()}
+                />
+
+                <DateField
+                    label="Data de Batismo"
+                    value={cadastro.batismo}
+                    onChange={(dateString) => updateCadastro({ batismo: dateString })}
+                    maximumDate={new Date()}
+                />
+            </View>
 
             <Input 
                 texto="Email*"

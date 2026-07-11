@@ -129,92 +129,96 @@ export function Passo1() {
                 onChange={(sexo) => updateCadastro({ sexo })}
             />
 
-            {/* Estado civil */}
-            <Dropdown
-                placeholder="Estado Civil*"
-                data={[
-                    { value: "1", label: "Casado(a)" },
-                    { value: "2", label: "Desquitado(a)" },
-                    { value: "3", label: "Divorciado(a)" },
-                    { value: "4", label: "Não Informar" },
-                    { value: "5", label: "Separado(a)" },
-                    { value: "6", label: "Solteiro(a)" },
-                    { value: "7", label: "União Estável" },
-                    { value: "8", label: "Viúvo(a)" },
-                ]}
-                onChange={(item) => {
-                    updateCadastro({ estadoCivil: item.value });
+            <View className='w-full justify-center ml-[4%]'>
+                {/* Estado civil */}
+                <Dropdown
+                    placeholder="Estado Civil*"
+                    data={[
+                        { value: "1", label: "Casado(a)" },
+                        { value: "2", label: "Desquitado(a)" },
+                        { value: "3", label: "Divorciado(a)" },
+                        { value: "4", label: "Não Informar" },
+                        { value: "5", label: "Separado(a)" },
+                        { value: "6", label: "Solteiro(a)" },
+                        { value: "7", label: "União Estável" },
+                        { value: "8", label: "Viúvo(a)" },
+                    ]}
+                    onChange={(item) => {
+                        updateCadastro({ estadoCivil: item.value });
 
-                    const deveMostrar = item.value === "1" || item.value === "7";
+                        const deveMostrar = item.value === "1" || item.value === "7";
 
-                    setMostrarConjuge(deveMostrar);
+                        setMostrarConjuge(deveMostrar);
 
-                    Animated.timing(animConjuge, {
-                        toValue: deveMostrar ? 1 : 0,
-                        duration: 400,
-                        useNativeDriver: true,
-                    }).start();
-                }}
-                onOpen={() => setScrollEnabled(false)}
-                onClose={() => setScrollEnabled(true)}
-            />
-
-           {mostrarConjuge && (
-                <Animated.View
-                    style={{
-                        width: '100%',
-                        alignItems: 'center',
-                        opacity: animConjuge,
-                        transform: [
-                            {
-                                translateY: animConjuge.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: [-20, 0],
-                                }),
-                            },
-                        ],
+                        Animated.timing(animConjuge, {
+                            toValue: deveMostrar ? 1 : 0,
+                            duration: 400,
+                            useNativeDriver: true,
+                        }).start();
                     }}
-                >
-                    <Input
-                        texto="Cônjuge"
-                        value={cadastro.conjuge}
-                        onChangeText={(text) => updateCadastro({ conjuge: text })}
-                    />
-                </Animated.View>
-            )}
+                    onOpen={() => setScrollEnabled(false)}
+                    onClose={() => setScrollEnabled(true)}
+                />
 
-            <Dropdown
-                placeholder="Grau de Instrução"
-                data={[
-                    { value: "1", label: "Alfabetizado" },
-                    { value: "2", label: "Bacharelado" },
-                    { value: "3", label: "Doutorado" },
-                    { value: "4", label: "Especialização/Pós Graduação" },
-                    { value: "5", label: "Fundamental (1°Grau) Completo" },
-                    { value: "6", label: "Fundamental (1°Grau) Incompleto" },
-                    { value: "7", label: "Médio (2°Grau) Completo" },
-                    { value: "8", label: "Médio (2°Grau) Incompleto" },
-                    { value: "9", label: "Mestrado" },
-                    { value: "10", label: "Não Sabe Ler/Escrever" },
-                    { value: "11", label: "Superior Completo" },
-                    { value: "12", label: "Superior Incompleto" },
-                ]}
-                onChange={(item) => updateCadastro({ escolaridade: item.value })}
-                onOpen={() => setScrollEnabled(false)}
-                onClose={() => setScrollEnabled(true)}
-            />
+            {mostrarConjuge && (
+                    <Animated.View
+                        style={{
+                            width: '100%',
+                            alignItems: 'center',
+                            opacity: animConjuge,
+                            transform: [
+                                {
+                                    translateY: animConjuge.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [-20, 0],
+                                    }),
+                                },
+                            ],
+                        }}
+                    >
+                        <View className='w-full'>
+                            <Input
+                                texto="Cônjuge"
+                                value={cadastro.conjuge}
+                                onChangeText={(text) => updateCadastro({ conjuge: text })}
+                            />
+                        </View>
+                    </Animated.View>
+                )}
 
-            <Dropdown
-                placeholder="Situação*"
-                data={[
-                    { value: "Ativo", label: "Ativo" },
-                    { value: "Em Tranferência", label: "Em Tranferência" },
-                    { value: "Inativo", label: "Inativo" },
-                ]}
-                onChange={(item) => updateCadastro({ situacao: item.value })}
-                onOpen={() => setScrollEnabled(false)}
-                onClose={() => setScrollEnabled(true)}
-            />
+                <Dropdown
+                    placeholder="Grau de Instrução"
+                    data={[
+                        { value: "1", label: "Alfabetizado" },
+                        { value: "2", label: "Bacharelado" },
+                        { value: "3", label: "Doutorado" },
+                        { value: "4", label: "Especialização/Pós Graduação" },
+                        { value: "5", label: "Fundamental (1°Grau) Completo" },
+                        { value: "6", label: "Fundamental (1°Grau) Incompleto" },
+                        { value: "7", label: "Médio (2°Grau) Completo" },
+                        { value: "8", label: "Médio (2°Grau) Incompleto" },
+                        { value: "9", label: "Mestrado" },
+                        { value: "10", label: "Não Sabe Ler/Escrever" },
+                        { value: "11", label: "Superior Completo" },
+                        { value: "12", label: "Superior Incompleto" },
+                    ]}
+                    onChange={(item) => updateCadastro({ escolaridade: item.value })}
+                    onOpen={() => setScrollEnabled(false)}
+                    onClose={() => setScrollEnabled(true)}
+                />
+
+                <Dropdown
+                    placeholder="Situação*"
+                    data={[
+                        { value: "Ativo", label: "Ativo" },
+                        { value: "Em Tranferência", label: "Em Tranferência" },
+                        { value: "Inativo", label: "Inativo" },
+                    ]}
+                    onChange={(item) => updateCadastro({ situacao: item.value })}
+                    onOpen={() => setScrollEnabled(false)}
+                    onClose={() => setScrollEnabled(true)}
+                />
+            </View>
 
             <Input
                 texto="Mãe"

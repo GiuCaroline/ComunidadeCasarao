@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  FlatList,
-  Pressable, ScrollView 
+  Pressable,
+  ScrollView,
+  Animated,
 } from "react-native";
 import { CaretUp, CaretDown } from "phosphor-react-native";
 
@@ -15,14 +16,36 @@ export function Dropdown({
   onChange,
   placeholder,
   onOpen,
-  onClose
+  onClose,
+  containerStyle,
 }) {
   const [expanded, setExpanded] = useState(false);
   const [internalValue, setInternalValue] = useState("");
 
   const value = externalValue !== undefined ? externalValue : internalValue;
+  const selectedItem = data.find((item) => item.value == value);
 
-  const selectedItem = data.find(item => item.value == value);
+  const isActive = expanded || !!selectedItem;
+
+  const animation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: isActive ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [isActive]);
+
+  const labelTop = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [13, -16],
+  });
+
+  const labelSize = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [16, 14],
+  });
 
   const openDropdown = () => {
     onOpen && onOpen();
@@ -38,43 +61,64 @@ export function Dropdown({
     if (externalValue === undefined) {
       setInternalValue(item.value);
     }
-
     onChange && onChange(item);
     closeDropdown();
   };
+
   return (
     <View>
-      <TouchableOpacity
-        style={[styles.sombra]}
-        className='h-[48px] bg-input dark:bg-input-dark rounded-xl px-[15px] flex-row justify-between items-center w-[95%] mb-[9%]'
-        onPress={expanded ? closeDropdown : openDropdown}
-        activeOpacity={0.8}
+      <View
+        style={[styles.sombra, containerStyle]}
+        className="bg-input dark:bg-input-dark rounded-xl w-[95%] h-[50px] mb-[9%]"
       >
-        <Text className='text-placeInput dark:text-placeInput-dark font-popRegular text-[16px]'>
-          {selectedItem?.label || placeholder}
-        </Text>
+        <Animated.Text
+          style={{
+            position: "absolute",
+            left: 16,
+            top: labelTop,
+            fontSize: labelSize,
+            fontFamily: isActive ? "Poppins_300Light" : "Poppins_400Regular",
+            zIndex: 1,
+          }}
+          className="text-placeInput dark:text-placeInput-dark"
+        >
+          {placeholder}
+        </Animated.Text>
 
-        {expanded ? <CaretUp size={22} className='text-placeInput dark:text-placeInput-dark'/> : <CaretDown size={22}  className='text-placeInput dark:text-placeInput-dark'/>}
-      </TouchableOpacity>
+        <TouchableOpacity
+          className="h-full px-4 flex-row justify-between items-center"
+          onPress={expanded ? closeDropdown : openDropdown}
+          activeOpacity={0.8}
+        >
+          <Text className="font-popRegular text-[16px] text-preto dark:text-branco">
+            {selectedItem?.label || ""}
+          </Text>
+
+          {expanded ? (
+            <CaretUp size={22} className="text-placeInput dark:text-placeInput-dark" />
+          ) : (
+            <CaretDown size={22} className="text-placeInput dark:text-placeInput-dark" />
+          )}
+        </TouchableOpacity>
+      </View>
 
       {expanded && (
         <>
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={closeDropdown}
-          />
+          <Pressable style={StyleSheet.absoluteFill} onPress={closeDropdown} />
 
-          <View className='absolute top-[52px] w-[95%] bg-input dark:bg-input-dark max-h-[300px] rounded-xl p-[10px] z-[999]'
-            style={[styles.sombra]}>
+          <View
+            className="absolute top-[52px] w-[95%] bg-input dark:bg-input-dark max-h-[300px] rounded-xl p-[10px] z-[999]"
+            style={[styles.sombra]}
+          >
             <ScrollView showsVerticalScrollIndicator>
               {data.map((item) => (
                 <TouchableOpacity
                   key={item.value}
-                  className='h-[45px] justify-center'
+                  className="h-[45px] justify-center"
                   onPress={() => onSelect(item)}
                   activeOpacity={0.8}
                 >
-                  <Text className='text-placeInput dark:text-placeInput-dark font-popRegular text-[16px]'>
+                  <Text className="text-placeInput dark:text-placeInput-dark font-popRegular text-[16px]">
                     {item.label}
                   </Text>
                 </TouchableOpacity>
@@ -86,7 +130,6 @@ export function Dropdown({
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   sombra: {
