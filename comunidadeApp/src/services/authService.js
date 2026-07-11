@@ -40,6 +40,11 @@ export async function loginUser(email, password) {
 export async function loginGoogle(email) {
   try {
     const response = await api.post('/auth/google', { email });
+
+    if (response.data.token) {
+      await AsyncStorage.setItem('@casarao:token', response.data.token);
+    }
+
     return response.data;
   } catch (error) {
     throw error;
