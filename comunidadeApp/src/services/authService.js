@@ -1,6 +1,15 @@
 import api from "./api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export async function awake(data) {
+  try {
+    const response = await api.get("/", data);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
+  }
+}
+
 export async function registerUser(data) {
   try {
     const response = await api.post("/auth/register", data);
@@ -43,6 +52,30 @@ export async function updateUser(data) {
     return response.data;
   } catch (error) {
     throw error.response?.data || { error: "Erro ao atualizar usuário" };
+  }
+}
+
+export async function forgotPassword(email) {
+  try {
+    const response = await api.post("/auth/esqueci-senha", { 
+      email: email.toLowerCase().trim() 
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
+  }
+}
+
+export async function resetPassword(email, token, novaSenha) {
+  try {
+    const response = await api.post("/auth/reset-senha", {
+      email: email.toLowerCase().trim(),
+      token,
+      novaSenha
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
   }
 }
 

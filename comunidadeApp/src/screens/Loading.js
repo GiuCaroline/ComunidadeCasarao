@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { View, Image } from 'react-native';
+import { awake } from '../services/authService';
 
 export function Loading({ navigation }) {
 
   useEffect(() => {
+    awake();
     const timer = setTimeout(() => {
       if (navigation) {
         navigation.replace('Login');
@@ -17,7 +19,7 @@ export function Loading({ navigation }) {
       
       <Image 
         source={require('../../assets/images/logoBranco.png')} 
-        className="w-[60%]"
+        className="w-[50%]"
         resizeMode="contain"
       />
 

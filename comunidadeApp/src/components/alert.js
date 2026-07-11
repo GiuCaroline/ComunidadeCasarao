@@ -42,11 +42,11 @@ export function AlertCustom({
     return(
     <Modal transparent animationType="fade" visible={visible}>
       <View style={styles.modalBackground} >
-        <View className=" rounded-[25px] w-[80%] py-[2%] items-start gap-2 mr-[4%] mt-[10%] flex-row " style={{ backgroundColor: bgColor }}>
+        <View className="rounded-[25px] w-[80%] py-[2%] items-start gap-2 mr-[4%] mt-[10%] flex-row pr-[4%]" style={{ backgroundColor: bgColor }}>
 
           <Icon size={48} color={color} />
 
-            <View className='flex justify-center items-start'>
+            <View className='flex-1 justify-center items-start'>
                 <Text
                     className="text-[16px] font-popRegular "
                 >
