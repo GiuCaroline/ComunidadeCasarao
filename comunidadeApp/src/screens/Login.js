@@ -9,7 +9,6 @@ import { useAuth } from "../context/AuthContext";
 import { AlertCustom } from '../components/alert';
 import { useColorScheme } from "nativewind";
 import LoadingOverlay from '../components/loadingOverlay';
-import { makeRedirectUri } from 'expo-auth-session';
 
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '../services/firebaseConfig';
@@ -36,7 +35,7 @@ export function Login() {
   });
 
   GoogleSignin.configure({
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, // o mesmo Web Client ID de sempre
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, 
   });
 
 
@@ -177,8 +176,7 @@ export function Login() {
           <View className='mt-[20%]'>
             <TouchableOpacity 
               className='flex-row items-center gap-1 border p-2 rounded-xl border-vermelho dark:border-vermelho-dark'
-              onPress={() => promptAsync()}
-              disabled={!request}
+              onPress={handleGoogleLogin}
             >
               <GoogleLogo size={23} className='text-preto dark:text-branco' weight="light"/>
               <Text className='font-popLight text-[16px] text-preto dark:text-branco'> Acesse pelo Google</Text>

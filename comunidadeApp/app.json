@@ -5,11 +5,11 @@
     "scheme": "comunidadecasarao",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.jpg",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/icon.jpg",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,13 +23,13 @@
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "softwareKeyboardLayoutMode": "resize",
-        "foregroundImage": "./assets/icon.jpg",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/icon.jpg"
+      "favicon": "./assets/logo.png"
     },
     "plugins": [
       "expo-font",
