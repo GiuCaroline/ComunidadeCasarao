@@ -5,6 +5,7 @@ import { useState } from "react";
 import { forgotPassword, resetPassword } from '../services/authService';
 import { AlertCustom } from "../components/alert";
 import LoadingOverlay from '../components/loadingOverlay';
+import { useColorScheme } from "nativewind";
 
 export function EsqueciSenha(){
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +14,12 @@ export function EsqueciSenha(){
   const [token, setToken] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [open, setOpen] = useState(false);
+  const { colorScheme } = useColorScheme();
   const navigation = useNavigation();
+
+  const logo = colorScheme === 'dark' 
+  ? require('../../assets/images/logoBranco.png') 
+  : require('../../assets/images/logoPreto.png');
 
   const [alerta, setAlerta] = useState({
     visible: false,
@@ -99,7 +105,7 @@ export function EsqueciSenha(){
             >
             <ScrollView contentContainerStyle={{ padding: 10, alignItems:'center' }} className='flex'>
                 <Image
-                    source={require('../../assets/images/logoPreto.png')}
+                    source={logo}
                     className="w-[60%]  mt-[30%]"
                     resizeMode="contain"
                 />
