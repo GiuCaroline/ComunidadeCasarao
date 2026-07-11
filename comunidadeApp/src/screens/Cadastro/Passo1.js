@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 
 import { Input } from '../../components/input';
-import { Calendario } from '../../components/calendario';
+import { DateField } from '../../components/dateField';
 import { Dropdown } from '../../components/dropdown';
 import { MascFem } from '../../components/genero';
 import { AlertCustom } from '../../components/alert';
@@ -116,25 +116,12 @@ export function Passo1() {
             />
 
             {/* Data */}
-                <View className='flex flex-row justify-center items-baseline'>
-                    <Text className="text-[16px] font-popRegular text-placeInput dark:text-placeInput-dark w-[200px]">Data de Nascimento*</Text>
-                    <TouchableOpacity className='bg-vermelho rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalendarioVisible(true)}>
-                        <Text className='text-branco'>Selecionar Data</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <Modal visible={calendarioVisible} transparent animationType="fade">
-                    <Calendario day={day} setDay={setDay} close={() => setCalendarioVisible(false)} />
-                </Modal>
-
-
-                <View style={[styles.sombra]}
-                    className="bg-input dark:bg-input-dark rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-[10%]"
-                >
-                    <Text className='text-preto dark:text-branco'>
-                    {day?.dateString}
-                    </Text>
-                </View>
+            <DateField
+                label="Data de Nascimento*"
+                value={cadastro.nascimento}
+                onChange={(dateString) => updateCadastro({ nascimento: dateString })}
+                maximumDate={new Date()}
+            />
 
             {/* Sexo */}
             <MascFem

@@ -5,7 +5,7 @@ import {
 
 import { Input } from '../../components/input';
 import { Dropdown } from '../../components/dropdown';
-import { Calendario } from '../../components/calendario';
+import { DateField } from '../../components/dateField';
 import { AlertCustom } from '../../components/alert';
 import { PlusCircleIcon, MinusCircleIcon, EyeSlash, Eye } from 'phosphor-react-native';
 
@@ -236,47 +236,19 @@ export function Passo3() {
                 ))}
             </View>
             
+            <DateField
+                label="Membro Desde"
+                value={cadastro.membro}
+                onChange={(dateString) => updateCadastro({ membro: dateString })}
+                maximumDate={new Date()}
+            />
 
-            <View className='flex flex-row justify-center items-baseline'>
-                <Text className="text-[16px] font-popRegular text-placeInput dark:text-placeInput-dark w-[200px]">Membro Desde</Text>
-                <TouchableOpacity className='bg-vermelho rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalMembroVisible(true)}>
-                    <Text className='text-branco'>Selecionar Data</Text>
-                </TouchableOpacity>
-            </View>
-
-            <Modal visible={calMembroVisible} transparent animationType="fade">
-                <Calendario day={membroDay} setDay={setMembroDay} close={() => setCalMembroVisible(false)} />
-            </Modal>
-
-
-            <View style={[styles.sombra]}
-                className="bg-input dark:bg-input-dark rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-[10%]"
-            >
-                <Text className='text-preto dark:text-branco'>
-                {membroDay?.dateString}
-                </Text>
-            </View>
-
-
-            <View className='flex flex-row justify-center items-baseline'>
-                <Text className="text-[16px] font-popRegular text-placeInput text-placeInput-dark w-[200px]">Data de Batismo</Text>
-                <TouchableOpacity className='bg-vermelho rounded-xl py-2 flex items-center w-[130px]' onPress={() => setCalBatismoVisible(true)}>
-                    <Text className='text-branco'>Selecionar Data</Text>
-                </TouchableOpacity>
-            </View>
-
-            <Modal visible={calBatismoVisible} transparent animationType="fade">
-                <Calendario day={batismoDay} setDay={setBatismoDay} close={() => setCalBatismoVisible(false)} />
-            </Modal>
-
-
-            <View style={[styles.sombra]}
-                className="bg-input dark:bg-input-dark rounded-xl flex px-4 justify-center w-[95%] h-[50px] mb-[10%]"
-            >
-                <Text className='text-preto dark:text-branco'>
-                {batismoDay?.dateString}
-                </Text>
-            </View>
+            <DateField
+                label="Data de Batismo"
+                value={cadastro.batismo}
+                onChange={(dateString) => updateCadastro({ batismo: dateString })}
+                maximumDate={new Date()}
+            />
 
             <Input 
                 texto="Email*"
