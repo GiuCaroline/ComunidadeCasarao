@@ -22,10 +22,10 @@
       "package": "com.giucaroline.comunidadecasarao",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "softwareKeyboardLayoutMode": "resize",
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
+      "softwareKeyboardLayoutMode": "resize",
       "edgeToEdgeEnabled": true
     },
     "web": {
