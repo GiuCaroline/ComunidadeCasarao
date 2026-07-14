@@ -7,7 +7,7 @@ import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Asset } from 'expo-asset';
 import { useAuth } from "../context/AuthContext";
-import { getUserById } from "../services/authService";
+import { getUserById, getCargos } from "../services/authService";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "nativewind";
 import LoadingOverlay from '../components/loadingOverlay';
@@ -19,24 +19,41 @@ export function Carteira() {
 
     const { user } = useAuth();
     const [usuario, setUsuario] = useState(null);
+    const [listaCargos, setListaCargos] = useState([]);
 
-    const cargos = [
-        { value: "1", label: "Cooperador" },
-        { value: "2", label: "Discipulador" },
-        { value: "3", label: "Equipe de Intercessão" },
-        { value: "4", label: "Funcionário" },
-        { value: "5", label: "Líder de Departamento" },
-        { value: "6", label: "Líder de GR" },
-        { value: "7", label: "Líder de Ministério" },
-        { value: "8", label: "Membro" },
-        { value: "9", label: "Pastor" },
-        { value: "10", label: "STAFF ILUMINAÇÃO" },
-        { value: "11", label: "STAFF MÍDIA" },
-        { value: "12", label: "STAFF PROJEÇÃO" },
-        { value: "13", label: "STAFF SOM" },
-        { value: "14", label: "STAFF VÍDEO" },
-        { value: "15", label: "Visitante" },
-    ];
+    useEffect(() => {
+        async function fetchCargos() {
+            try {
+                const data = await getCargos();
+                let arrayDeCargos = [];
+
+                if (Array.isArray(data)) {
+                    arrayDeCargos = data;
+                } else if (data && Array.isArray(data.cargos)) {
+                    arrayDeCargos = data.cargos;
+                } else if (data && Array.isArray(data.data)) {
+                    arrayDeCargos = data.data;
+                } else if (data && typeof data === 'object') {
+                    const extrairArray = Object.values(data).find(Array.isArray);
+                    arrayDeCargos = extrairArray || [];
+                }
+
+                const cargosFormatados = arrayDeCargos
+                    .filter((item) => String(item.id) !== "16")
+                    .map((item) => ({
+                        value: String(item.id),
+                        label: item.cargo || "Sem Nome"
+                    }));
+
+                setListaCargos(cargosFormatados);
+            } catch (error) {
+                console.log(error);
+                setListaCargos([]);
+            }
+        }
+        fetchCargos();
+    }, []);
+
     const cargosUsuario = [
         usuario?.cargo,
         usuario?.cargo2,
@@ -44,9 +61,8 @@ export function Carteira() {
         usuario?.cargo4
     ]
     .filter(c => c) 
-    .map(c => cargos.find(item => item.value == c)?.label)
+    .map(c => listaCargos.find(item => item.value == c)?.label)
     .filter(c => c);
-
 
     useEffect(() => {
         async function carregarUsuario() {
@@ -59,9 +75,9 @@ export function Carteira() {
             } finally {
                 setIsLoading(false);
             }
-            }
+        }
 
-            if (user?.id) {
+        if (user?.id) {
             carregarUsuario();
         }
     }, [user]);
@@ -85,7 +101,6 @@ export function Carteira() {
         ? require('../../assets/images/logoBranco.png')
         : require('../../assets/images/logoPreto.png')
     );
-
     
     function formatarData(data) {
         if (!data) return "";
@@ -382,12 +397,10 @@ export function Carteira() {
 
 const styles = StyleSheet.create({
     sombra: {
-        // iOS
         shadowColor: '#000',
         shadowOffset: { width: 5, height: 5 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
-        // Android
         elevation: 6,
     }
 });

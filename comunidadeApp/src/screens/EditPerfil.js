@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Platform,
   TouchableOpacity,
-  Modal
+  Modal,
+  Animated
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -17,16 +18,18 @@ import { Input } from "../components/input";
 import { Dropdown } from "../components/dropdown";
 import { Eye, EyeSlash, PlusCircleIcon, MinusCircleIcon } from "phosphor-react-native";
 import { useAuth } from "../context/AuthContext";
-import { getUserById } from "../services/authService";
+import { getUserById, getEstados, getGraus, getCargos } from "../services/authService";
 import { useEffect, useState } from "react";
 import { DateField } from '../components/dateField';
-import { Animated } from 'react-native';
 
 export function EditPerfil() {
   const navigation = useNavigation();
 
   const { user, atualizarUsuario } = useAuth();
   const [cargos, setCargos] = useState([]);
+  const [opcoesCargos, setOpcoesCargos] = useState([]);
+  const [estados, setEstados] = useState([]);
+  const [graus, setGraus] = useState([]);
 
   const [usuario, setUsuario] = useState(null);
 
@@ -35,6 +38,68 @@ export function EditPerfil() {
   const [membroDay, setMembroDay] = useState(null);
   const [batismoDay, setBatismoDay] = useState(null);
 
+  
+  useEffect(() => {
+    async function carregarEstados() {
+      try {
+        const data = await getEstados();
+        let arrayDeEstados = [];
+
+        if (Array.isArray(data)) {
+          arrayDeEstados = data;
+        } else if (data && Array.isArray(data.estados)) {
+          arrayDeEstados = data.estados;
+        } else if (data && Array.isArray(data.data)) {
+          arrayDeEstados = data.data;
+        } else if (data && typeof data === 'object') {
+          const extrairArray = Object.values(data).find(Array.isArray);
+          arrayDeEstados = extrairArray || [];
+        }
+
+        const estadosFormatados = arrayDeEstados.map((item) => ({
+          value: String(item.id),
+          label: item.estado || "Sem Nome"
+        }));
+
+        setEstados(estadosFormatados);
+      } catch (error) {
+        console.log(error);
+        setEstados([]);
+      }
+    }
+    carregarEstados();
+  }, []);
+
+  useEffect(() => {
+      async function carregarGraus() {
+      try {
+          const data = await getGraus();
+          let arrayDeGraus = [];
+
+          if (Array.isArray(data)) {
+            arrayDeGraus = data;
+          } else if (data && Array.isArray(data.graus)) {
+            arrayDeGraus = data.graus;
+          } else if (data && Array.isArray(data.data)) {
+            arrayDeGraus = data.data;
+          } else if (data && typeof data === 'object') {
+            const extrairArray = Object.values(data).find(Array.isArray);
+            arrayDeGraus = extrairArray || [];
+          }
+
+          const grausFormatados = arrayDeGraus.map((item) => ({
+            value: String(item.id),
+            label: item.instrucao || "Sem Nome"
+          }));
+
+          setGraus(grausFormatados);
+      } catch (error) {
+        console.log(error);
+        setGraus([]);
+      }
+    }
+    carregarGraus();
+  }, []);
   
   const [form, setForm] = useState({
     nome: "",
@@ -63,32 +128,6 @@ export function EditPerfil() {
   const [alertType, setAlertType] = useState("success");
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-
-  const estadoCivilOptions = [
-    { value: 1, label: "Casado(a)" },
-    { value: 2, label: "Desquitado(a)" },
-    { value: 3, label: "Divorciado(a)" },
-    { value: 4, label: "Não Informar" },
-    { value: 5, label: "Separado(a)" },
-    { value: 6, label: "Solteiro(a)" },
-    { value: 7, label: "União Estável" },
-    { value: 8, label: "Viúvo(a)" },
-  ];
-
-  const grauInstrucaoOptions = [
-      { value: "1", label: "Alfabetizado" },
-      { value: "2", label: "Bacharelado" },
-      { value: "3", label: "Doutorado" },
-      { value: "4", label: "Especialização/Pós Graduação" },
-      { value: "5", label: "Fundamental (1°Grau) Completo" },
-      { value: "6", label: "Fundamental (1°Grau) Incompleto" },
-      { value: "7", label: "Médio (2°Grau) Completo" },
-      { value: "8", label: "Médio (2°Grau) Incompleto" },
-      { value: "9", label: "Mestrado" },
-      { value: "10", label: "Não Sabe Ler/Escrever" },
-      { value: "11", label: "Superior Completo" },
-      { value: "12", label: "Superior Incompleto" },
-  ];
 
   const situacaoOptions = [
     { value: "Ativo", label: "Ativo" },
@@ -161,6 +200,49 @@ export function EditPerfil() {
       carregarUsuario();
     }
   }, [user]);
+
+  useEffect(() => {
+    async function carregarCargosLista() {
+      try {
+        const data = await getCargos();
+        let arrayDeCargos = [];
+
+        if (Array.isArray(data)) {
+          arrayDeCargos = data;
+        } else if (data && Array.isArray(data.cargos)) {
+          arrayDeCargos = data.cargos;
+        } else if (data && Array.isArray(data.data)) {
+          arrayDeCargos = data.data;
+        } else if (data && typeof data === 'object') {
+          const extrairArray = Object.values(data).find(Array.isArray);
+          arrayDeCargos = extrairArray || [];
+        }
+
+        const isPrivilegiado = [usuario.cargo, usuario.cargo2, usuario.cargo3, usuario.cargo4].some(
+          (c) => String(c) === "9" || String(c) === "16"
+        );
+
+        const cargosFormatados = arrayDeCargos
+          .filter((item) => {
+            if (isPrivilegiado) return true;
+            return String(item.id) !== "9" && String(item.id) !== "16";
+          })
+          .map((item) => ({
+            value: String(item.id),
+            label: item.cargo || "Sem Nome"
+          }));
+
+        setOpcoesCargos(cargosFormatados);
+      } catch (error) {
+        console.log(error);
+        setOpcoesCargos([]);
+      }
+    }
+
+    if (usuario) {
+      carregarCargosLista();
+    }
+  }, [usuario]);
 
   function handleChange(field, value) {
     setForm((prev) => ({
@@ -307,7 +389,7 @@ export function EditPerfil() {
             <View className='w-full ml-[5%]'>
               <Dropdown
                   placeholder="Estado Civil"
-                  data={estadoCivilOptions}
+                  data={estados}
                   value={form?.estadoCivil || ""}
                   onChange={(item) => {
                       const value = item.value;
@@ -361,7 +443,7 @@ export function EditPerfil() {
               
               <Dropdown
                 placeholder="Grau de Instrução"
-                data={grauInstrucaoOptions}
+                data={graus}
                 value={form?.grauInstrucao || ""}  
                 onChange={(item) => handleChange("grauInstrucao", item.value)}
                 onOpen={() => setScrollEnabled(false)}
@@ -407,23 +489,7 @@ export function EditPerfil() {
                   <View className="flex-1">
                     <Dropdown
                       placeholder={`Cargo ${index + 1}`}
-                      data={[
-                        { value: "1", label: "Cooperador" },
-                        { value: "2", label: "Discipulador" },
-                        { value: "3", label: "Equipe de Intercessão" },
-                        { value: "4", label: "Funcionário" },
-                        { value: "5", label: "Líder de Departamento" },
-                        { value: "6", label: "Líder de GR" },
-                        { value: "7", label: "Líder de Ministério" },
-                        { value: "8", label: "Membro" },
-                        { value: "9", label: "Pastor" },
-                        { value: "10", label: "STAFF ILUMINAÇÃO" },
-                        { value: "11", label: "STAFF MÍDIA" },
-                        { value: "12", label: "STAFF PROJEÇÃO" },
-                        { value: "13", label: "STAFF SOM" },
-                        { value: "14", label: "STAFF VÍDEO" },
-                        { value: "15", label: "Visitante" },
-                      ]}
+                      data={opcoesCargos}
                       value={cargo}
                       onChange={(item) => atualizarCargo(index, item.value)}
                       onOpen={() => setScrollEnabled(false)}
@@ -447,7 +513,6 @@ export function EditPerfil() {
               ))}
             </View>
 
-            {/* Endereço */}
             <View className='gap-2 items-center flex-row justify-between'>
               <Text className='text-vermelho text-popRegular text-[18px]'>
                 Endereço
@@ -596,12 +661,10 @@ export function EditPerfil() {
 
 const styles = StyleSheet.create({
   sombra: {
-    // iOS
     shadowColor: '#000',
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.25,
     shadowRadius: 5,
-    // Android
     elevation: 6,
   }
 });

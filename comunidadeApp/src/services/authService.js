@@ -173,3 +173,30 @@ export async function getEscalas(data) {
     throw error.response?.data || { error: "Erro no servidor" };
   }
 }
+
+export async function getCargos(data) {
+  try {
+    const response = await api.get("/auth/cargos", data);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
+  }
+}
+
+export async function getEstados(data) {
+  try {
+    const response = await api.get("/auth/estadocivil", data);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
+  }
+}
+
+export async function getGraus(data) {
+  try {
+    const response = await api.get("/auth/grauInst", data);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Erro no servidor" };
+  }
+}

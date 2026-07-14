@@ -14,11 +14,16 @@ import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
 import { useCadastro } from "../CadastroContext";
 import { useColorScheme } from "nativewind";
+import { getEstados, getGraus } from "../../services/authService";
 
 
 export function Passo1() {
 
     const navigation = useNavigation();
+    
+    const [estados, setEstados] = useState([]);
+    const [graus, setGraus] = useState([]);
+
     const { cadastro, updateCadastro, resetCadastro } = useCadastro();
     const [mostrarConjuge, setMostrarConjuge] = useState(false);
     const animConjuge = useState(new Animated.Value(0))[0];
@@ -35,6 +40,68 @@ export function Passo1() {
             updateCadastro({ nascimento: day.dateString });
         }
     }, [day]);
+
+  useEffect(() => {
+    async function carregarEstados() {
+      try {
+        const data = await getEstados();
+        let arrayDeEstados = [];
+
+        if (Array.isArray(data)) {
+          arrayDeEstados = data;
+        } else if (data && Array.isArray(data.estados)) {
+          arrayDeEstados = data.estados;
+        } else if (data && Array.isArray(data.data)) {
+          arrayDeEstados = data.data;
+        } else if (data && typeof data === 'object') {
+          const extrairArray = Object.values(data).find(Array.isArray);
+          arrayDeEstados = extrairArray || [];
+        }
+
+        const estadosFormatados = arrayDeEstados.map((item) => ({
+          value: String(item.id),
+          label: item.estado || "Sem Nome"
+        }));
+
+        setEstados(estadosFormatados);
+      } catch (error) {
+        console.log(error);
+        setEstados([]);
+      }
+    }
+    carregarEstados();
+  }, []);
+
+    useEffect(() => {
+        async function carregarGraus() {
+        try {
+            const data = await getGraus();
+            let arrayDeGraus = [];
+
+            if (Array.isArray(data)) {
+            arrayDeGraus = data;
+            } else if (data && Array.isArray(data.graus)) {
+            arrayDeGraus = data.graus;
+            } else if (data && Array.isArray(data.data)) {
+            arrayDeGraus = data.data;
+            } else if (data && typeof data === 'object') {
+            const extrairArray = Object.values(data).find(Array.isArray);
+            arrayDeGraus = extrairArray || [];
+            }
+
+            const grausFormatados = arrayDeGraus.map((item) => ({
+            value: String(item.id),
+            label: item.instrucao || "Sem Nome"
+            }));
+
+            setGraus(grausFormatados);
+        } catch (error) {
+            console.log(error);
+            setGraus([]);
+        }
+        }
+        carregarGraus();
+    }, []);
 
     const [scrollEnabled, setScrollEnabled] = useState(true);
     const [calendarioVisible, setCalendarioVisible] = useState(false);
@@ -133,16 +200,7 @@ export function Passo1() {
                 {/* Estado civil */}
                 <Dropdown
                     placeholder="Estado Civil*"
-                    data={[
-                        { value: "1", label: "Casado(a)" },
-                        { value: "2", label: "Desquitado(a)" },
-                        { value: "3", label: "Divorciado(a)" },
-                        { value: "4", label: "Não Informar" },
-                        { value: "5", label: "Separado(a)" },
-                        { value: "6", label: "Solteiro(a)" },
-                        { value: "7", label: "União Estável" },
-                        { value: "8", label: "Viúvo(a)" },
-                    ]}
+                    data={estados}
                     onChange={(item) => {
                         updateCadastro({ estadoCivil: item.value });
 
@@ -188,20 +246,7 @@ export function Passo1() {
 
                 <Dropdown
                     placeholder="Grau de Instrução"
-                    data={[
-                        { value: "1", label: "Alfabetizado" },
-                        { value: "2", label: "Bacharelado" },
-                        { value: "3", label: "Doutorado" },
-                        { value: "4", label: "Especialização/Pós Graduação" },
-                        { value: "5", label: "Fundamental (1°Grau) Completo" },
-                        { value: "6", label: "Fundamental (1°Grau) Incompleto" },
-                        { value: "7", label: "Médio (2°Grau) Completo" },
-                        { value: "8", label: "Médio (2°Grau) Incompleto" },
-                        { value: "9", label: "Mestrado" },
-                        { value: "10", label: "Não Sabe Ler/Escrever" },
-                        { value: "11", label: "Superior Completo" },
-                        { value: "12", label: "Superior Incompleto" },
-                    ]}
+                    data={graus}
                     onChange={(item) => updateCadastro({ escolaridade: item.value })}
                     onOpen={() => setScrollEnabled(false)}
                     onClose={() => setScrollEnabled(true)}

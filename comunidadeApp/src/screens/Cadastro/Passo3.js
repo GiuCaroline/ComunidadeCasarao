@@ -11,22 +11,56 @@ import { PlusCircleIcon, MinusCircleIcon, EyeSlash, Eye } from 'phosphor-react-n
 
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from "react";
-import { registerUser } from "../../services/authService";
+import { registerUser, getCargos } from "../../services/authService";
 import { useCadastro } from "../CadastroContext";
 import { useColorScheme } from 'nativewind';
 import LoadingOverlay from '../../components/loadingOverlay';
 
-
 export function Passo3() {
-
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
     const { cadastro, updateCadastro, resetCadastro } = useCadastro();
+    
+    const [opcoesCargos, setOpcoesCargos] = useState([]);
     const [cargos, setCargos] = useState([null]);
+    
     const { colorScheme } = useColorScheme();
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
-    const logo = colorScheme === 'dark'? require('../../../assets/images/logoBranco.png') : require('../../../assets/images/logoPreto.png') ;
+    useEffect(() => {
+        async function carregarCargos() {
+            try {
+                const data = await getCargos();
+                let arrayDeCargos = [];
+
+                if (Array.isArray(data)) {
+                    arrayDeCargos = data;
+                } else if (data && Array.isArray(data.cargos)) {
+                    arrayDeCargos = data.cargos;
+                } else if (data && Array.isArray(data.data)) {
+                    arrayDeCargos = data.data;
+                } else if (data && typeof data === 'object') {
+                    const extrairArray = Object.values(data).find(Array.isArray);
+                    arrayDeCargos = extrairArray || [];
+                }
+
+                const cargosFormatados = arrayDeCargos
+                    .filter((item) => String(item.id) !== "9" && String(item.id) !== "16")
+                    .map((item) => ({
+                        value: String(item.id),
+                        label: item.cargo || "Sem Nome"
+                    }));
+
+                setOpcoesCargos(cargosFormatados);
+            } catch (error) {
+                console.log(error);
+                setOpcoesCargos([]);
+            }
+        }
+        carregarCargos();
+    }, []);
+
+    const logo = colorScheme === 'dark' ? require('../../../assets/images/logoBranco.png') : require('../../../assets/images/logoPreto.png');
     
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -37,15 +71,15 @@ export function Passo3() {
     const [batismoDay, setBatismoDay] = useState(null);
     
     useEffect(() => {
-    if (membroDay?.dateString) {
-        updateCadastro({ membro: membroDay.dateString });
-    }
+        if (membroDay?.dateString) {
+            updateCadastro({ membro: membroDay.dateString });
+        }
     }, [membroDay]);
 
     useEffect(() => {
-    if (batismoDay?.dateString) {
-        updateCadastro({ batismo: batismoDay.dateString });
-    }
+        if (batismoDay?.dateString) {
+            updateCadastro({ batismo: batismoDay.dateString });
+        }
     }, [batismoDay]);
 
     const [calMembroVisible, setCalMembroVisible] = useState(false);
@@ -55,7 +89,6 @@ export function Passo3() {
         if (!cadastro.email) return "Informe o e-mail.";
         if (!cadastro.senha || cadastro.senha.length < 6)
             return "A senha deve ter no mínimo 6 caracteres";
-
 
         return null;
     }
@@ -118,12 +151,14 @@ export function Passo3() {
 
         if (!aceitouTermos) {
             showAlert("Atenção!", "Você precisa aceitar os Termos de Uso.", "warning");
+            setIsLoading(false);
             return;
         }
 
         const erro = validarCadastro();
         if (erro) {
             showAlert("Atenção", erro);
+            setIsLoading(false);
             return;
         }
 
@@ -137,15 +172,13 @@ export function Passo3() {
                 navigation.navigate("Login");
             }, 2000);
 
-            await registerUser(cadastro);
-
             resetCadastro();
 
         } catch (error) {
             showAlert("Erro", error.error || "Erro no cadastro");
             console.log("erro:", error);
         } finally {
-        setIsLoading(false);
+            setIsLoading(false);
         }
     }
 
@@ -190,30 +223,13 @@ export function Passo3() {
 
             </View>
 
-
             <View className='w-full pl-[5%]'>
-                {cargos.map((cargo, index) => (
+                {cargos.map((itemCargo, index) => (
                     <View key={index} className="flex-row mb-2">
                         <View className="flex-1">
                             <Dropdown
                                 placeholder={`Cargo ${index + 1}`}
-                                data={[
-                                    { value: "1", label: "Cooperador" },
-                                    { value: "2", label: "Discipulador" },
-                                    { value: "3", label: "Equipe de Intercessão" },
-                                    { value: "4", label: "Funcionário" },
-                                    { value: "5", label: "Líder de Departamento" },
-                                    { value: "6", label: "Líder de GR" },
-                                    { value: "7", label: "Líder de Ministério" },
-                                    { value: "8", label: "Membro" },
-                                    { value: "9", label: "Pastor" },
-                                    { value: "10", label: "STAFF ILUMINAÇÃO" },
-                                    { value: "11", label: "STAFF MÍDIA" },
-                                    { value: "12", label: "STAFF PROJEÇÃO" },
-                                    { value: "13", label: "STAFF SOM" },
-                                    { value: "14", label: "STAFF VÍDEO" },
-                                    { value: "15", label: "Visitante" },
-                                ]}
+                                data={opcoesCargos}
                                 onChange={(item) => atualizarCargo(index, item.value)}
                                 onOpen={() => setScrollEnabled(false)}
                                 onClose={() => setScrollEnabled(true)}
@@ -280,7 +296,6 @@ export function Passo3() {
                 </TouchableOpacity>
             </View>
 
-
             <TouchableOpacity
                 className="flex-row items-center mb-[10%] w-[90%]"
                 activeOpacity={0.8}
@@ -292,7 +307,6 @@ export function Passo3() {
                     }
                 }}
                 >
-                {/* Caixa do checkbox */}
                 <View
                     className={`w-5 h-5 mr-3 rounded 
                     ${aceitouTermos ? 'bg-vermelho border-vermelho' : 'bg-input dark:bg-input-dark'}
@@ -303,7 +317,6 @@ export function Passo3() {
                     )}
                 </View>
 
-                {/* Texto */}
                 <Text className="font-popLight text-[14px] text-placeInput dark:text-placeInput-dark">
                     Li e aceito os{" "}
                     <Text className="text-vermelho underline" 
@@ -401,15 +414,12 @@ export function Passo3() {
   );
 }
 
-
 const styles = StyleSheet.create({
     sombra: {
-        // iOS
         shadowColor: '#000',
         shadowOffset: { width: 5, height: 5 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
-        // Android
         elevation: 6,
     }
 });
