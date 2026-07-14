@@ -1,10 +1,10 @@
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { useState, useEffect, useCallback } from "react";
+import { View, Text, Image, StyleSheet, ScrollView, PanResponder } from "react-native";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { MonthHeader } from "../components/monthHeader";
 import { CustomCalendar } from "../components/customCalendar";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { CalendarDots, UserCircle } from "phosphor-react-native";
+import { CalendarDots, CalendarCheckIcon } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
 import { getEventos, getEscalas } from "../services/authService";
 import LoadingOverlay from '../components/loadingOverlay';
@@ -261,6 +261,37 @@ export function Agenda() {
     setFilteredEvents(agruparListagem(lista));
   }, [selected, month, year, eventosBase, agendaBase, canceladosBase, escalasBase, getDadosParaData]);
 
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onStartShouldSetPanResponderCapture: () => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return Math.abs(gestureState.dx) > 30 && Math.abs(gestureState.dy) < 20;
+      },
+      onPanResponderTerminationRequest: () => true,
+      onPanResponderRelease: (evt, gestureState) => {
+        if (gestureState.dx > 60) {
+          setMonth(prevMonth => {
+            if (prevMonth === 0) {
+              setYear(prevYear => prevYear - 1);
+              return 11;
+            }
+            return prevMonth - 1;
+          });
+        } else if (gestureState.dx < -60) {
+          setMonth(prevMonth => {
+            if (prevMonth === 11) {
+              setYear(prevYear => prevYear + 1);
+              return 0;
+            }
+            return prevMonth + 1;
+          });
+        }
+      },
+      onPanResponderTerminate: () => {}
+    })
+  ).current;
+
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
       <View className='w-full flex-row justify-between items-center px-[4%] mb-[-25%] mt-[-12%]'>
@@ -282,19 +313,21 @@ export function Agenda() {
           />
         </View>
 
-        <CustomCalendar
-          month={month}
-          year={year}
-          selected={selected}
-          onSelectDay={(date) => {
-            if (selected === date) {
-              setSelected(null);
-            } else {
-              setSelected(date);
-            }
-          }}
-          events={eventsByDate}
-        />
+        <View {...panResponder.panHandlers}>
+          <CustomCalendar
+            month={month}
+            year={year}
+            selected={selected}
+            onSelectDay={(date) => {
+              if (selected === date) {
+                setSelected(null);
+              } else {
+                setSelected(date);
+              }
+            }}
+            events={eventsByDate}
+          />
+        </View>
 
         <View className='mt-[5%] px-[3%]'>
           <View className='mt-[5%] px-[3%]'>
@@ -306,7 +339,7 @@ export function Agenda() {
                     className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[4%] mt-[4%] shadow-md flex-row items-start'
                     style={styles.sombra}
                   >
-                    <UserCircle
+                    <CalendarCheckIcon
                       size={26}
                       color={item.cor || '#000000'}
                       weight="light"

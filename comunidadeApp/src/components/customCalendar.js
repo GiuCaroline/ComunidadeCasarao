@@ -1,6 +1,7 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Animated } from "react-native";
 import { generateCalendar } from "../utils/calendarUtils";
 import { DayCell } from "./dayCell";
+import { useRef, useEffect } from "react";
 
 const monthsName = [
   "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
@@ -16,19 +17,58 @@ export function CustomCalendar({
   onSelectDay,
   events = {}
 }) {
+  const slideAnim = useRef(new Animated.Value(30)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const prevDate = useRef({ month, year });
+
+  useEffect(() => {
+    let direction = 30;
+
+    if (
+      year < prevDate.current.year ||
+      (year === prevDate.current.year && month < prevDate.current.month)
+    ) {
+      direction = -30;
+    }
+
+    slideAnim.setValue(direction);
+    opacityAnim.setValue(0);
+
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      })
+    ]).start();
+
+    prevDate.current = { month, year };
+
+  }, [month, year]);
 
   const days = generateCalendar(month, year);
 
   return (
     <View className='mt-[5%]'>
-      <View className='flex-row items-center mb-[3%] ml-[5%]'>
+      <Animated.View
+        className='flex-row items-center mb-[3%] ml-[5%]'
+        style={{ opacity: opacityAnim, transform: [{ translateX: slideAnim }] }}
+      >
         <Text className='font-popRegular text-preto dark:text-branco text-base'>
           {monthsName[month]} {year}
         </Text>
-      </View>
+      </Animated.View>
 
       <View style={styles.sombra} className='bg-input dark:bg-input-dark mx-[5%] rounded-[20px] p-2'>
-        <View className="flex-row justify-between mb-2">
+        <Animated.View
+          className="flex-row justify-between mb-2"
+          style={{ opacity: opacityAnim, transform: [{ translateX: slideAnim }] }}
+        >
           {weekDays.map((day, index) => (
             <Text
               key={index}
@@ -37,9 +77,9 @@ export function CustomCalendar({
               {day}
             </Text>
           ))}
-        </View>
+        </Animated.View>
 
-        <View style={styles.grid}>
+        <Animated.View style={[styles.grid, { opacity: opacityAnim, transform: [{ translateX: slideAnim }] }]}>
           {days.map((day, index) => {
 
             if (!day) {
@@ -59,7 +99,7 @@ export function CustomCalendar({
               />
             );
           })}
-        </View>
+        </Animated.View>
       </View>
     </View>
   );
