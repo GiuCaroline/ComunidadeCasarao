@@ -2,6 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from "nativewind";
+import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appearance } from 'react-native';
 
 import { useFonts,
    Poppins_200ExtraLight,
@@ -58,7 +61,30 @@ export default function App() {
 function AppContent() {
   const { setColorScheme } = useColorScheme();
 
+  useEffect(() => {
+    async function loadTheme() {
+      const savedTheme = await AsyncStorage.getItem('@theme_pref');
+      
+      if (savedTheme && savedTheme !== 'system') {
+        setColorScheme(savedTheme);
+      } else {
+        const temaSistema = Appearance.getColorScheme();
+        setColorScheme(temaSistema || 'light');
+      }
+    }
+    
+    loadTheme();
 
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      AsyncStorage.getItem('@theme_pref').then((savedTheme) => {
+        if (!savedTheme || savedTheme === 'system') {
+          setColorScheme(colorScheme || 'light');
+        }
+      });
+    });
+
+    return () => subscription.remove();
+  }, [setColorScheme]);
 
   return (
     <NavigationContainer>

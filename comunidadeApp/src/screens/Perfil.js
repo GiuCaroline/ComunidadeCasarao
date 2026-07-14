@@ -1,12 +1,13 @@
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
-import { IdentificationCard, Paperclip, PencilSimple, SunDim, MoonStars, SignOutIcon } from "phosphor-react-native";
+import { IdentificationCard, Paperclip, PencilSimple, SunDim, MoonStars, SignOutIcon, DeviceMobile } from "phosphor-react-native";
 import { useAuth } from "../context/AuthContext";
 import { getUserById } from "../services/authService";
 import { useEffect, useState } from "react";
 import { AlertCustom } from '../components/alert';
 import { useColorScheme } from "nativewind";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingOverlay from '../components/loadingOverlay';
 
 export function Perfil() {
@@ -14,6 +15,7 @@ export function Perfil() {
   const navigation = useNavigation();
   const { user, logout } = useAuth();
   const [usuario, setUsuario] = useState(null);
+  const [themePref, setThemePref] = useState("system");
 
   const genero = [
     { value: "F", label: "Feminino" },
@@ -76,6 +78,17 @@ export function Perfil() {
   ];
   const dicGrau = grau.find(c => c.value == usuario?.grauinst)?.label || "";
 
+  const { colorScheme, setColorScheme } = useColorScheme();
+
+  useEffect(() => {
+    async function loadThemePref() {
+      const savedTheme = await AsyncStorage.getItem('@theme_pref');
+      if (savedTheme) {
+        setThemePref(savedTheme);
+      }
+    }
+    loadThemePref();
+  }, []);
 
   useEffect(() => {
     async function carregarUsuario() {
@@ -95,7 +108,17 @@ export function Perfil() {
     }
   }, [user]);
 
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  async function handleCycleTheme() {
+    let nextPref = "system";
+    if (themePref === "system") nextPref = "light";
+    else if (themePref === "light") nextPref = "dark";
+    else if (themePref === "dark") nextPref = "system";
+
+    setThemePref(nextPref);
+    setColorScheme(nextPref);
+    await AsyncStorage.setItem('@theme_pref', nextPref);
+  }
+
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
@@ -188,14 +211,12 @@ export function Perfil() {
     temValor(usuario?.dtabatismo)
   ;
 
-  
   function formataNome(nome) {
     if (!nome) return "Visitante";
     const partes = nome.trim().split(" ");
 
     return partes.slice(0, 2).join(" ");
   }
-
 
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -420,18 +441,21 @@ export function Perfil() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={toggleColorScheme}
+            activeOpacity={0.8}
+            onPress={handleCycleTheme}
             className="w-[95%] px-4 py-5 bg-input dark:bg-input-dark rounded-[20px] flex-row items-center justify-between mb-[5%]"
             style={styles.sombra}
           >
             <Text className="text-base font-popRegular text-preto dark:text-branco">
-              Tema do App
+              Tema {themePref === "system" ? "Sistema" : themePref === "light" ? "Claro" : "Escuro"}
             </Text>
 
-            {colorScheme === "dark" ? (
+            {themePref === "dark" ? (
               <MoonStars size={25} weight="light" color="#B3261E" />
-            ) : (
+            ) : themePref === "light" ? (
               <SunDim size={25} weight="light" color="#B3261E" />
+            ) : (
+              <DeviceMobile size={25} weight="light" color="#B3261E" />
             )}
           </TouchableOpacity>
 
@@ -481,15 +505,12 @@ export function Perfil() {
   );
 }
 
-
 const styles = StyleSheet.create({
   sombra: {
-      // iOS
       shadowColor: '#000',
       shadowOffset: { width: 5, height: 5 },
       shadowOpacity: 0.25,
       shadowRadius: 5,
-      // Android
       elevation: 6,
   }
 });

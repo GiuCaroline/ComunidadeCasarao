@@ -6,9 +6,9 @@ import { getCarrossel } from "../services/authService";
 
 const { width } = Dimensions.get('window');
 
-export function Carousel({ setLoading }){
+export function Carrossel({ setLoading }){
   const { colorScheme } = useColorScheme();
-  const [carouselData, setCarouselData] = useState([]);
+  const [carrosselData, setCarrosselData] = useState([]);
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const animations = useRef([]).current;
@@ -17,7 +17,7 @@ export function Carousel({ setLoading }){
     async function fetchData() {
       try {
         const data = await getCarrossel();
-        setCarouselData(data);
+        setCarrosselData(data);
         
         if (data.length === 0 && setLoading) {
           setLoading(false);
@@ -33,8 +33,8 @@ export function Carousel({ setLoading }){
   }, []);
 
   useEffect(() => {
-    if (carouselData.length > 0) {
-      const newAnimations = carouselData.map(() => new Animated.Value(8));
+    if (carrosselData.length > 0) {
+      const newAnimations = carrosselData.map(() => new Animated.Value(8));
       animations.splice(0, animations.length, ...newAnimations);
       
       setCurrentIndex(0); 
@@ -43,7 +43,7 @@ export function Carousel({ setLoading }){
         setLoading(false);
       }
     }
-  }, [carouselData]);
+  }, [carrosselData]);
 
   useEffect(() => {
     if (animations.length === 0) return;
@@ -55,13 +55,13 @@ export function Carousel({ setLoading }){
         useNativeDriver: false,
       }).start();
     });
-  }, [currentIndex, carouselData]);
+  }, [currentIndex, carrosselData]);
 
   useEffect(() => {
-    if (carouselData.length === 0) return;
+    if (carrosselData.length === 0) return;
 
     const interval = setInterval(() => {
-      const nextIndex = currentIndex === carouselData.length - 1 ? 0 : currentIndex + 1;
+      const nextIndex = currentIndex === carrosselData.length - 1 ? 0 : currentIndex + 1;
       flatListRef.current?.scrollToIndex({
         index: nextIndex,
         animated: true,
@@ -71,13 +71,13 @@ export function Carousel({ setLoading }){
     }, 4500);
 
     return () => clearInterval(interval);
-  }, [currentIndex, carouselData]);
+  }, [currentIndex, carrosselData]);
 
   return (
     <View className='relative'>
       <FlatList
         ref={flatListRef}
-        data={carouselData}
+        data={carrosselData}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -127,7 +127,7 @@ export function Carousel({ setLoading }){
       </View>
 
       <View className="flex-row justify-center mt-[4%]">
-        {carouselData.map((_, index) => (
+        {carrosselData.map((_, index) => (
           <Animated.View
             key={index}
             style={{

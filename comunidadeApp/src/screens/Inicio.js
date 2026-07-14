@@ -2,7 +2,7 @@ import { View, Image, ScrollView, Text, StyleSheet, TouchableOpacity, Linking } 
 import { useState, useEffect } from "react";
 import { InstagramLogo, YoutubeLogo, FacebookLogo, MapPinAreaIcon, Bank, PixLogo } from "phosphor-react-native";
 import { WhatsappLogo, Phone, EnvelopeSimple } from "phosphor-react-native";
-import { Carousel } from '../components/carousel';
+import { Carrossel } from '../components/carrossel';
 import { Nav } from '../components/nav';
 import LoadingOverlay from '../components/loadingOverlay';
 import { useAuth } from "../context/AuthContext";
@@ -92,7 +92,7 @@ export function Inicio(){
           />
         </View>
 
-        <Carousel setLoading={setLoading} />
+        <Carrossel setLoading={setLoading} />
 
         <View className='mt-[5%] px-[5%]'>
           <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Próximos Eventos</Text>
@@ -193,15 +193,15 @@ export function Inicio(){
             </View>
 
             <TouchableOpacity className='mt-[5%]' onPress={() => copiarTexto('001')}>
-              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Banco:</Text> 001 - Banco Santander</Text>
+              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Banco:</Text> Banco Bradesco</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => copiarTexto('1234-5')}>
-              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Agência:</Text> 1234-5</Text>
+            <TouchableOpacity onPress={() => copiarTexto('0121')}>
+              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Agência:</Text> 0121</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => copiarTexto('67890-1')}>
-              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Conta:</Text> 67890-1</Text>
+            <TouchableOpacity onPress={() => copiarTexto('145880-9')}>
+              <Text className='text-[15px] font-popLight text-preto dark:text-branco'><Text className='font-popRegular'>Conta:</Text> 145880-9</Text>
             </TouchableOpacity>
             
             <View className='flex-row justify-between'>
@@ -220,8 +220,8 @@ export function Inicio(){
                 />
             </View>
 
-            <TouchableOpacity onPress={() => copiarTexto('contato@comunidadecasarao.com')}>
-              <Text className='text-[16px] font-popLight text-preto dark:text-branco'>contato@comunidadecasarao.com</Text>
+            <TouchableOpacity onPress={() => copiarTexto('55.046.445/0001-02')}>
+              <Text className='text-[16px] font-popLight text-preto dark:text-branco'>55.046.445/0001-02</Text>
             </TouchableOpacity>
           </View> 
         </View>

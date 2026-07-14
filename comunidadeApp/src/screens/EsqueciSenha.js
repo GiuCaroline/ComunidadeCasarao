@@ -126,7 +126,7 @@ export function EsqueciSenha(){
                             <Input
                                 texto='Email'
                                 value={email}
-                                onChangeText={setEmail}
+                                onChangeText={(text) => setEmail(text.toLowerCase())}
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
