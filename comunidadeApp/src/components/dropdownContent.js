@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Animated } from "react-native";
 import { CaretUp, CaretDown, WhatsappLogo, Envelope } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 export function DropdownContent({
   title,
@@ -11,6 +12,10 @@ export function DropdownContent({
 }) {
   const [expanded, setExpanded] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
+  const { colorScheme } = useColorScheme();
+  const icon = colorScheme === 'dark' ? '#a5a5a5' : '#5e5e5e';
+
+  const iconVerm = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
 
   const toggle = () => {
     const toValue = expanded ? 0 : 1;
@@ -59,7 +64,7 @@ export function DropdownContent({
           )}
         </View>
 
-        {expanded ? <CaretUp size={22} className='text-placeInput dark:text-branco' /> : <CaretDown size={22} className='text-placeInput dark:text-branco'/>}
+        {expanded ? <CaretUp size={22} color={icon} /> : <CaretDown size={22} color={icon} />}
       </TouchableOpacity>
 
       <Animated.View
@@ -82,7 +87,7 @@ export function DropdownContent({
             onPress={openWhatsApp}
             className="flex-row items-center mb-2"
           >
-            <WhatsappLogo size={20} className='text-vermelho' weight="light" />
+            <WhatsappLogo size={20} color={iconVerm} weight="light" />
             <Text className="ml-2 font-popRegular text-preto dark:text-branco">{whatsapp}</Text>
           </TouchableOpacity>
 
@@ -90,7 +95,7 @@ export function DropdownContent({
             onPress={openEmail}
             className="flex-row items-center"
           >
-            <Envelope size={20} className='text-vermelho' weight="light" />
+            <Envelope size={20} color={iconVerm} weight="light" />
             <Text className="ml-2 font-popRegular text-preto dark:text-branco">{email}</Text>
           </TouchableOpacity>
         </View>

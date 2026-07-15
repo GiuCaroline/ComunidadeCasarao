@@ -3,6 +3,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useState, useEffect, useRef } from "react";
 import { CaretUp, CaretDown, ArrowLeft, X, DownloadSimple } from "phosphor-react-native";
 import { getGaleriaEvento } from "../services/authService";
+import { useColorScheme } from "nativewind";
 import { useVideoPlayer, VideoView } from "expo-video";
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
@@ -28,6 +29,10 @@ export function EventGalery() {
   const navigation = useNavigation();
   const route = useRoute();
   const { evento } = route.params || {};
+  
+  const { colorScheme } = useColorScheme();
+  const icon = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
+  const iconSeta = colorScheme === 'dark' ? '#FAFAFA' : '#000';
 
   const [fotos, setFotos] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -124,9 +129,9 @@ export function EventGalery() {
     <View className="flex-1 bg-branco dark:bg-preto-dark">
       <View className="px-5 pt-12 pb-4 flex-row items-center">
         <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4">
-          <ArrowLeft size={30} color="#B3261E" weight="bold" />
+          <ArrowLeft size={30} color={iconSeta} weight="regular" />
         </TouchableOpacity>
-        <Text className="text-[18px] font-popSemiBold text-vermelho dark:text-vermelho-dark">
+        <Text className="text-[18px] font-popSemiBold text-preto dark:text-branco">
           {evento?.nome || "Galeria"}
         </Text>
       </View>
@@ -143,9 +148,9 @@ export function EventGalery() {
               Fotos
             </Text>
             {isPhotosOpen ? (
-              <CaretUp size={24} color="#B3261E" />
+              <CaretUp size={24} color={icon} />
             ) : (
-              <CaretDown size={24} color="#B3261E" />
+              <CaretDown size={24} color={icon} />
             )}
           </TouchableOpacity>
 
@@ -185,9 +190,9 @@ export function EventGalery() {
               Vídeos
             </Text>
             {isVideosOpen ? (
-              <CaretUp size={24} color="#B3261E" />
+              <CaretUp size={24} color={icon} />
             ) : (
-              <CaretDown size={24} color="#B3261E" />
+              <CaretDown size={24} color={icon} />
             )}
           </TouchableOpacity>
 

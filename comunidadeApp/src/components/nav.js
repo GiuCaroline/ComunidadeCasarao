@@ -7,9 +7,14 @@ import {
   User,
 } from "phosphor-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useColorScheme } from "nativewind";
 
 export function Nav({ active, onChange }) {
   const insets = useSafeAreaInsets();
+  const { colorScheme } = useColorScheme();
+
+  const iconColor = colorScheme === 'dark' ? '#FAFAFA' : '#000000';
+  const houseColor = colorScheme === 'dark' ? '#000000' : '#FAFAFA';
 
   return (
     <View
@@ -21,6 +26,7 @@ export function Nav({ active, onChange }) {
         active={active === "Cursos"}
         onPress={() => onChange("Cursos")}
         icon={GraduationCap}
+        color={iconColor}
       />
 
       <Tab
@@ -28,13 +34,14 @@ export function Nav({ active, onChange }) {
         active={active === "Galeria"}
         onPress={() => onChange("Galeria")}
         icon={ImagesSquare}
+        color={iconColor}
       />
 
       <Pressable
         onPress={() => onChange("Inicio")}
         className="bg-preto dark:bg-branco w-14 h-14 rounded-full justify-center items-center "
       >
-        <House size={26} weight="fill" className='text-branco dark:text-preto' />
+        <House size={26} weight="fill" color={houseColor} />
       </Pressable>
 
       <Tab
@@ -42,6 +49,7 @@ export function Nav({ active, onChange }) {
         active={active === "Agenda"}
         onPress={() => onChange("Agenda")}
         icon={CalendarDots}
+        color={iconColor}
       />
 
       <Tab
@@ -49,13 +57,13 @@ export function Nav({ active, onChange }) {
         active={active === "Perfil"}
         onPress={() => onChange("Perfil")}
         icon={User}
+        color={iconColor}
       />
-
     </View>
   );
 }
 
-function Tab({ label, icon: Icon, active, onPress }) {
+function Tab({ label, icon: Icon, active, onPress, color }) {
   return (
     <Pressable className="items-center justify-center" onPress={onPress}>
       {active && (
@@ -65,7 +73,7 @@ function Tab({ label, icon: Icon, active, onPress }) {
       <Icon
         size={24}
         weight={active ? "fill" : "light"}
-        className="text-preto dark:text-branco"
+        color={color}
       />
 
       <Text className="text-[11px] text-preto dark:text-branco font-popRegular">
@@ -74,7 +82,6 @@ function Tab({ label, icon: Icon, active, onPress }) {
     </Pressable>
   );
 }
-
 
 const styles = StyleSheet.create({
     sombra: {

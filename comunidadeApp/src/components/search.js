@@ -6,6 +6,7 @@ export function Search({ value, onChange }) {
   const { colorScheme } = useColorScheme();
 
   const correto =  colorScheme === 'dark'? '#a5a5a5': '#5e5e5e' ; 
+  const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000000';
   return (
     <View
       className="w-[95%] h-[45px] bg-input dark:bg-input-dark rounded-full flex-row items-center px-4"
@@ -19,7 +20,7 @@ export function Search({ value, onChange }) {
         placeholderTextColor={correto}
     />
 
-    <MagnifyingGlass size={30} weight="light" className='text-preto dark:text-branco' />
+    <MagnifyingGlass size={30} weight="light" color={icon} />
     </View>
   );
 }

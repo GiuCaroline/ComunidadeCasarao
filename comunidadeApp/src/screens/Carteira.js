@@ -17,6 +17,8 @@ export function Carteira() {
     const navigation = useNavigation();
     const { colorScheme } = useColorScheme();
 
+    const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000000';
+
     const { user } = useAuth();
     const [usuario, setUsuario] = useState(null);
     const [listaCargos, setListaCargos] = useState([]);
@@ -303,7 +305,7 @@ export function Carteira() {
             onPress={() => navigation.navigate("Perfil")}
         >
             <View className='w-full flex-row items-center px-[4%] mt-[16%]'>
-                <ArrowLeft className='text-preto dark:text-branco' />
+                <ArrowLeft color={icon} />
                 <Text className='ml-[4%] mt-[1%] text-[18px] font-popRegular text-preto dark:text-branco'>Credencial</Text>
             </View>
         </TouchableOpacity>

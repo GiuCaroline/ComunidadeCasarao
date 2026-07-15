@@ -17,6 +17,7 @@ export function Galeria() {
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
+  const icon = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
   
   const [eventos, setEventos] = useState([]);
 
@@ -113,7 +114,7 @@ export function Galeria() {
             style={styles.sombra}
           >
             <View className="flex-row items-center gap-3">
-              <CalendarCheck size={27} color="#B3261E" weight="light" />
+              <CalendarCheck size={27} color={icon} weight="light" />
 
               <View>
                 <Text className="text-base font-popRegular text-preto dark:text-branco">
@@ -126,7 +127,7 @@ export function Galeria() {
               </View>
             </View>
 
-            <CaretRight size={24} color="#B3261E" />
+            <CaretRight size={24} color={icon} />
           </TouchableOpacity>
         )}
       />

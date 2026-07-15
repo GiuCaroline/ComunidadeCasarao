@@ -22,6 +22,7 @@ export function EsqueciSenha(){
   const logo = colorScheme === 'dark' 
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
+  const iconEye = colorScheme === 'dark' ? '#a5a5a5' : '#5e5e5e';
 
   const [alerta, setAlerta] = useState({
     visible: false,
@@ -170,9 +171,9 @@ export function EsqueciSenha(){
                                     className="absolute right-6 z-10 top-3"
                                 >
                                 {mostrarSenha ? (
-                                    <Eye size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                                    <Eye size={24} weight="light" color={iconEye} />
                                 ) : (
-                                    <EyeSlash size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                                    <EyeSlash size={24} weight="light" color={iconEye} />
                                 )}
                                 </TouchableOpacity>
             </View>

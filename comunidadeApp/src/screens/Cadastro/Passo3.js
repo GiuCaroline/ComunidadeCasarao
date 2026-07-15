@@ -25,6 +25,10 @@ export function Passo3() {
     const [cargos, setCargos] = useState([null]);
     
     const { colorScheme } = useColorScheme();
+
+    const iconEye = colorScheme === 'dark' ? '#a5a5a5' : '#5e5e5e';
+    const icon = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
+
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
     useEffect(() => {
@@ -239,13 +243,13 @@ export function Passo3() {
                         
                         {cargos.length > 1 && (
                             <TouchableOpacity onPress={() => removerCargo(index)}>
-                                <MinusCircleIcon size={32} weight="fill" className="text-vermelho mt-2" />
+                                <MinusCircleIcon size={32} weight="fill" className="mt-2" color={icon} />
                             </TouchableOpacity>
                         )}
 
                         {index === cargos.length - 1 && cargos.length < 4 &&  (
                             <TouchableOpacity onPress={adicionarCargo}>
-                                <PlusCircleIcon size={32} weight="fill" className="text-vermelho mt-2" />
+                                <PlusCircleIcon size={32} weight="fill" className="mt-2" color={icon} />
                             </TouchableOpacity>
                         )}
                     </View>
@@ -289,9 +293,9 @@ export function Passo3() {
                     className="absolute right-6 z-10 top-3"
                 >
                 {mostrarSenha ? (
-                    <Eye size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                    <Eye size={24} weight="light" color={iconEye} />
                 ) : (
-                    <EyeSlash size={24} weight="light" className='text-placeInput dark:text-placeInput-dark' />
+                    <EyeSlash size={24} weight="light" color={iconEye} />
                 )}
                 </TouchableOpacity>
             </View>

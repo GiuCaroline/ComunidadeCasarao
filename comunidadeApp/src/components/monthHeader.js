@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CaretLeft, CaretRight } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 const months = [
   "Jan","Fev","Mar","Abr","Maio","Jun",
@@ -7,6 +8,9 @@ const months = [
 ];
 
 export function MonthHeader({ month, year, setMonth, setYear }) {
+
+  const { colorScheme } = useColorScheme();
+  const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000';
 
   function handlePrev() {
     if (month === 0) {
@@ -29,7 +33,7 @@ export function MonthHeader({ month, year, setMonth, setYear }) {
   return (
     <View style={styles.container} className="flex-row justify-between items-center bg-input dark:bg-input-dark rounded-full px-3 w-[80%]">
       <TouchableOpacity onPress={handlePrev}>
-        <CaretLeft size={24} className='text-preto dark:text-branco' />
+        <CaretLeft size={24} color={icon} />
       </TouchableOpacity>
 
       <Text className='font-popLight text-[15px] bg-vermelho rounded-full px-6 py-3 text-branco'>
@@ -37,7 +41,7 @@ export function MonthHeader({ month, year, setMonth, setYear }) {
       </Text>
 
       <TouchableOpacity onPress={handleNext}>
-        <CaretRight size={24} className='text-preto dark:text-branco' />
+        <CaretRight size={24} color={icon} />
       </TouchableOpacity>
     </View>
   );

@@ -17,6 +17,8 @@ export function Inicio(){
   const navigation = useNavigation();
   const { user } = useAuth();
   const { colorScheme } = useColorScheme();
+  const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000000';
+  const iconVerm = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
 
   const [loading, setLoading] = useState(true);
   const [proximosEventos, setProximosEventos] = useState([]);
@@ -123,7 +125,7 @@ export function Inicio(){
             className='flex-row items-center gap-2'
             onPress={() => Linking.openURL('https://instagram.com/comunidade.casarao')}
           >
-            <InstagramLogo className='text-preto dark:text-branco' weight="light" size={35} />
+            <InstagramLogo color={icon} weight="light" size={35} />
             <Text className='text-[16px] text-vermelho'>@comunidade.casarao</Text>
           </TouchableOpacity>
 
@@ -131,7 +133,7 @@ export function Inicio(){
             className='flex-row items-center gap-2 mt-[2%]'
             onPress={() => Linking.openURL('https://www.youtube.com/@comunidade.casarao')}
           >
-            <YoutubeLogo className='text-preto dark:text-branco' weight="light" size={35} />
+            <YoutubeLogo color={icon} weight="light" size={35} />
             <Text className='text-[16px] text-vermelho'>Comunidade Casarão</Text>
           </TouchableOpacity>
 
@@ -139,7 +141,7 @@ export function Inicio(){
             className='flex-row items-center gap-2 mt-[2%]'
             onPress={() => Linking.openURL('https://facebook.com/comunidade.casarao')}
           >
-            <FacebookLogo className='text-preto dark:text-branco' weight="light" size={35} />
+            <FacebookLogo color={icon} weight="light" size={35} />
             <Text className='text-[16px] text-vermelho'>comunidade.casarao</Text>
           </TouchableOpacity>
         </View>
@@ -149,7 +151,7 @@ export function Inicio(){
           <View className='flex-row justify-between items-center'>
             <Text className='text-vermelho underline text-[18px] ml-[1%]'>Contatos</Text>
             <View className='flex-row items-center gap-2'>
-              <MapPinAreaIcon className='text-preto dark:text-branco' weight="light" size={30}/>
+              <MapPinAreaIcon color={icon} weight="light" size={30}/>
               <Text className='text-[15px] font-popRegular text-preto dark:text-branco'>Onde estamos</Text>
             </View>
           </View>
@@ -157,12 +159,12 @@ export function Inicio(){
           <View className='mt-[5%] flex-row justify-between'>
             <View>
               <View className='flex-row items-center gap-2'>
-                <WhatsappLogo className='text-preto dark:text-branco' weight="light" size={32}/>
+                <WhatsappLogo color={icon} weight="light" size={32}/>
                 <Text className='text-preto dark:text-branco text-[15px] font-popLight'>(11) 91342-2341</Text>
               </View>
 
               <View className='flex-row items-center gap-2 mt-[12%]'>
-                <Phone className='text-preto dark:text-branco' weight="light" size={32}/>
+                <Phone color={icon}  weight="light" size={32}/>
                 <Text className='text-preto dark:text-branco text-[15px] font-popLight'>(11) 4455-3943</Text>
               </View>
             </View>
@@ -176,7 +178,7 @@ export function Inicio(){
           </View>
 
           <View className='flex-row items-center gap-2 mt-[2%]'>
-            <EnvelopeSimple className='text-preto dark:text-branco' weight="light" size={32}/>
+            <EnvelopeSimple color={icon} weight="light" size={32}/>
             <Text className='text-preto dark:text-branco text-[15px] font-popLight'>contato@comunidadecasarao.com</Text>
           </View>
         </View>
@@ -188,7 +190,7 @@ export function Inicio(){
 
           <View className='bg-input dark:bg-input-dark rounded-xl px-[4%] py-[3%] mt-[5%]' style={[styles.sombra]}>
             <View className='flex-row items-center gap-2'>
-              <Bank className='text-vermelho' weight="light" size={32}/>
+              <Bank color={iconVerm} weight="light" size={32}/>
               <Text className='text-preto dark:text-branco font-popRegular text-[16px]'>Transferência Bancária</Text>
             </View>
 
@@ -207,7 +209,7 @@ export function Inicio(){
             <View className='flex-row justify-between'>
               <View>
                 <View className='flex-row items-center gap-2 mt-[5%]'>
-                  <PixLogo className='text-vermelho' weight="light" size={32}/>
+                  <PixLogo color={iconVerm} weight="light" size={32}/>
                   <Text className='text-preto dark:text-branco font-popRegular text-[16px]'>Pix</Text>
                 </View>
                 <Text className='mt-[3%] font-popLight text-preto dark:text-branco text-[15px]'>{'  Escaneie o QR\nCode com o app do\nseu banco para\ncontribuir.'}</Text>

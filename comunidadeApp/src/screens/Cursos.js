@@ -19,6 +19,8 @@ export function Cursos() {
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
 
+  const icon = colorScheme === 'dark'? '#ee2400' : '#BB1C00';
+
   useEffect(() => {
     async function carregarCursos() {
     setIsLoading(true);
@@ -50,7 +52,7 @@ export function Cursos() {
           style={styles.shadow}
           >
             <View className='flex-row items-center gap-1'>
-              <Info size={25} weight="fill" className="text-vermelho" />
+              <Info size={25} weight="fill" color={icon} />
               <Text className="font-popRegular text-preto text-[17px] dark:text-branco">
                   Informações Adicionais
               </Text>

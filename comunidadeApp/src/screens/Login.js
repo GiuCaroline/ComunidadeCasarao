@@ -27,6 +27,8 @@ export function Login() {
   ? require('../../assets/images/logoBranco.png') 
   : require('../../assets/images/logoPreto.png');
 
+  const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000';
+
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertConfig, setAlertConfig] = useState({
       title: "",
@@ -178,7 +180,7 @@ export function Login() {
               className='flex-row items-center gap-1 border p-2 rounded-xl border-vermelho dark:border-vermelho-dark'
               onPress={handleGoogleLogin}
             >
-              <GoogleLogo size={23} className='text-preto dark:text-branco' weight="light"/>
+              <GoogleLogo size={23} weight="light" color={icon} />
               <Text className='font-popLight text-[16px] text-preto dark:text-branco'> Acesse pelo Google</Text>
             </TouchableOpacity>
           </View>

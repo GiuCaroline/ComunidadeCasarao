@@ -2,10 +2,13 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "rea
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeft, File } from "phosphor-react-native";
-
+import { useColorScheme } from "nativewind";
 
 export function Solicitacao() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const { colorScheme } = useColorScheme();
+  const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000000';
+  const iconVerm = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
 
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
@@ -14,7 +17,7 @@ export function Solicitacao() {
           onPress={() => navigation.navigate("Perfil")}
       >
           <View className='w-full flex-row items-center px-[4%] mt-[16%]'>
-              <ArrowLeft className='text-preto dark:text-branco' />
+              <ArrowLeft color={icon} />
               <Text className='ml-[4%] mt-[1%] text-[18px] font-popRegular text-preto dark:text-branco'>Solicitação</Text>
           </View>
       </TouchableOpacity>
@@ -31,7 +34,7 @@ export function Solicitacao() {
             </Text>
           </View>
 
-          <File size={25} color="#B3261E"/>
+          <File size={25} color={iconVerm}/>
         </TouchableOpacity>
       </View>
 
@@ -47,7 +50,7 @@ export function Solicitacao() {
             </Text>
           </View>
 
-          <File size={25} color="#B3261E"/>
+          <File size={25} color={iconVerm}/>
         </TouchableOpacity>
       </View>
 
@@ -63,7 +66,7 @@ export function Solicitacao() {
             </Text>
           </View>
 
-          <File size={25} color="#B3261E"/>
+          <File size={25} color={iconVerm}/>
         </TouchableOpacity>
       </View>
 

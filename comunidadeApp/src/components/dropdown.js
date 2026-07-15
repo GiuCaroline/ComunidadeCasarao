@@ -9,6 +9,7 @@ import {
   Animated,
 } from "react-native";
 import { CaretUp, CaretDown } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 export function Dropdown({
   data = [],
@@ -21,6 +22,9 @@ export function Dropdown({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [internalValue, setInternalValue] = useState("");
+  
+  const { colorScheme } = useColorScheme();
+  const icon = colorScheme === 'dark' ? '#a5a5a5' : '#5e5e5e';
 
   const value = externalValue !== undefined ? externalValue : internalValue;
   const selectedItem = data.find((item) => item.value == value);
@@ -95,9 +99,9 @@ export function Dropdown({
           </Text>
 
           {expanded ? (
-            <CaretUp size={22} className="text-placeInput dark:text-placeInput-dark" />
+            <CaretUp size={22} color={icon} />
           ) : (
-            <CaretDown size={22} className="text-placeInput dark:text-placeInput-dark" />
+            <CaretDown size={22} color={icon} />
           )}
         </TouchableOpacity>
       </View>

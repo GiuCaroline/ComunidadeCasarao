@@ -137,6 +137,8 @@ export function Perfil() {
 
   const { colorScheme, setColorScheme } = useColorScheme();
 
+  const iconVerm = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
+
   useEffect(() => {
     async function loadThemePref() {
       const savedTheme = await AsyncStorage.getItem('@theme_pref');
@@ -320,7 +322,7 @@ export function Perfil() {
               </View>
             </View>
 
-            <IdentificationCard size={30} weight="light" color={camposFaltando().length === 0 ? "#B3261E" : "#999"}/>
+            <IdentificationCard size={30} weight="light" color={camposFaltando().length === 0 ? iconVerm : "#999"}/>
           </TouchableOpacity>
         </View>
 
@@ -406,8 +408,8 @@ export function Perfil() {
           {temEndereco && (
             <>
               <View className='mt-[5%] items-center flex-row justify-between'>
-                <Text className='text-vermelho text-popRegular text-[18px]'>Endereço</Text>
-                <View className='w-[73%] h-[1px] bg-vermelho'></View>
+                <Text className='text-vermelho dark:text-vermelho-dark text-popRegular text-[18px]'>Endereço</Text>
+                <View className='w-[73%] h-[1px] bg-vermelho dark:bg-vermelho-dark'></View>
               </View>
 
               {temValor(usuario?.endereco) && (
@@ -454,8 +456,8 @@ export function Perfil() {
           {temIgreja && (
             <>
               <View className='mt-[5%] items-center flex-row justify-between'>
-                <Text className='text-vermelho text-popRegular text-[18px]'>Igreja</Text>
-                <View className='w-[82%] h-[1px] bg-vermelho'></View>
+                <Text className='text-vermelho dark:text-vermelho-dark text-popRegular text-[18px]'>Igreja</Text>
+                <View className='w-[82%] h-[1px] bg-vermelho dark:bg-vermelho-dark'></View>
               </View>
 
               <View className='flex-row justify-between'>
@@ -494,7 +496,7 @@ export function Perfil() {
               </Text>
             </View>
 
-            <Paperclip size={25} weight="light" color="#B3261E"/>
+            <Paperclip size={25} weight="light" color={iconVerm}/>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -508,11 +510,11 @@ export function Perfil() {
             </Text>
 
             {themePref === "dark" ? (
-              <MoonStars size={25} weight="light" color="#B3261E" />
+              <MoonStars size={25} weight="light" color={iconVerm} />
             ) : themePref === "light" ? (
-              <SunDim size={25} weight="light" color="#B3261E" />
+              <SunDim size={25} weight="light" color={iconVerm} />
             ) : (
-              <DeviceMobile size={25} weight="light" color="#B3261E" />
+              <DeviceMobile size={25} weight="light" color={iconVerm} />
             )}
           </TouchableOpacity>
 
@@ -522,16 +524,16 @@ export function Perfil() {
               await logout();
               navigation.navigate("Login");
             }}
-            className="w-[95%] px-4 py-5 bg-transparent border-solid border-[#BB1C00] border-[1px] rounded-[20px] flex-row items-center justify-between mb-[25%]"
+            className="w-[95%] px-4 py-5 bg-transparent border-solid border-vermelho dark:border-vermelho-dark border-[1px] rounded-[20px] flex-row items-center justify-between mb-[25%]"
             
           >
             <View className="flex-row items-center gap-3">
-              <Text className="text-base font-popRegular text-vermelho">
+              <Text className="text-base font-popRegular text-vermelho dark:text-vermelho-dark">
                 LogOut
               </Text>
             </View>
 
-            <SignOutIcon size={25} weight="light" color="#BB1C00"/>
+            <SignOutIcon size={25} weight="light" color={iconVerm}/>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -539,7 +541,7 @@ export function Perfil() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => navigation.navigate("EditPerfil")}
-          className="absolute bottom-32 right-5 bg-vermelho rounded-full p-4"
+          className="absolute bottom-32 right-5 bg-vermelho dark:bg-vermelho-dark rounded-full p-4"
           style={styles.sombra}
         >
           <PencilSimple  size={28} weight="light" color="#FAFAFA"/>
