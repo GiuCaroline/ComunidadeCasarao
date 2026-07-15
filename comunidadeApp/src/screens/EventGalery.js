@@ -7,6 +7,7 @@ import { useColorScheme } from "nativewind";
 import { useVideoPlayer, VideoView } from "expo-video";
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system/legacy';
+import { AlertCustom } from "../components/alert";
 
 function ReprodutorDeVideo({ url }) {
   const player = useVideoPlayer(url, (player) => {
@@ -33,6 +34,13 @@ export function EventGalery() {
   const { colorScheme } = useColorScheme();
   const icon = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
   const iconSeta = colorScheme === 'dark' ? '#FAFAFA' : '#000';
+
+  const [alerta, setAlerta] = useState({
+      visible: false,
+      title: "",
+      message: "",
+      type: "error"
+  });
 
   const [fotos, setFotos] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -121,15 +129,32 @@ export function EventGalery() {
       const asset = await MediaLibrary.createAssetAsync(uri);
       await MediaLibrary.saveToLibraryAsync(asset.uri);
 
-      Alert.alert('Sucesso', 'Foto salva na galeria!');
+      setAlerta({
+          visible: true,
+          title: "Sucesso!",
+          message: "Foto salva na galeria.",
+          type: "success"
+      });
     } catch (error) {
       console.error(error);
-      Alert.alert('Erro', 'Não foi possível baixar a foto.');
+      setAlerta({
+          visible: true,
+          title: "Erro",
+          message: "Não foi possível baixar a foto.",
+          type: "error"
+      });
     }
   };
 
-
   return (
+    <>
+    <AlertCustom
+        visible={alerta.visible}
+        title={alerta.title}
+        message={alerta.message}
+        type={alerta.type}
+        onClose={() => setAlerta({ ...alerta, visible: false })}
+    />
     <View className="flex-1 bg-branco dark:bg-preto-dark">
       <View className="px-5 pt-12 pb-4 flex-row items-center">
         <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4">
@@ -250,6 +275,7 @@ export function EventGalery() {
       </Modal>
 
     </View>
+    </>
   );
 }
 

@@ -6,7 +6,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Asset } from 'expo-asset';
-import { Alert } from 'react-native';
+import { AlertCustom } from "../components/alert";
 import { useAuth } from "../context/AuthContext";
 import { getUserById, getCargos } from "../services/authService";
 import { useEffect, useState } from "react";
@@ -317,7 +317,7 @@ export function Carteira() {
                     message: "Credencial baixada.",
                     type: "success"
                 });
-                
+
             } else {
                 const novoCaminho = `${FileSystem.documentDirectory}${nomeArquivo}`;
                 await FileSystem.moveAsync({ from: uri, to: novoCaminho });

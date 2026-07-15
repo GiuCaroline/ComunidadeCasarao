@@ -10,7 +10,6 @@ import { useColorScheme } from "nativewind";
 import { getProximosEventos } from "../services/authService";
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from 'expo-clipboard';
-import { Alert } from 'react-native';
 import { AlertCustom } from "../components/alert";
 
 export function Inicio(){
@@ -84,7 +83,7 @@ export function Inicio(){
     <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
       {loading && <LoadingOverlay />}
 
-      <ScrollView contentContainerStyle={{ padding: 10, paddingBottom: 95 }} className='flex w-full'>
+      <ScrollView contentContainerStyle={{ padding: 10, paddingBottom: 110 }} className='flex w-full'>
         <View className='w-full flex-row justify-between items-center px-[2%] mb-[-18%] mt-[-15%]'>
           <Text className='text-[18px] font-popRegular mt-[5%] text-preto dark:text-branco'>Olá {primeiroNome(user?.nome)}!</Text>
           <Image
