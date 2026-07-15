@@ -39,7 +39,15 @@
       "expo-video",
       "expo-web-browser",
       "@react-native-google-signin/google-signin",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "O app precisa de acesso às suas fotos para salvar imagens da galeria de eventos.",
+          "savePhotosPermission": "O app precisa salvar fotos e vídeos na sua galeria.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
     ],
     "extra": {
       "eas": {

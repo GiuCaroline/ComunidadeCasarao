@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Nav } from "../components/nav";
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeft } from "phosphor-react-native";
@@ -6,6 +6,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Asset } from 'expo-asset';
+import { Alert } from 'react-native';
 import { useAuth } from "../context/AuthContext";
 import { getUserById, getCargos } from "../services/authService";
 import { useEffect, useState } from "react";
@@ -15,6 +16,14 @@ import LoadingOverlay from '../components/loadingOverlay';
 export function Carteira() {
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
+
+    const [alerta, setAlerta] = useState({
+        visible: false,
+        title: "",
+        message: "",
+        type: "error"
+    });
+
     const { colorScheme } = useColorScheme();
 
     const icon = colorScheme === 'dark' ? '#FAFAFA' : '#000000';
@@ -93,7 +102,7 @@ export function Carteira() {
         3: '#8cb3ff',
     };
 
-    const corCredpdf = temCorPersonalizada ? coresPorCodigo[usuario?.codigo] : '#F0F0F0';
+    const corCredpdf = temCorPersonalizada ? coresPorCodigo[usuario?.codigo] : colorScheme === 'dark' ? '#212124' : '#F0F0F0';
 
     const textoClasse = temCorPersonalizada ? 'text-branco' : 'text-preto dark:text-branco';
     
@@ -283,22 +292,57 @@ export function Carteira() {
             </html> `;
 
             const { uri } = await Print.printToFileAsync({ html });
+            const nomeArquivo = `credencial_membro_${usuario?.codigo}.pdf`;
 
-            const novoCaminho = `${FileSystem.documentDirectory}credencial_membro_${usuario?.codigo}.pdf`;
+            if (Platform.OS === 'android') {
+                const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
 
-            await FileSystem.moveAsync({
-                from: uri,
-                to: novoCaminho,
-            });
+                if (!permissions.granted) {
+                    await Sharing.shareAsync(uri);
+                    return;
+                }
 
-            await Sharing.shareAsync(novoCaminho);
+                const conteudoBase64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
 
+                const novoUri = await FileSystem.StorageAccessFramework.createFileAsync(
+                    permissions.directoryUri,
+                    nomeArquivo,
+                    'application/pdf'
+                );
+
+                await FileSystem.writeAsStringAsync(novoUri, conteudoBase64, { encoding: 'base64' });
+                setAlerta({
+                    visible: true,
+                    title: "Sucesso!",
+                    message: "Credencial baixada.",
+                    type: "success"
+                });
+                
+            } else {
+                const novoCaminho = `${FileSystem.documentDirectory}${nomeArquivo}`;
+                await FileSystem.moveAsync({ from: uri, to: novoCaminho });
+                await Sharing.shareAsync(novoCaminho); 
+            }
         } catch (error) {
+            setAlerta({
+                visible: true,
+                title: "Erro",
+                message: "Erro ao gerar PDF.",
+                type: "error"
+            });
             console.log("Erro ao gerar PDF:", error);
         }
     };
 
   return (
+    <>
+    <AlertCustom
+        visible={alerta.visible}
+        title={alerta.title}
+        message={alerta.message}
+        type={alerta.type}
+        onClose={() => setAlerta({ ...alerta, visible: false })}
+    />
     <View className="flex-1 bg-branco dark:bg-preto-dark">
         <TouchableOpacity
             activeOpacity={0.8}
@@ -394,6 +438,7 @@ export function Carteira() {
       
       <LoadingOverlay visible={isLoading} />
     </View>
+    </>
   );
 }
 

@@ -5,8 +5,8 @@ import { CaretUp, CaretDown, ArrowLeft, X, DownloadSimple } from "phosphor-react
 import { getGaleriaEvento } from "../services/authService";
 import { useColorScheme } from "nativewind";
 import { useVideoPlayer, VideoView } from "expo-video";
+import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system/legacy';
-import * as Sharing from 'expo-sharing';
 
 function ReprodutorDeVideo({ url }) {
   const player = useVideoPlayer(url, (player) => {
@@ -106,24 +106,28 @@ export function EventGalery() {
 
   const handleDownload = async (url) => {
     try {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+
+      if (status !== 'granted') {
+        Alert.alert('Permissão negada', 'Precisamos de acesso à galeria para salvar a foto.');
+        return;
+      }
+
       const filename = url.split('/').pop().split('?')[0] || 'imagem.jpg';
       const fileUri = `${FileSystem.documentDirectory}${filename}`;
 
       const { uri } = await FileSystem.downloadAsync(url, fileUri);
-      
-      const isAvailable = await Sharing.isAvailableAsync();
-      
-      if (isAvailable) {
-        await Sharing.shareAsync(uri);
-      } else {
-        Alert.alert('Erro', 'O compartilhamento não está disponível neste dispositivo.');
-      }
-      
+
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      await MediaLibrary.saveToLibraryAsync(asset.uri);
+
+      Alert.alert('Sucesso', 'Foto salva na galeria!');
     } catch (error) {
       console.error(error);
       Alert.alert('Erro', 'Não foi possível baixar a foto.');
     }
   };
+
 
   return (
     <View className="flex-1 bg-branco dark:bg-preto-dark">
