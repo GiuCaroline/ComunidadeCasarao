@@ -8,6 +8,7 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system/legacy';
 import { AlertCustom } from "../components/alert";
+import LoadingOverlay from '../components/loadingOverlay';
 
 function ReprodutorDeVideo({ url }) {
   const player = useVideoPlayer(url, (player) => {
@@ -30,6 +31,7 @@ export function EventGalery() {
   const navigation = useNavigation();
   const route = useRoute();
   const { evento } = route.params || {};
+  const [isLoading, setIsLoading] = useState(false);
   
   const { colorScheme } = useColorScheme();
   const icon = colorScheme === 'dark' ? '#ee2400' : '#BB1C00';
@@ -55,6 +57,7 @@ export function EventGalery() {
     async function fetchMidias() {
       if (evento?.agendaevento_id) {
         try {
+          setIsLoading(true);
           const data = await getGaleriaEvento(evento.agendaevento_id);
           
           const imagensFiltradas = data.filter(item => item.tipo_arquivo === 'imagem');
@@ -64,6 +67,8 @@ export function EventGalery() {
           setVideos(videosFiltrados);
         } catch (error) {
           console.error(error);
+        } finally{
+          setIsLoading(false);
         }
       }
     }
@@ -273,7 +278,7 @@ export function EventGalery() {
           />
         </View>
       </Modal>
-
+      <LoadingOverlay visible={isLoading} />
     </View>
     </>
   );
